@@ -57,6 +57,7 @@ const SignIn = ({ toggleForget }) => {
         if (response.data.isError) {
           setError(response.data.msg);
         } else {
+          setError("");
           setFlag({
             name: "otp",
             label: "OTP",
