@@ -9,6 +9,7 @@ import theme from "./project.theme";
 import Navbar from "./client/components/NavBar/Navbar";
 import SignUp from "./client/components/SignUp/SignUp";
 import SignIn from "./client/components/SignIn/SignIn";
+import ForgetPassword from "./client/components/ForgetPassword/ForgetPassword";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Navbar />
         <SignUp />
         <SignIn />
+        <ForgetPassword />
       </Container>
     </ThemeProvider>
   );

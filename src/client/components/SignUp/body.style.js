@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
     color: theme.palette.secondary.main,
   },
+  link: {
+    cursor: "pointer",
+  },
 }));
 
 export default useStyles;

@@ -89,11 +89,11 @@ const NavBar = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton color="inherit">
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
+      <MenuItem name="signin" onClick={toggleModal}>
+        Sign-In
+      </MenuItem>
+      <MenuItem name="signup" onClick={toggleModal}>
+        Sign-Up
       </MenuItem>
     </Menu>
   ) : (
@@ -154,7 +154,7 @@ const NavBar = (props) => {
 
           {/*profile icon mobile version*/}
           <div className={classes.sectionMobile}>
-            <IconButton onClick={handleMobileMenuOpen} color="inherit">
+            <IconButton onClick={handleMobileMenuOpen} color="secondary">
               <MoreIcon />
             </IconButton>
           </div>

@@ -11,22 +11,18 @@ import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { connect } from "react-redux";
 
 // styles
 import useStyles from "./body.style";
 
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://js-notebook.herokuapp.com">
-        JS-NoteBook
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-};
+// copyright
+import Copyright from "../Copyright/Copyright";
+
+// reducer actions
+import { forget, signin, signup } from "../../redux/actions/sign.action";
 
 // on click submit
 const onFormSubmit = (e) => {
@@ -34,8 +30,31 @@ const onFormSubmit = (e) => {
   console.log(e);
 };
 
-const SignIn = () => {
+const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
   const classes = useStyles();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .trim()
+        .email("Invalid email format")
+        .required("Required!"),
+      password: Yup.string()
+        .trim()
+        .min(4, "Minimum 4 characters")
+        .max(20, "Maximum 20 characters")
+        .matches(
+          /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$/,
+          "Atleast one each of number, upper case, lower case & special characters should be present"
+        )
+        .required("Required!"),
+    }),
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -58,6 +77,12 @@ const SignIn = () => {
             label="Email Address"
             name="email"
             autoComplete="email"
+            onChange={(e) => {
+              formik.setFieldTouched("email");
+              return formik.handleChange(e);
+            }}
+            error={formik.errors.email && formik.touched.email}
+            helperText={formik.errors.email}
             autoFocus
           />
           <TextField
@@ -69,6 +94,12 @@ const SignIn = () => {
             label="Password"
             type="password"
             id="password"
+            onChange={(e) => {
+              formik.setFieldTouched("password");
+              return formik.handleChange(e);
+            }}
+            error={formik.errors.password && formik.touched.password}
+            helperText={formik.errors.password}
             autoComplete="current-password"
           />
           <FormControlLabel
@@ -86,12 +117,26 @@ const SignIn = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link
+                className={classes.link}
+                variant="body2"
+                onClick={() => {
+                  toggleSignIn();
+                  toggleForget();
+                }}
+              >
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link
+                className={classes.link}
+                variant="body2"
+                onClick={() => {
+                  toggleSignIn();
+                  toggleSignUp();
+                }}
+              >
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -105,4 +150,24 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+const mapActionToProps = (dispatch) => {
+  return {
+    toggleSignUp: () => {
+      dispatch({
+        type: signup,
+      });
+    },
+    toggleSignIn: () => {
+      dispatch({
+        type: signin,
+      });
+    },
+    toggleForget: () => {
+      dispatch({
+        type: forget,
+      });
+    },
+  };
+};
+
+export default connect(null, mapActionToProps)(SignIn);

@@ -11,25 +11,18 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { connect } from "react-redux";
 
 // styles
 import useStyles from "./body.style";
 
 // copyright
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://js-notebook.herokuapp.com">
-        JS-NoteBook
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-};
+import Copyright from "../Copyright/Copyright";
 
-const Body = () => {
+// reducer actions
+import { signin, signup } from "../../redux/actions/sign.action";
+
+const Body = ({ toggleSignUp, toggleSignIn }) => {
   const classes = useStyles();
 
   const formik = useFormik({
@@ -59,10 +52,10 @@ const Body = () => {
         .trim()
         .min(4, "Minimum 4 characters")
         .max(20, "Maximum 20 characters")
-        .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$/, {
-          messageOrOptions: "special characters, number, upper, lower",
-          excludeEmptyString: true,
-        })
+        .matches(
+          /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{4,20}$/,
+          "Atleast one each of number, upper case, lower case & special characters should be present"
+        )
         .required("Required!"),
     }),
   });
@@ -85,8 +78,11 @@ const Body = () => {
                 name="firstName"
                 variant="outlined"
                 value={formik.values.firstName}
-                onChange={formik.handleChange}
-                error={!!formik.errors.firstName}
+                onChange={(e) => {
+                  formik.setFieldTouched("firstName");
+                  return formik.handleChange(e);
+                }}
+                error={formik.errors.firstName && formik.touched.firstName}
                 helperText={formik.errors.firstName}
                 required
                 fullWidth
@@ -105,8 +101,11 @@ const Body = () => {
                 name="lastName"
                 autoComplete="lname"
                 value={formik.values.lastName}
-                onChange={formik.handleChange}
-                error={!!formik.errors.lastName}
+                onChange={(e) => {
+                  formik.setFieldTouched("lastName");
+                  return formik.handleChange(e);
+                }}
+                error={formik.errors.lastName && formik.touched.lastName}
                 helperText={formik.errors.lastName}
               />
             </Grid>
@@ -120,8 +119,11 @@ const Body = () => {
                 name="email"
                 autoComplete="email"
                 value={formik.values.email}
-                onChange={formik.handleChange}
-                error={!!formik.errors.email}
+                onChange={(e) => {
+                  formik.setFieldTouched("email");
+                  return formik.handleChange(e);
+                }}
+                error={formik.errors.email && formik.touched.email}
                 helperText={formik.errors.email}
               />
             </Grid>
@@ -135,7 +137,10 @@ const Body = () => {
                 type="password"
                 id="password"
                 value={formik.values.password}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.setFieldTouched("password");
+                  return formik.handleChange(e);
+                }}
                 error={formik.errors.password && formik.touched.password}
                 helperText={formik.errors.password}
                 autoComplete="current-password"
@@ -153,7 +158,14 @@ const Body = () => {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link
+                className={classes.link}
+                variant="body2"
+                onClick={() => {
+                  toggleSignUp();
+                  toggleSignIn();
+                }}
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -167,4 +179,19 @@ const Body = () => {
   );
 };
 
-export default Body;
+const mapActionToProps = (dispatch) => {
+  return {
+    toggleSignUp: () => {
+      dispatch({
+        type: signup,
+      });
+    },
+    toggleSignIn: () => {
+      dispatch({
+        type: signin,
+      });
+    },
+  };
+};
+
+export default connect(null, mapActionToProps)(Body);

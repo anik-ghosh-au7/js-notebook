@@ -11,7 +11,7 @@ let users = [
     lastname: "Admin",
     email: "admin@gmail.com",
     password: "password",
-    error: "",
+    otp: "1234",
   },
 ];
 
@@ -54,6 +54,26 @@ app.post("/signup", function (req, res) {
   users.push(req.body);
   // console.log(users);
   res.status(200).send({ msg: "signup successfull" });
+});
+
+app.post("/reset", function (req, res) {
+  let found = users.find((user) => user.email === req.body.email);
+  if (found) {
+    return res.status(200).send({ isError: false });
+  } else {
+    return res.send({ msg: "Email not registered", isError: true });
+  }
+});
+
+app.post("/verify", function (req, res) {
+  let found = users.find((user) => user.email === req.body.email);
+  if (found) {
+    if (found.otp === req.body.otp)
+      return res.status(200).send({ isError: false });
+    else res.send({ msg: "Wrong OTP provided", isError: true });
+  } else {
+    return res.send({ msg: "Email not registered", isError: true });
+  }
 });
 
 app.get("/*", function (req, res) {
