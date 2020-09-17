@@ -1,5 +1,4 @@
 import React from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,72 +10,16 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import { connect } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
-    },
-  },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  },
-}));
+// style
+import useStyles from "./navBar.style";
 
-export default function PrimarySearchAppBar() {
+// reducer actions
+import { signin, signup } from "../../redux/actions/sign.action";
+
+const NavBar = (props) => {
+  const { toggleSignIn, toggleSignUp } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -101,6 +44,16 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const toggleModal = (event) => {
+    if (event.target.innerText === "Sign-In") {
+      toggleSignIn();
+    }
+    if (event.target.innerText === "Sign-Up") {
+      toggleSignUp();
+    }
+    handleMenuClose();
+  };
+
   const flag = true;
 
   const menuId = "primary-search-account-menu";
@@ -114,8 +67,12 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem name="signin" onClick={toggleModal}>
+        Sign-In
+      </MenuItem>
+      <MenuItem name="signup" onClick={toggleModal}>
+        Sign-Up
+      </MenuItem>
     </Menu>
   ) : (
     <div>hello world</div>
@@ -133,12 +90,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton color="inherit">
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
@@ -150,53 +102,59 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static" style={{ backgroundColor: "#383836" }}>
+      <AppBar position="static">
         <Toolbar>
+          {/*start icon*/}
           <IconButton
             edge="start"
             className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
+            color="secondary"
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+
+          {/*logo*/}
+          <Typography
+            color="secondary"
+            className={classes.title}
+            variant="h6"
+            noWrap
+          >
             JS-NoteBook
           </Typography>
+
+          {/*search bar*/}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
+              <SearchIcon color="secondary" />
             </div>
             <InputBase
+              style={{ color: "white" }}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{ "aria-label": "search" }}
             />
           </div>
+
+          {/*space between search and profile*/}
           <div className={classes.grow} />
+
+          {/*profile icon*/}
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color="inherit"
+              color="secondary"
             >
               <AccountCircle />
             </IconButton>
           </div>
+
+          {/*profile icon mobile version*/}
           <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
+            <IconButton onClick={handleMobileMenuOpen} color="inherit">
               <MoreIcon />
             </IconButton>
           </div>
@@ -206,4 +164,21 @@ export default function PrimarySearchAppBar() {
       {renderMenu}
     </div>
   );
-}
+};
+
+const mapActionToProps = (dispatch) => {
+  return {
+    toggleSignUp: () => {
+      dispatch({
+        type: signup,
+      });
+    },
+    toggleSignIn: () => {
+      dispatch({
+        type: signin,
+      });
+    },
+  };
+};
+
+export default connect(null, mapActionToProps)(NavBar);
