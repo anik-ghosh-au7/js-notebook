@@ -59,7 +59,9 @@ app.post("/signup", function (req, res) {
 app.post("/reset", function (req, res) {
   let found = users.find((user) => user.email === req.body.email);
   if (found) {
-    return res.status(200).send({ isError: false });
+    return res
+      .status(200)
+      .send({ isError: false, msg: "We have sent OTP to given email" });
   } else {
     return res.send({ msg: "Email not registered", isError: true });
   }

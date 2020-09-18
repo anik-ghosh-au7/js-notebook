@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,6 +11,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
+// component
+import Notification from "../Notification/Notification";
+
 // axios
 import httpRequest from "../../config/axios.config";
 
@@ -22,8 +25,9 @@ import Copyright from "../Copyright/Copyright";
 
 // reducer actions
 import { forget } from "../../redux/actions/sign.action";
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
-const SignIn = ({ toggleForget }) => {
+const SignIn = ({ setNotification }) => {
   const [error, setError] = useState("");
 
   const [flag, setFlag] = useState({
@@ -56,8 +60,18 @@ const SignIn = ({ toggleForget }) => {
         });
         if (response.data.isError) {
           setError(response.data.msg);
+          setNotification({
+            msg: response.data.msg,
+            open: true,
+            severity: "error",
+          });
         } else {
           setError("");
+          setNotification({
+            msg: response.data.msg,
+            open: true,
+            severity: "success",
+          });
           setFlag({
             name: "otp",
             label: "OTP",
@@ -76,8 +90,18 @@ const SignIn = ({ toggleForget }) => {
         });
         if (response.data.isError) {
           setError(response.data.msg);
+          setNotification({
+            msg: response.data.msg,
+            open: true,
+            severity: "error",
+          });
         } else {
           setError("");
+          setNotification({
+            msg: response.data.msg,
+            open: true,
+            severity: "success",
+          });
           setFlag({
             name: "reset",
             label: "New Password",
@@ -87,9 +111,37 @@ const SignIn = ({ toggleForget }) => {
       } catch (err) {
         console.log(err);
       }
+    } else if (e.target.name === "reset") {
+      try {
+        let response = await httpRequest({
+          method: "POST",
+          url: "http://localhost:5000/reset",
+          data: { email: formik.values.email, password: formik.values.reset },
+        });
+        if (response.data.isError) {
+          setError(response.data.msg);
+          setNotification({
+            msg: response.data.msg,
+            open: true,
+            severity: "error",
+          });
+        } else {
+          setError("");
+          setNotification({
+            msg: response.data.msg,
+            open: true,
+            severity: "success",
+          });
+          setFlag({
+            name: "email",
+            label: "Email Address",
+            button: "Send OTP",
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
-    // else if (e.target.name === "reset") {
-    // }
   };
 
   const classes = useStyles();
@@ -123,68 +175,72 @@ const SignIn = ({ toggleForget }) => {
     }),
   });
 
+  // return body ---------------------------------------------------
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <VpnKeyIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Reset Password
-        </Typography>
-        <form
-          className={classes.form}
-          noValidate
-          onSubmit={onFormSubmit}
-          name={flag.name}
-        >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            type={flag.name === "reset" ? "password" : "text"}
-            id={flag.name}
-            label={flag.label}
+    <Fragment>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <VpnKeyIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Reset Password
+          </Typography>
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={onFormSubmit}
             name={flag.name}
-            autoComplete={flag.name}
-            value={formik.values[flag.name]}
-            onChange={(e) => {
-              formik.setFieldTouched(flag.name);
-              return formik.handleChange(e);
-            }}
-            error={
-              (formik.errors[flag.name] && formik.touched[flag.name]) || !!error
-            }
-            helperText={formik.errors[flag.name] || error}
-            autoFocus
-          />
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
           >
-            {flag.button}
-          </Button>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              type={flag.name === "reset" ? "password" : "text"}
+              id={flag.name}
+              label={flag.label}
+              name={flag.name}
+              autoComplete={flag.name}
+              value={formik.values[flag.name]}
+              onChange={(e) => {
+                formik.setFieldTouched(flag.name);
+                return formik.handleChange(e);
+              }}
+              error={
+                (formik.errors[flag.name] && formik.touched[flag.name]) ||
+                !!error
+              }
+              helperText={formik.errors[flag.name] || error}
+              autoFocus
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              {flag.button}
+            </Button>
+          </form>
+        </div>
+        <Box mt={8}>
+          <Copyright />
+        </Box>
+      </Container>
+    </Fragment>
   );
 };
 
 const mapActionToProps = (dispatch) => {
   return {
-    toggleForget: () => {
+    setNotification: (data) => {
       dispatch({
-        type: forget,
+        type: SET_NOTIFICATION,
+        payload: { ...data },
       });
     },
   };
