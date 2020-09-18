@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosDefaultConfig = {
   // baseUrl: 'https://js-notebook.herokuapp.com',
-  baseUrl: "https://localhost:5000/",
+  baseUrl: "http://localhost:5000/api/",
   headers: {
     "X-Requested-With": "XMLHttpRequest",
     Accept: "application/json",

@@ -13,6 +13,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
+// axios
+import httpRequest from "../../config/axios.config";
+
 // styles
 import useStyles from "./body.style";
 
@@ -21,8 +24,9 @@ import Copyright from "../Copyright/Copyright";
 
 // reducer actions
 import { signin, signup } from "../../redux/actions/sign.action";
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
-const Body = ({ toggleSignUp, toggleSignIn }) => {
+const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
   const classes = useStyles();
 
   const formik = useFormik({
@@ -65,6 +69,41 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
     return formik.handleChange(e);
   };
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      let data = {
+        firstName: formik.values.firstName,
+        lastName: formik.values.lastName,
+        email: formik.values.email,
+        password: formik.values.password,
+      };
+      let response = await httpRequest({
+        method: "POST",
+        url: "http://localhost:5000/api/users/signup",
+        data,
+      });
+
+      // if all good
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: response.data.msg,
+      });
+
+      // switching to login
+      toggleSignUp();
+      toggleSignIn();
+    } catch (err) {
+      if (!!err.response)
+        setNotification({
+          open: true,
+          severity: "error",
+          msg: err.response.data.msg,
+        });
+    }
+  };
+
   // return component ---------------------------------------------
   return (
     <Container component="main" maxWidth="xs">
@@ -76,7 +115,7 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={submitHandler} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -189,6 +228,12 @@ const mapActionToProps = (dispatch) => {
     toggleSignIn: () => {
       dispatch({
         type: signin,
+      });
+    },
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
       });
     },
   };

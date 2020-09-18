@@ -15,6 +15,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
+// axios
+import httpRequest from "../../config/axios.config";
+
 // styles
 import useStyles from "./body.style";
 
@@ -23,15 +26,15 @@ import Copyright from "../Copyright/Copyright";
 
 // reducer actions
 import { forget, signin, signup } from "../../redux/actions/sign.action";
-
-// on click submit
-const onFormSubmit = (e) => {
-  e.preventDefault();
-  console.log(e);
-};
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
 //  signin component -----------------------------------------------
-const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
+const SignIn = ({
+  toggleSignUp,
+  toggleSignIn,
+  toggleForget,
+  setNotification,
+}) => {
   const classes = useStyles();
 
   const formik = useFormik({
@@ -62,6 +65,50 @@ const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
     return formik.handleChange(e);
   };
 
+  // on click submit
+  const onFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let data = {
+        email: formik.values.email,
+        password: formik.values.password,
+      };
+      let response = await httpRequest({
+        method: "POST",
+        url: "http://localhost:5000/api/users/login",
+        data,
+      });
+
+      // if all good
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: response.data.msg,
+      });
+      console.log(response.data.data.token, response.data.data.user);
+
+      // setting data to local storage
+      localStorage.setItem("access_token", response.data.data.token);
+      localStorage.setItem(
+        "user_data",
+        JSON.stringify(response.data.data.user)
+      );
+
+      // switching to user home
+      toggleSignIn();
+      console.log("Authorized", response.data);
+    } catch (err) {
+      if (!!err.response) {
+        setNotification({
+          open: true,
+          severity: "error",
+          msg: err.response.data.msg,
+        });
+      }
+    }
+  };
+
+  // return component -----------------------------------------------------------
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -166,6 +213,12 @@ const mapActionToProps = (dispatch) => {
     toggleForget: () => {
       dispatch({
         type: forget,
+      });
+    },
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
       });
     },
   };

@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
     return { ...state, ...action.payload };
   }
   if (action.type === CLEAR_NOTIFICATION) {
-    return { ...initialState, severity: state.severity };
+    return { ...state, open: false };
   }
   return state;
 };

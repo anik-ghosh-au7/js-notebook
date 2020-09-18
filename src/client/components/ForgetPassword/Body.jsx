@@ -42,44 +42,44 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
         url,
         data,
       });
-      if (response.data.isError) {
-        setError(response.data.msg);
+
+      // error state to false
+      setError("");
+
+      // notification state
+      setNotification({
+        msg: response.data.msg,
+        open: true,
+        severity: "success",
+      });
+
+      // input bar state
+      if (targetName === "email") {
+        setFlag({
+          name: "otp",
+          label: "OTP",
+          button: "Submit OTP",
+        });
+      } else if (targetName === "otp") {
+        setFlag({
+          name: "reset",
+          label: "New Password",
+          button: "Reset Password",
+        });
+      } else {
+        // modal state
+        toggleForget();
+      }
+    } catch (err) {
+      if (!!err.response) {
+        setError(err.response.data.msg);
         setNotification({
-          msg: response.data.msg,
+          msg: err.response.data.msg,
           open: true,
           severity: "error",
         });
-      } else {
-        // error state to false
-        setError("");
-
-        // notification state
-        setNotification({
-          msg: response.data.msg,
-          open: true,
-          severity: "success",
-        });
-
-        // input bar state
-        if (targetName === "email") {
-          setFlag({
-            name: "otp",
-            label: "OTP",
-            button: "Submit OTP",
-          });
-        } else if (targetName === "otp") {
-          setFlag({
-            name: "reset",
-            label: "New Password",
-            button: "Reset Password",
-          });
-        } else {
-          // modal state
-          toggleForget();
-        }
       }
-    } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
   };
 
@@ -91,7 +91,7 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     if (e.target.name === "email") {
       const parameters = {
         targetName: e.target.name,
-        url: "http://localhost:5000/reset",
+        url: "http://localhost:5000/api/users/verify",
         data: { email: formik.values.email },
       };
       setStates({ ...parameters });
@@ -101,8 +101,8 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     else if (e.target.name === "otp") {
       const parameters = {
         targetName: e.target.name,
-        url: "http://localhost:5000/verify",
-        data: { email: formik.values.email, otp: formik.values.otp },
+        url: "http://localhost:5000/api/users/otp",
+        data: { otp: formik.values.otp },
       };
       setStates({ ...parameters });
     }
@@ -111,7 +111,7 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     else if (e.target.name === "reset") {
       const parameters = {
         targetName: e.target.name,
-        url: "http://localhost:5000/password",
+        url: "http://localhost:5000/api/users/password",
         data: { email: formik.values.email, password: formik.values.reset },
       };
       setStates({ ...parameters });
