@@ -60,6 +60,12 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
     }),
   });
 
+  const onChangeHandle = (e) => {
+    formik.setFieldTouched(e.target.id);
+    return formik.handleChange(e);
+  };
+
+  // return component ---------------------------------------------
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -78,10 +84,7 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
                 name="firstName"
                 variant="outlined"
                 value={formik.values.firstName}
-                onChange={(e) => {
-                  formik.setFieldTouched("firstName");
-                  return formik.handleChange(e);
-                }}
+                onChange={onChangeHandle}
                 error={formik.errors.firstName && formik.touched.firstName}
                 helperText={formik.errors.firstName}
                 required
@@ -101,10 +104,7 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
                 name="lastName"
                 autoComplete="lname"
                 value={formik.values.lastName}
-                onChange={(e) => {
-                  formik.setFieldTouched("lastName");
-                  return formik.handleChange(e);
-                }}
+                onChange={onChangeHandle}
                 error={formik.errors.lastName && formik.touched.lastName}
                 helperText={formik.errors.lastName}
               />
@@ -119,10 +119,7 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
                 name="email"
                 autoComplete="email"
                 value={formik.values.email}
-                onChange={(e) => {
-                  formik.setFieldTouched("email");
-                  return formik.handleChange(e);
-                }}
+                onChange={onChangeHandle}
                 error={formik.errors.email && formik.touched.email}
                 helperText={formik.errors.email}
               />
@@ -137,10 +134,7 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
                 type="password"
                 id="password"
                 value={formik.values.password}
-                onChange={(e) => {
-                  formik.setFieldTouched("password");
-                  return formik.handleChange(e);
-                }}
+                onChange={onChangeHandle}
                 error={formik.errors.password && formik.touched.password}
                 helperText={formik.errors.password}
                 autoComplete="current-password"
@@ -153,6 +147,12 @@ const Body = ({ toggleSignUp, toggleSignIn }) => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={
+              !!formik.errors.firstName ||
+              !!formik.errors.lastName ||
+              !!formik.errors.email ||
+              !!formik.errors.password
+            }
           >
             Sign Up
           </Button>

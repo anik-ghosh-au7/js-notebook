@@ -27,12 +27,7 @@ const Notification = (props) => {
     console.log(msg),
     (
       <div className={classes.root}>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity={severity}>
             {msg}
           </Alert>

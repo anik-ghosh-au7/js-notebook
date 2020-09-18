@@ -11,9 +11,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
-// component
-import Notification from "../Notification/Notification";
-
 // axios
 import httpRequest from "../../config/axios.config";
 
@@ -27,7 +24,8 @@ import Copyright from "../Copyright/Copyright";
 import { forget } from "../../redux/actions/sign.action";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
-const SignIn = ({ setNotification }) => {
+// Forget Password component -----------------------------------------
+const ForgetPassword = ({ toggleForget, setNotification }) => {
   const [error, setError] = useState("");
 
   const [flag, setFlag] = useState({
@@ -36,111 +34,87 @@ const SignIn = ({ setNotification }) => {
     button: "Send OTP",
   });
 
-  // const [flag, setFlag] = useState({
-  //   name: "otp",
-  //   label: "OTP",
-  //   button: "Submit OTP",
-  // });
-
-  // const [flag, setFlag] = useState({
-  // name: "reset",
-  // label: "New Password",
-  // button: "Reset Password",
-  // });
-
-  // on click submit
-  const onFormSubmit = async (e) => {
-    e.preventDefault();
-    if (e.target.name === "email") {
-      try {
-        let response = await httpRequest({
-          method: "POST",
-          url: "http://localhost:5000/reset",
-          data: { email: formik.values.email },
+  // page logic function
+  const setStates = async ({ targetName, url, data }) => {
+    try {
+      let response = await httpRequest({
+        method: "POST",
+        url,
+        data,
+      });
+      if (response.data.isError) {
+        setError(response.data.msg);
+        setNotification({
+          msg: response.data.msg,
+          open: true,
+          severity: "error",
         });
-        if (response.data.isError) {
-          setError(response.data.msg);
-          setNotification({
-            msg: response.data.msg,
-            open: true,
-            severity: "error",
-          });
-        } else {
-          setError("");
-          setNotification({
-            msg: response.data.msg,
-            open: true,
-            severity: "success",
-          });
+      } else {
+        // error state to false
+        setError("");
+
+        // notification state
+        setNotification({
+          msg: response.data.msg,
+          open: true,
+          severity: "success",
+        });
+
+        // input bar state
+        if (targetName === "email") {
           setFlag({
             name: "otp",
             label: "OTP",
             button: "Submit OTP",
           });
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    } else if (e.target.name === "otp") {
-      try {
-        let response = await httpRequest({
-          method: "POST",
-          url: "http://localhost:5000/verify",
-          data: { email: formik.values.email, otp: formik.values.otp },
-        });
-        if (response.data.isError) {
-          setError(response.data.msg);
-          setNotification({
-            msg: response.data.msg,
-            open: true,
-            severity: "error",
-          });
-        } else {
-          setError("");
-          setNotification({
-            msg: response.data.msg,
-            open: true,
-            severity: "success",
-          });
+        } else if (targetName === "otp") {
           setFlag({
             name: "reset",
             label: "New Password",
             button: "Reset Password",
           });
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    } else if (e.target.name === "reset") {
-      try {
-        let response = await httpRequest({
-          method: "POST",
-          url: "http://localhost:5000/reset",
-          data: { email: formik.values.email, password: formik.values.reset },
-        });
-        if (response.data.isError) {
-          setError(response.data.msg);
-          setNotification({
-            msg: response.data.msg,
-            open: true,
-            severity: "error",
-          });
         } else {
-          setError("");
-          setNotification({
-            msg: response.data.msg,
-            open: true,
-            severity: "success",
-          });
-          setFlag({
-            name: "email",
-            label: "Email Address",
-            button: "Send OTP",
-          });
+          // modal state
+          toggleForget();
         }
-      } catch (err) {
-        console.log(err);
       }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // on click submit
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+
+    // condition for email
+    if (e.target.name === "email") {
+      const parameters = {
+        targetName: e.target.name,
+        url: "http://localhost:5000/reset",
+        data: { email: formik.values.email },
+      };
+      setStates({ ...parameters });
+    }
+
+    // condition for OTP
+    else if (e.target.name === "otp") {
+      const parameters = {
+        targetName: e.target.name,
+        url: "http://localhost:5000/verify",
+        data: { email: formik.values.email, otp: formik.values.otp },
+      };
+      setStates({ ...parameters });
+    }
+
+    // condition for password reset
+    else if (e.target.name === "reset") {
+      const parameters = {
+        targetName: e.target.name,
+        url: "http://localhost:5000/password",
+        data: { email: formik.values.email, password: formik.values.reset },
+      };
+      setStates({ ...parameters });
     }
   };
 
@@ -175,6 +149,11 @@ const SignIn = ({ setNotification }) => {
     }),
   });
 
+  const onChangeHandle = (e) => {
+    formik.setFieldTouched(flag.name);
+    return formik.handleChange(e);
+  };
+
   // return body ---------------------------------------------------
   return (
     <Fragment>
@@ -204,10 +183,7 @@ const SignIn = ({ setNotification }) => {
               name={flag.name}
               autoComplete={flag.name}
               value={formik.values[flag.name]}
-              onChange={(e) => {
-                formik.setFieldTouched(flag.name);
-                return formik.handleChange(e);
-              }}
+              onChange={onChangeHandle}
               error={
                 (formik.errors[flag.name] && formik.touched[flag.name]) ||
                 !!error
@@ -222,6 +198,7 @@ const SignIn = ({ setNotification }) => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={!!formik.errors[flag.name]}
             >
               {flag.button}
             </Button>
@@ -243,7 +220,12 @@ const mapActionToProps = (dispatch) => {
         payload: { ...data },
       });
     },
+    toggleForget: () => {
+      dispatch({
+        type: forget,
+      });
+    },
   };
 };
 
-export default connect(null, mapActionToProps)(SignIn);
+export default connect(null, mapActionToProps)(ForgetPassword);

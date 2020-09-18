@@ -30,6 +30,7 @@ const onFormSubmit = (e) => {
   console.log(e);
 };
 
+//  signin component -----------------------------------------------
 const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
   const classes = useStyles();
 
@@ -56,6 +57,11 @@ const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
     }),
   });
 
+  let onChangeHandle = (e) => {
+    formik.setFieldTouched(e.target.id);
+    return formik.handleChange(e);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -77,10 +83,7 @@ const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
             label="Email Address"
             name="email"
             autoComplete="email"
-            onChange={(e) => {
-              formik.setFieldTouched("email");
-              return formik.handleChange(e);
-            }}
+            onChange={onChangeHandle}
             error={formik.errors.email && formik.touched.email}
             helperText={formik.errors.email}
             autoFocus
@@ -94,10 +97,7 @@ const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
             label="Password"
             type="password"
             id="password"
-            onChange={(e) => {
-              formik.setFieldTouched("password");
-              return formik.handleChange(e);
-            }}
+            onChange={onChangeHandle}
             error={formik.errors.password && formik.touched.password}
             helperText={formik.errors.password}
             autoComplete="current-password"
@@ -112,6 +112,7 @@ const SignIn = ({ toggleSignUp, toggleSignIn, toggleForget }) => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={!!formik.errors.email || !!formik.errors.password}
           >
             Sign In
           </Button>
