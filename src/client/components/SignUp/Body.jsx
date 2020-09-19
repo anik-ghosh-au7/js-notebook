@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
@@ -194,6 +195,15 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
             }
           >
             Sign Up
+          </Button>
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="secondary"
+            className={classes.submit}
+          >
+            <Icon className={"fa fa-google"} />
           </Button>
           <Grid container justify="flex-end">
             <Grid item>

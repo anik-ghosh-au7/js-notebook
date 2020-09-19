@@ -1,5 +1,6 @@
 // importing packages
 import jwt from "jsonwebtoken";
+import passport from "passport";
 
 // models
 import model from "../models/user.model";
@@ -7,50 +8,42 @@ import model from "../models/user.model";
 import response from "../utils/response";
 // catching errors
 import catchError from "../utils/catchError";
+// secret key for jwt
+import { secret } from "../configs/secretKey";
 
 const controller = {};
 
-//  user signin control
+//  user signin control -------------------------------------------
 controller.signup = catchError(async (req, res, next) => {
   const user = new model(req.body);
   const data = await user.save();
   response(res, data, "register successful", false, 200);
 });
 
-// user login control
-controller.login = catchError(async (req, res, next) => {
-  const user = await model.findOne({ email: req.body.email });
+// user login control --------------------------------------------
+controller.login = (req, res, next) => {
+  passport.authenticate("local", { session: false }, (err, user, info) => {
+    console.log("Error===>", err);
+    console.log(user);
+    if (err || !user)
+      return response(res, null, "Credentials incorrect", true, 404);
 
-  // checking if user found
-  if (!user) return response(res, null, "Email is not registered", true, 404);
+    req.login(user, { session: false }, (err) => {
+      if (err) return next(err);
 
-  // checking password
-  if (user.password !== req.body.password)
-    return response(res, null, "Password is incorrect", true, 401);
+      // generate a signed json web token with the contents of user object and return it in the response
+      const { firstName, lastName, email, _id } = user;
+      const token = jwt.sign(
+        { firstName, lastName, email, _id }.toJSON(),
+        secret
+      );
+      //  return res.json({user, token});
+      response(res, { user, token }, "Login Successful", false, 200);
+    });
+  })(req, res);
+};
 
-  // creating token
-  let token = jwt.sign(
-    {
-      email: req.body.email,
-      password: req.body.password,
-    },
-    "secret_key"
-  );
-
-  //   // storing it in response
-  //   res.cookie("token", token, cookieConfig);
-
-  let userData = {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-  };
-
-  const data = { token, user: userData };
-  response(res, data, "Login successful", false, 200);
-});
-
-// checking email for password reset
+// checking email for password reset ------------------------------------------------
 controller.verify = catchError(async (req, res, next) => {
   console.log(req.headers);
   let { email } = req.body;
@@ -63,7 +56,7 @@ controller.verify = catchError(async (req, res, next) => {
   response(res, null, "OTP sent to email", false, 200);
 });
 
-// check otp
+// check otp -----------------------------------------------------------------------
 controller.otp = catchError(async (req, res, next) => {
   let { otp } = req.body;
   if (otp === "1234")
@@ -72,7 +65,7 @@ controller.otp = catchError(async (req, res, next) => {
   response(res, null, "OTP didn`t match", true, 401);
 });
 
-// set new password
+// set new password ----------------------------------------------------------------
 controller.setPassword = catchError(async (req, res, next) => {
   let { email, password } = req.body;
   let user = await model.findOneAndUpdate({ email }, { $set: { password } });

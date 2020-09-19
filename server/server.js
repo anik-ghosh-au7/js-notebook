@@ -14,6 +14,9 @@ import userRoute from "./routes/user.route";
 // connecting to database
 import "./database";
 
+// passport local strategy
+import "./passport";
+
 dotenv.config();
 
 // init app
