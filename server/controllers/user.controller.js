@@ -33,10 +33,7 @@ controller.login = (req, res, next) => {
 
       // generate a signed json web token with the contents of user object and return it in the response
       const { firstName, lastName, email, _id } = user;
-      const token = jwt.sign(
-        { firstName, lastName, email, _id }.toJSON(),
-        secret
-      );
+      const token = jwt.sign({ firstName, lastName, email, _id }, secret);
       //  return res.json({user, token});
       response(res, { user, token }, "Login Successful", false, 200);
     });
