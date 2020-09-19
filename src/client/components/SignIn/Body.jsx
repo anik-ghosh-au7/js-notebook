@@ -15,6 +15,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
+// font-awesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+
 // axios
 import httpRequest from "../../config/axios.config";
 
@@ -23,6 +28,9 @@ import useStyles from "./body.style";
 
 // copyright
 import Copyright from "../Copyright/Copyright";
+
+// Divider
+import DividerWithText from "../Divider/DividerWithText";
 
 // reducer actions
 import { forget, signin, signup } from "../../redux/actions/sign.action";
@@ -163,6 +171,32 @@ const SignIn = ({
           >
             Sign In
           </Button>
+
+          <DividerWithText>Or</DividerWithText>
+
+          <Button
+            type="button"
+            width="50%"
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            style={{ marginTop: "10px" }}
+          >
+            <FontAwesomeIcon icon={faGithub} style={{ marginRight: "10px" }} />{" "}
+            Github
+          </Button>
+          <Button
+            type="button"
+            width="50%"
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            style={{ float: "right", marginTop: "10px" }}
+          >
+            <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />{" "}
+            Google
+          </Button>
+
           <Grid container>
             <Grid item xs>
               <Link
