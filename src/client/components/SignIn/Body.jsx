@@ -38,12 +38,16 @@ import GithubButton from "../Buttons/Github.button";
 import { forget, signin, signup } from "../../redux/actions/sign.action";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
+// user data reducer
+import { setUserData } from "../../utils/storageData";
+
 //  signin component -----------------------------------------------
 const SignIn = ({
   toggleSignUp,
   toggleSignIn,
   toggleForget,
   setNotification,
+  setUser,
 }) => {
   const classes = useStyles();
 
@@ -80,6 +84,13 @@ const SignIn = ({
   const responseGoogle = (response, status) => {
     console.log("google token --> ", response.accessToken);
     console.log("google user_data --> ", response.profileObj);
+    let userData = {
+      firstName: response.profileObj.givenName,
+      lastName: response.profileObj.familyName,
+      email: response.profileObj.email,
+      img: response.profileObj.imageUrl,
+    };
+    setUser(userData, response.accessToken);
     if (status)
       setNotification({
         open: true,
@@ -118,6 +129,19 @@ const SignIn = ({
         },
       });
 
+      let data = {
+        img: user_data.data.avatar_url,
+        githubUrl: user_data.data.url,
+        email: user_data.data.email,
+        firstName: user_data.data.name
+          ? user_data.data.name.split(" ")[0]
+          : null,
+        lastName: user_data.data.name
+          ? user_data.data.name.split(" ")[1]
+          : null,
+      };
+
+      setUser(data, response_data.data.access_token);
       console.log("github user_data --> ", user_data.data);
       setNotification({
         open: true,
@@ -161,11 +185,7 @@ const SignIn = ({
       console.log(response.data.data.token, response.data.data.user);
 
       // setting data to local storage
-      localStorage.setItem("access_token", response.data.data.token);
-      localStorage.setItem(
-        "user_data",
-        JSON.stringify(response.data.data.user)
-      );
+      setUser(response.data.data.user, response.data.data.token);
 
       // switching to user home
       toggleSignIn();
@@ -315,6 +335,7 @@ const mapActionToProps = (dispatch) => {
         payload: { ...data },
       });
     },
+    setUser: (data, token) => dispatch(setUserData(data, token)),
   };
 };
 

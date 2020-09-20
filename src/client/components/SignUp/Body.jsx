@@ -28,6 +28,9 @@ import Copyright from "../Copyright/Copyright";
 import { signin, signup } from "../../redux/actions/sign.action";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
+// user data reducer
+import { setUserData } from "../../utils/storageData";
+
 // github credentials
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../config/github";
 
@@ -36,7 +39,7 @@ import DividerWithText from "../Divider/DividerWithText";
 import GoogleButton from "../Buttons/Google.button";
 import GitHubButton from "../Buttons/Github.button";
 
-const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
+const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
   const classes = useStyles();
 
   const formik = useFormik({
@@ -84,6 +87,13 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
   const responseGoogle = (response, status) => {
     console.log("google token --> ", response.accessToken);
     console.log("google user_data --> ", response.profileObj);
+    let userData = {
+      firstName: response.profileObj.givenName,
+      lastName: response.profileObj.familyName,
+      email: response.profileObj.email,
+      img: response.profileObj.imageUrl,
+    };
+    setUser(userData, response.accessToken);
     if (status)
       setNotification({
         open: true,
@@ -121,6 +131,20 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
           Authorization: `token ${response_data.data.access_token}`,
         },
       });
+
+      let data = {
+        img: user_data.data.avatar_url,
+        githubUrl: user_data.data.url,
+        email: user_data.data.email,
+        firstName: user_data.data.name
+          ? user_data.data.name.split(" ")[0]
+          : null,
+        lastName: user_data.data.name
+          ? user_data.data.name.split(" ")[1]
+          : null,
+      };
+
+      setUser(data, response_data.data.access_token);
 
       console.log("github user_data --> ", user_data.data);
       setNotification({
@@ -312,6 +336,10 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
   );
 };
 
+// const mapActionToProps = {
+//   setUserData
+// }
+
 const mapActionToProps = (dispatch) => {
   return {
     toggleSignUp: () => {
@@ -330,6 +358,7 @@ const mapActionToProps = (dispatch) => {
         payload: { ...data },
       });
     },
+    setUser: (data, token) => dispatch(setUserData(data, token)),
   };
 };
 
