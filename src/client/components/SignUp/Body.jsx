@@ -12,14 +12,8 @@ import Container from "@material-ui/core/Container";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
-import { GoogleLogin } from "react-google-login";
 import GitHubLogin from "react-github-login";
 import axios from "axios";
-
-// font-awesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 // axios
 import httpRequest from "../../config/axios.config";
@@ -30,18 +24,17 @@ import useStyles from "./body.style";
 // copyright
 import Copyright from "../Copyright/Copyright";
 
-// Divider
-import DividerWithText from "../Divider/DividerWithText";
-
 // reducer actions
 import { signin, signup } from "../../redux/actions/sign.action";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
-// google credentials
-import { GOOGLE_CLIENT_ID } from "../../config/google";
-
 // github credentials
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../config/github";
+
+// components
+import DividerWithText from "../Divider/DividerWithText";
+import GoogleButton from "../Buttons/Google.button";
+import GitHubButton from "../Buttons/Github.button";
 
 const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
   const classes = useStyles();
@@ -81,43 +74,71 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
     }),
   });
 
+  // input data handle
   const onChangeHandle = (e) => {
     formik.setFieldTouched(e.target.id);
     return formik.handleChange(e);
   };
 
-  const responseGoogle = (response) => {
+  // google response
+  const responseGoogle = (response, status) => {
     console.log("google token --> ", response.accessToken);
     console.log("google user_data --> ", response.profileObj);
+    if (status)
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: "Login Successful",
+      });
+    else
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: "Login Unsuccessful",
+      });
   };
 
+  // github response
   const responseGithub = async (response) => {
-    // console.log("github response --> ", response);
+    try {
+      let response_data = await httpRequest({
+        method: "POST",
+        url:
+          "https://cors-anywhere.herokuapp.com/" +
+          "https://github.com/login/oauth/access_token",
+        data: {
+          client_id: GITHUB_CLIENT_ID,
+          code: response.code,
+          client_secret: GITHUB_CLIENT_SECRET,
+        },
+      });
 
-    let response_data = await httpRequest({
-      method: "POST",
-      url:
-        "https://cors-anywhere.herokuapp.com/" +
-        "https://github.com/login/oauth/access_token",
-      data: {
-        client_id: GITHUB_CLIENT_ID,
-        code: response.code,
-        client_secret: GITHUB_CLIENT_SECRET,
-      },
-    });
+      console.log("github token --> ", response_data.data.access_token);
 
-    console.log("github token --> ", response_data.data.access_token);
+      let user_data = await axios("https://api.github.com/user", {
+        method: "GET",
+        headers: {
+          Authorization: `token ${response_data.data.access_token}`,
+        },
+      });
 
-    let user_data = await axios("https://api.github.com/user", {
-      method: "GET",
-      headers: {
-        Authorization: `token ${response_data.data.access_token}`,
-      },
-    });
-
-    console.log("github user_data --> ", user_data.data);
+      console.log("github user_data --> ", user_data.data);
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: "Login Successful!!",
+      });
+    } catch (err) {
+      console.log(err);
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: "Login Unsuccessful!!",
+      });
+    }
   };
 
+  // form submit handler
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -152,6 +173,10 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
         });
     }
   };
+
+  // github button click logic
+  const githubButtonClick = () =>
+    document.getElementById("github_button").children[0].click();
 
   // return component ---------------------------------------------
   return (
@@ -246,47 +271,14 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
           </Button>
 
           <DividerWithText>Or</DividerWithText>
-
-          <Button
-            type="button"
-            width="50%"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            style={{ marginTop: "10px" }}
-            onClick={() =>
-              document.getElementById("github_button").children[0].click()
-            }
-          >
-            <FontAwesomeIcon icon={faGithub} style={{ marginRight: "10px" }} />{" "}
-            Github
-          </Button>
-
-          <GoogleLogin
-            clientId={GOOGLE_CLIENT_ID}
-            render={(renderProps) => (
-              <Button
-                type="button"
-                width="50%"
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                style={{ float: "right", marginTop: "10px" }}
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-              >
-                <FontAwesomeIcon
-                  icon={faGoogle}
-                  style={{ marginRight: "10px" }}
-                />{" "}
-                Google
-              </Button>
-            )}
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={"single_host_origin"}
+          {/*Github button*/}
+          <GitHubButton
+            useStyles={useStyles}
+            githubButtonClick={githubButtonClick}
           />
+
+          {/*Google button*/}
+          <GoogleButton responseGoogle={responseGoogle} useStyles={useStyles} />
 
           <Grid container justify="flex-end">
             <Grid item>
@@ -303,7 +295,7 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
             </Grid>
           </Grid>
         </form>
-
+        {/*main github button*/}
         <div hidden id="github_button">
           <GitHubLogin
             clientId={GITHUB_CLIENT_ID}
