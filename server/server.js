@@ -15,7 +15,7 @@ import userRoute from "./routes/user.route";
 import "./database";
 
 // passport local strategy
-import "./passport";
+import "./local.passport";
 
 dotenv.config();
 
@@ -50,43 +50,6 @@ app.use(express.static(path.join(__dirname, "../src/client/build")));
 
 // routes
 app.use("/api/users", userRoute);
-
-// app.post("/password", (req, res) => {
-//   const { password } = req.body;
-//   let found = users.find((user) => user.email === req.body.email);
-//   if (found) {
-//     found.password = password;
-//     return res
-//       .status(200)
-//       .send({ isError: false, msg: "Password changed successfully" });
-//   } else {
-//     return res.send({ msg: "Email not registered", isError: true });
-//   }
-// });
-
-// app.post("/reset", function (req, res) {
-//   let found = users.find((user) => user.email === req.body.email);
-//   if (found) {
-//     return res
-//       .status(200)
-//       .send({ isError: false, msg: "We have sent OTP to given email" });
-//   } else {
-//     return res.status(404).send({ msg: "Email not registered", isError: true });
-//   }
-// });
-
-// app.post("/verify", function (req, res) {
-//   let found = users.find((user) => user.email === req.body.email);
-//   if (found) {
-//     if (found.otp === req.body.otp)
-//       return res
-//         .status(200)
-//         .send({ isError: false, msg: "Create New Password" });
-//     else res.send({ msg: "Wrong OTP provided", isError: true });
-//   } else {
-//     return res.send({ msg: "Email not registered", isError: true });
-//   }
-// });
 
 // 404 error handling
 app.use("/api/*", (req, res, next) => {

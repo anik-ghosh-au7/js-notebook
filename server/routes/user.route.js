@@ -1,5 +1,6 @@
 // importing package
 import express from "express";
+import passport from "passport";
 
 // controller
 import userController from "../controllers/user.controller";

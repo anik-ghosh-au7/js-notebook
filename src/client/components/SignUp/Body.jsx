@@ -12,6 +12,9 @@ import Container from "@material-ui/core/Container";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
+import { GoogleLogin } from "react-google-login";
+import GitHubLogin from "react-github-login";
+import axios from "axios";
 
 // font-awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,6 +36,12 @@ import DividerWithText from "../Divider/DividerWithText";
 // reducer actions
 import { signin, signup } from "../../redux/actions/sign.action";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
+
+// google credentials
+import { GOOGLE_CLIENT_ID } from "../../config/google";
+
+// github credentials
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../config/github";
 
 const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
   const classes = useStyles();
@@ -75,6 +84,38 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
   const onChangeHandle = (e) => {
     formik.setFieldTouched(e.target.id);
     return formik.handleChange(e);
+  };
+
+  const responseGoogle = (response) => {
+    console.log("google token --> ", response.accessToken);
+    console.log("google user_data --> ", response.profileObj);
+  };
+
+  const responseGithub = async (response) => {
+    // console.log("github response --> ", response);
+
+    let response_data = await httpRequest({
+      method: "POST",
+      url:
+        "https://cors-anywhere.herokuapp.com/" +
+        "https://github.com/login/oauth/access_token",
+      data: {
+        client_id: GITHUB_CLIENT_ID,
+        code: response.code,
+        client_secret: GITHUB_CLIENT_SECRET,
+      },
+    });
+
+    console.log("github token --> ", response_data.data.access_token);
+
+    let user_data = await axios("https://api.github.com/user", {
+      method: "GET",
+      headers: {
+        Authorization: `token ${response_data.data.access_token}`,
+      },
+    });
+
+    console.log("github user_data --> ", user_data.data);
   };
 
   const submitHandler = async (e) => {
@@ -213,21 +254,39 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
             color="primary"
             className={classes.submit}
             style={{ marginTop: "10px" }}
+            onClick={() =>
+              document.getElementById("github_button").children[0].click()
+            }
           >
             <FontAwesomeIcon icon={faGithub} style={{ marginRight: "10px" }} />{" "}
             Github
           </Button>
-          <Button
-            type="button"
-            width="50%"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            style={{ float: "right", marginTop: "10px" }}
-          >
-            <FontAwesomeIcon icon={faGoogle} style={{ marginRight: "10px" }} />{" "}
-            Google
-          </Button>
+
+          <GoogleLogin
+            clientId={GOOGLE_CLIENT_ID}
+            render={(renderProps) => (
+              <Button
+                type="button"
+                width="50%"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                style={{ float: "right", marginTop: "10px" }}
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+              >
+                <FontAwesomeIcon
+                  icon={faGoogle}
+                  style={{ marginRight: "10px" }}
+                />{" "}
+                Google
+              </Button>
+            )}
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+          />
 
           <Grid container justify="flex-end">
             <Grid item>
@@ -244,6 +303,15 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification }) => {
             </Grid>
           </Grid>
         </form>
+
+        <div hidden id="github_button">
+          <GitHubLogin
+            clientId={GITHUB_CLIENT_ID}
+            onSuccess={responseGithub}
+            onFailure={responseGithub}
+            redirectUri=""
+          />
+        </div>
       </div>
       <Box mt={5}>
         <Copyright />
