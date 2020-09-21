@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
+    boxShadow: "0px 0px 4px 1px rgba(0,0,0,0.4)",
   },
   profile_img: {
     height: "100%",
