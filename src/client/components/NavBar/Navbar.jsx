@@ -17,13 +17,19 @@ import { isEmpty } from "lodash";
 import useStyles from "./navBar.style";
 
 // reducer actions
-import { signin, signup, signout } from "../../redux/actions/sign.action";
+import {
+  signin,
+  signup,
+  signout,
+  profile,
+} from "../../redux/actions/sign.action";
 
 const NavBar = (props) => {
   const {
     toggleSignIn,
     toggleSignUp,
     toggleSignOut,
+    toggleProfile,
     isLogin,
     userName,
     userImg,
@@ -61,6 +67,9 @@ const NavBar = (props) => {
     }
     if (event.target.innerText === "Sign-Out") {
       toggleSignOut();
+    }
+    if (event.target.innerText === "Profile") {
+      toggleProfile();
     }
     handleMenuClose();
   };
@@ -229,6 +238,11 @@ const mapActionToProps = (dispatch) => {
     toggleSignOut: () => {
       dispatch({
         type: signout,
+      });
+    },
+    toggleProfile: () => {
+      dispatch({
+        type: profile,
       });
     },
   };

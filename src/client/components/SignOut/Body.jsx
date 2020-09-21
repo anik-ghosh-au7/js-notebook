@@ -35,9 +35,9 @@ const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
       setNotification({
         open: true,
         severity: "success",
-        msg: "Sign out successfull",
+        msg: "Sign out successful",
       });
-    } else {
+    } else if (innerText === "NO") {
       setNotification({
         open: true,
         severity: "warning",
@@ -101,10 +101,6 @@ const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
     </Fragment>
   );
 };
-
-// const mapActionToProps = {
-//   clearUserData,
-// };
 
 const mapActionToProps = (dispatch) => {
   return {

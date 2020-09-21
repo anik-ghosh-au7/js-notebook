@@ -10,6 +10,7 @@ import Navbar from "./client/components/NavBar/Navbar";
 import SignUp from "./client/components/SignUp/SignUp";
 import SignIn from "./client/components/SignIn/SignIn";
 import SignOut from "./client/components/SignOut/SignOut";
+import Profile from "./client/components/Profile/Profile";
 import Notification from "./client/components/Notification/Notification";
 import ForgetPassword from "./client/components/ForgetPassword/ForgetPassword";
 
@@ -22,6 +23,7 @@ function App() {
         <SignUp />
         <SignIn />
         <SignOut />
+        <Profile />
         <ForgetPassword />
       </Container>
     </ThemeProvider>
