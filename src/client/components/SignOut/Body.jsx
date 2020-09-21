@@ -75,7 +75,6 @@ const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
                 className={classes.submit}
                 style={{ float: "left", marginTop: "10px" }}
                 onClick={onClickHandler}
-                className={classes.submit}
               >
                 <CheckCircleIcon style={{ marginRight: "10px" }} /> Yes
               </Button>
@@ -89,7 +88,6 @@ const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
                 className={classes.submit}
                 style={{ float: "right", marginTop: "10px" }}
                 onClick={onClickHandler}
-                className={classes.submit}
               >
                 <CancelIcon style={{ marginRight: "10px" }} /> No
               </Button>
