@@ -15,6 +15,8 @@ export const setUserData = (data, token) => (dispatch) => {
 };
 
 export const clearUserData = () => (dispatch) => {
+  localStorage.clear("token");
+  localStorage.clear("user");
   dispatch({
     type: CLEAR_USER,
   });

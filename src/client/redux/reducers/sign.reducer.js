@@ -1,9 +1,10 @@
-import { signin, signup, forget } from "../actions/sign.action";
+import { signin, signup, forget, signout } from "../actions/sign.action";
 
 let initialState = {
   signup: false,
   signin: false,
   forget: false,
+  signout: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -17,6 +18,10 @@ const reducer = (state = initialState, action) => {
 
   if (action.type === forget) {
     return { ...state, forget: !state.forget };
+  }
+
+  if (action.type === signout) {
+    return { ...state, signout: !state.signout };
   }
 
   return state;

@@ -11,15 +11,23 @@ import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { connect } from "react-redux";
+import { isEmpty } from "lodash";
 
 // style
 import useStyles from "./navBar.style";
 
 // reducer actions
-import { signin, signup } from "../../redux/actions/sign.action";
+import { signin, signup, signout } from "../../redux/actions/sign.action";
 
 const NavBar = (props) => {
-  const { toggleSignIn, toggleSignUp } = props;
+  const {
+    toggleSignIn,
+    toggleSignUp,
+    toggleSignOut,
+    isLogin,
+    userName,
+    userImg,
+  } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -51,13 +59,17 @@ const NavBar = (props) => {
     if (event.target.innerText === "Sign-Up") {
       toggleSignUp();
     }
+    if (event.target.innerText === "Sign-Out") {
+      toggleSignOut();
+    }
     handleMenuClose();
   };
 
-  const flag = true;
+  const toTitleName = (name) =>
+    name.charAt(0).toUpperCase() + name.slice(1, name.length);
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = flag ? (
+  const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -67,19 +79,29 @@ const NavBar = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem name="signin" onClick={toggleModal}>
-        Sign-In
-      </MenuItem>
-      <MenuItem name="signup" onClick={toggleModal}>
-        Sign-Up
-      </MenuItem>
+      {" "}
+      {isLogin
+        ? [
+            <MenuItem name="profile" key="profile" onClick={toggleModal}>
+              Profile
+            </MenuItem>,
+            <MenuItem name="signout" key="signout" onClick={toggleModal}>
+              Sign-Out
+            </MenuItem>,
+          ]
+        : [
+            <MenuItem name="signin" key="signin" onClick={toggleModal}>
+              Sign-In
+            </MenuItem>,
+            <MenuItem name="signup" key="signup" onClick={toggleModal}>
+              Sign-Up
+            </MenuItem>,
+          ]}
     </Menu>
-  ) : (
-    <div>hello world</div>
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = flag ? (
+  const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -89,17 +111,26 @@ const NavBar = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem name="signin" onClick={toggleModal}>
-        Sign-In
-      </MenuItem>
-      <MenuItem name="signup" onClick={toggleModal}>
-        Sign-Up
-      </MenuItem>
+      {isLogin
+        ? [
+            <MenuItem name="profile" key="profile" onClick={toggleModal}>
+              Profile
+            </MenuItem>,
+            <MenuItem name="signout" key="signout" onClick={toggleModal}>
+              Sign-Out
+            </MenuItem>,
+          ]
+        : [
+            <MenuItem name="signin" key="signin" onClick={toggleModal}>
+              Sign-In
+            </MenuItem>,
+            <MenuItem name="signup" key="signup" onClick={toggleModal}>
+              Sign-Up
+            </MenuItem>,
+          ]}
     </Menu>
-  ) : (
-    <div>hello world</div>
   );
-
+  // return component ----------------------------------------------------------------
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -141,6 +172,15 @@ const NavBar = (props) => {
           {/*space between search and profile*/}
           <div className={classes.grow} />
 
+          <Typography
+            color="secondary"
+            className={classes.title}
+            variant="subtitle1"
+            noWrap
+          >
+            Hello, {!!userName ? toTitleName(userName) : "Guest"}
+          </Typography>
+
           {/*profile icon*/}
           <div className={classes.sectionDesktop}>
             <IconButton
@@ -166,6 +206,14 @@ const NavBar = (props) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    isLogin: !isEmpty(state.userData),
+    userName: state.userData.firstName,
+    userImg: state.userData.img,
+  };
+};
+
 const mapActionToProps = (dispatch) => {
   return {
     toggleSignUp: () => {
@@ -178,7 +226,12 @@ const mapActionToProps = (dispatch) => {
         type: signin,
       });
     },
+    toggleSignOut: () => {
+      dispatch({
+        type: signout,
+      });
+    },
   };
 };
 
-export default connect(null, mapActionToProps)(NavBar);
+export default connect(mapStateToProps, mapActionToProps)(NavBar);

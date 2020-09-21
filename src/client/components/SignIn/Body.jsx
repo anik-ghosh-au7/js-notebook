@@ -135,7 +135,7 @@ const SignIn = ({
         email: user_data.data.email,
         firstName: user_data.data.name
           ? user_data.data.name.split(" ")[0]
-          : null,
+          : user_data.data.login,
         lastName: user_data.data.name
           ? user_data.data.name.split(" ")[1]
           : null,
