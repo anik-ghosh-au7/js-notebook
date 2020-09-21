@@ -18,6 +18,6 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(3, 4, 3),
+    padding: theme.spacing(6, 4, 3, 4),
   },
 }));
