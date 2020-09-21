@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CenteredGrid() {
+const Body = () => {
   const classes = useStyles();
 
   return (
@@ -46,4 +46,6 @@ export default function CenteredGrid() {
       </Grid>
     </div>
   );
-}
+};
+
+export default Body;
