@@ -94,13 +94,14 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       img: response.profileObj.imageUrl,
     };
     setUser(userData, response.accessToken);
-    if (status)
+    if (status) {
       setNotification({
         open: true,
         severity: "success",
         msg: "Login Successful",
       });
-    else
+      toggleSignUp();
+    } else
       setNotification({
         open: true,
         severity: "error",
@@ -152,6 +153,8 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
         severity: "success",
         msg: "Login Successful!!",
       });
+
+      toggleSignUp();
     } catch (err) {
       console.log(err);
       setNotification({
@@ -335,10 +338,6 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
     </Container>
   );
 };
-
-// const mapActionToProps = {
-//   setUserData
-// }
 
 const mapActionToProps = (dispatch) => {
   return {

@@ -91,13 +91,14 @@ const SignIn = ({
       img: response.profileObj.imageUrl,
     };
     setUser(userData, response.accessToken);
-    if (status)
+    if (status) {
       setNotification({
         open: true,
         severity: "success",
         msg: "Login Successful",
       });
-    else
+      toggleSignIn();
+    } else
       setNotification({
         open: true,
         severity: "error",
@@ -148,6 +149,8 @@ const SignIn = ({
         severity: "success",
         msg: "Login Successful!!",
       });
+
+      toggleSignIn();
     } catch (err) {
       console.log(err);
       setNotification({

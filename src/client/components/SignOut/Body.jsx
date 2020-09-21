@@ -6,6 +6,8 @@ import Box from "@material-ui/core/Box";
 import HelpIcon from "@material-ui/icons/Help";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import CancelIcon from "@material-ui/icons/Cancel";
 import { connect } from "react-redux";
 
 // styles
@@ -16,15 +18,32 @@ import Copyright from "../Copyright/Copyright";
 
 // reducer actions
 import { clearUserData } from "../../utils/storageData";
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
+import { Grid } from "@material-ui/core";
+
+// Components
+import DividerWithText from "../Divider/DividerWithText";
 
 // Forget Password component -----------------------------------------
-const Body = ({ toggleSignOut, clearUserData }) => {
+const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
   const classes = useStyles();
 
   const onClickHandler = (e) => {
     const { innerText } = e.target;
-    console.log(innerText, e.target);
-    if (innerText === "YES") clearUserData();
+    if (innerText === "YES") {
+      clearUserData();
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: "Sign out successfull",
+      });
+    } else {
+      setNotification({
+        open: true,
+        severity: "warning",
+        msg: "Sign out cancelled",
+      });
+    }
     toggleSignOut();
   };
 
@@ -37,32 +56,47 @@ const Body = ({ toggleSignOut, clearUserData }) => {
           <Avatar className={classes.avatar}>
             <HelpIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography
+            component="h1"
+            variant="h5"
+            style={{ marginTop: "20px", marginBottom: "20px" }}
+          >
             Do You Want to Sign Out?
           </Typography>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={onClickHandler}
-            className={classes.submit}
-          >
-            Yes
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={onClickHandler}
-            className={classes.submit}
-          >
-            No
-          </Button>
+          <DividerWithText>Select</DividerWithText>
+          <Grid container>
+            <Grid item xs>
+              <Button
+                type="button"
+                width="50%"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                style={{ float: "left", marginTop: "10px" }}
+                onClick={onClickHandler}
+                className={classes.submit}
+              >
+                <CheckCircleIcon style={{ marginRight: "10px" }} /> Yes
+              </Button>
+            </Grid>
+            <Grid item xs>
+              <Button
+                type="button"
+                width="50%"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                style={{ float: "right", marginTop: "10px" }}
+                onClick={onClickHandler}
+                className={classes.submit}
+              >
+                <CancelIcon style={{ marginRight: "10px" }} /> No
+              </Button>
+            </Grid>
+          </Grid>
         </div>
-        <Box mt={8}>
+        <Box mt={4}>
           <Copyright />
         </Box>
       </Container>
@@ -70,8 +104,20 @@ const Body = ({ toggleSignOut, clearUserData }) => {
   );
 };
 
-const mapActionToProps = {
-  clearUserData,
+// const mapActionToProps = {
+//   clearUserData,
+// };
+
+const mapActionToProps = (dispatch) => {
+  return {
+    clearUserData: () => dispatch(clearUserData()),
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
+      });
+    },
+  };
 };
 
 export default connect(null, mapActionToProps)(Body);
