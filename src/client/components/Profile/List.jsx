@@ -25,12 +25,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
+let data = [
+  { name: "Name", value: "Anik Ghosh" },
+  { name: "Email", value: "anik@gmail.com" },
+  { name: "Github", value: "anik-ghosh-au7" },
+];
+
+function generate() {
+  return data.map((value, idx) => (
+    <ListItem key={idx}>
+      <ListItemAvatar>
+        <Avatar>
+          <FolderIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <Typography variant="h6" style={{ color: "#ff6f00" }}>
+            {value.name}
+          </Typography>
+        }
+        secondary={value.value}
+      />
+      <ListItemSecondaryAction>
+        <IconButton edge="end" aria-label="delete">
+          <DeleteIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  ));
 }
 
 export default function InteractiveList() {
@@ -44,30 +67,7 @@ export default function InteractiveList() {
             Profile Details
           </Typography>
           <div className={classes.demo}>
-            <List>
-              {generate(
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <Typography variant="h6" style={{ color: "#ff6f00" }}>
-                        Name
-                      </Typography>
-                    }
-                    secondary="Anik Ghosh"
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              )}
-            </List>
+            <List>{generate()}</List>
           </div>
         </Grid>
       </Grid>
