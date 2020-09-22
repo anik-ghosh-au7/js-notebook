@@ -8,7 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 // components
 import List from "./List";
-import FileInput from "./FileInput";
+import DropZone from "../DropZone/DropZone";
 
 // styles
 import useStyles from "./body.style";
@@ -39,6 +39,7 @@ const Body = ({ userData }) => {
     }`,
     Email: !!userData.email ? userData.email : null,
     Github: !!userData.githubUrl ? userData.githubUrl : null,
+    Image: !!userData.img ? userData.img : null,
   };
 
   // field value state
@@ -46,6 +47,9 @@ const Body = ({ userData }) => {
 
   // input modal open state
   const [isOpen, setIsOpen] = React.useState(false);
+
+  // to change field type from text to input and vice-versa
+  const [fieldType, setFieldType] = React.useState({ name: "" });
 
   const onMouseOver = () => {
     setIsShow(true);
@@ -80,10 +84,21 @@ const Body = ({ userData }) => {
           </Card>
         </Grid>
         <Grid item xs={6}>
-          <List data={data} setData={setData} init_data={init_data} />
+          <List
+            data={data}
+            setData={setData}
+            init_data={init_data}
+            fieldType={fieldType}
+            setFieldType={setFieldType}
+          />
         </Grid>
       </Grid>
-      <FileInput isOpen={isOpen} setIsOpen={setIsOpen} />
+      <DropZone
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        data={data}
+        setData={setData}
+      />
     </div>
   );
 };

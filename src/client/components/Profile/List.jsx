@@ -28,23 +28,8 @@ const getFieldIcon = (name) => {
   return <FolderIcon />;
 };
 
-const DataList = ({ data, setData, init_data }) => {
+const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
   const classes = useStyles();
-
-  // to change field type from text to input and vice-versa
-  const [fieldType, setFieldType] = useState({ name: "" });
-
-  // // initial user data
-  // const init_data = {
-  //   Name: `${userData.firstName} ${
-  //     !!userData.lastName ? userData.lastName : ""
-  //   }`,
-  //   Email: !!userData.email ? userData.email : null,
-  //   Github: !!userData.githubUrl ? userData.githubUrl : null,
-  // };
-
-  // // field value state
-  // const [data, setData] = useState(init_data);
 
   const onEditHandler = (e) => {
     setFieldType({ name: e.currentTarget.value });
@@ -62,7 +47,7 @@ const DataList = ({ data, setData, init_data }) => {
   // function to generate profile fields dynamically
   const generate = () => {
     return map(Object.keys(data), (name, idx) => {
-      if (!!data[name]) {
+      if (!!data[name] && name !== "Image") {
         return (
           <ListItem key={idx}>
             <ListItemAvatar>
@@ -114,49 +99,47 @@ const DataList = ({ data, setData, init_data }) => {
 
   return (
     <div className={classes.root}>
-      <form>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <Typography variant="h4" className={classes.title}>
-              Profile Details
-            </Typography>
-            <div className={classes.demo}>
-              <List>{generate()}</List>
-            </div>
-          </Grid>
-          {fieldType.name && (
-            <>
-              <Grid item xs>
-                <Button
-                  type="button"
-                  width="50%"
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  style={{ float: "left", marginTop: "10px" }}
-                  // onClick={onClickHandler}
-                >
-                  <CheckCircleIcon style={{ marginRight: "10px" }} /> Save
-                </Button>
-              </Grid>
-
-              <Grid item xs>
-                <Button
-                  type="button"
-                  width="50%"
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  style={{ float: "right", marginTop: "10px" }}
-                  onClick={discardHandler}
-                >
-                  <CancelIcon style={{ marginRight: "10px" }} /> Discard
-                </Button>
-              </Grid>
-            </>
-          )}
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={12}>
+          <Typography variant="h4" className={classes.title}>
+            Profile Details
+          </Typography>
+          <div className={classes.demo}>
+            <List>{generate()}</List>
+          </div>
         </Grid>
-      </form>
+        {fieldType.name && (
+          <>
+            <Grid item xs>
+              <Button
+                type="button"
+                width="50%"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                style={{ float: "left", marginTop: "10px" }}
+                // onClick={onClickHandler}
+              >
+                <CheckCircleIcon style={{ marginRight: "10px" }} /> Save
+              </Button>
+            </Grid>
+
+            <Grid item xs>
+              <Button
+                type="button"
+                width="50%"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                style={{ float: "right", marginTop: "10px" }}
+                onClick={discardHandler}
+              >
+                <CancelIcon style={{ marginRight: "10px" }} /> Discard
+              </Button>
+            </Grid>
+          </>
+        )}
+      </Grid>
     </div>
   );
 };

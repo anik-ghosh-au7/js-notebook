@@ -32,7 +32,6 @@ const NavBar = (props) => {
     toggleProfile,
     isLogin,
     userName,
-    userImg,
   } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
