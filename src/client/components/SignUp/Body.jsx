@@ -85,6 +85,13 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
 
   // google response
   const responseGoogle = (response, status) => {
+    if (!status) {
+      return setNotification({
+        open: true,
+        severity: "error",
+        msg: "Login Unsuccessful",
+      });
+    }
     console.log("google token --> ", response.accessToken);
     console.log("google user_data --> ", response.profileObj);
     let userData = {
@@ -94,19 +101,12 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       img: response.profileObj.imageUrl,
     };
     setUser(userData, response.accessToken);
-    if (status) {
-      setNotification({
-        open: true,
-        severity: "success",
-        msg: "Login Successful",
-      });
-      toggleSignUp();
-    } else
-      setNotification({
-        open: true,
-        severity: "error",
-        msg: "Login Unsuccessful",
-      });
+    setNotification({
+      open: true,
+      severity: "success",
+      msg: "Login Successful",
+    });
+    toggleSignUp();
   };
 
   // github response
