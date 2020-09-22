@@ -1,30 +1,16 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
+import { connect } from "react-redux";
 
+// components
 import List from "./List";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  card_root: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    boxShadow: "0px 0px 4px 1px rgba(0,0,0,0.4)",
-  },
-  profile_img: {
-    height: "100%",
-    width: "100%",
-    objectFit: "contain",
-  },
-}));
+// styles
+import useStyles from "./body.style";
 
-const Body = () => {
+const Body = ({ userImg }) => {
   const classes = useStyles();
 
   return (
@@ -34,7 +20,7 @@ const Body = () => {
           <Card className={classes.card_root}>
             <CardMedia title="Profile Image">
               <img
-                src="default_image.png"
+                src={userImg || "default_image.png"}
                 className={classes.profile_img}
                 alt="profile"
               />
@@ -49,4 +35,10 @@ const Body = () => {
   );
 };
 
-export default Body;
+const mapStateToProps = (state) => {
+  return {
+    userImg: state.userData.img,
+  };
+};
+
+export default connect(mapStateToProps)(Body);
