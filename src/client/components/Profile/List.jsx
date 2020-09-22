@@ -16,7 +16,6 @@ import ShortTextTwoToneIcon from "@material-ui/icons/ShortTextTwoTone";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { map } from "lodash";
-import { connect } from "react-redux";
 
 // styles
 import useStyles from "./list.style";
@@ -29,26 +28,26 @@ const getFieldIcon = (name) => {
   return <FolderIcon />;
 };
 
-const DataList = ({ userData }) => {
+const DataList = ({ data, setData, init_data }) => {
   const classes = useStyles();
 
-  // to change feild type from text to input and vice-versa
-  const [feildType, setFeildType] = useState({ name: "" });
+  // to change field type from text to input and vice-versa
+  const [fieldType, setFieldType] = useState({ name: "" });
 
-  // initial data
-  const init_data = {
-    Name: `${userData.firstName} ${
-      !!userData.lastName ? userData.lastName : ""
-    }`,
-    Email: !!userData.email ? userData.email : null,
-    Github: !!userData.githubUrl ? userData.githubUrl : null,
-  };
+  // // initial user data
+  // const init_data = {
+  //   Name: `${userData.firstName} ${
+  //     !!userData.lastName ? userData.lastName : ""
+  //   }`,
+  //   Email: !!userData.email ? userData.email : null,
+  //   Github: !!userData.githubUrl ? userData.githubUrl : null,
+  // };
 
-  // feild value
-  const [data, setData] = useState(init_data);
+  // // field value state
+  // const [data, setData] = useState(init_data);
 
   const onEditHandler = (e) => {
-    setFeildType({ name: e.currentTarget.value });
+    setFieldType({ name: e.currentTarget.value });
   };
 
   const onChangeHandler = (e) => {
@@ -56,11 +55,11 @@ const DataList = ({ userData }) => {
   };
 
   const discardHandler = () => {
-    setFeildType({ name: "" });
+    setFieldType({ name: "" });
     setData(init_data);
   };
 
-  // function to generate profile feilds dynamically
+  // function to generate profile fields dynamically
   const generate = () => {
     return map(Object.keys(data), (name, idx) => {
       if (!!data[name]) {
@@ -69,7 +68,7 @@ const DataList = ({ userData }) => {
             <ListItemAvatar>
               <Avatar>{getFieldIcon(name)}</Avatar>
             </ListItemAvatar>
-            {feildType.name === name ? (
+            {fieldType.name === name ? (
               <TextField
                 id={name}
                 value={data[name]}
@@ -100,7 +99,7 @@ const DataList = ({ userData }) => {
             <ListItemSecondaryAction>
               <IconButton
                 edge="end"
-                aria-label="delete"
+                aria-label="edit"
                 value={name}
                 onClick={onEditHandler}
               >
@@ -125,7 +124,7 @@ const DataList = ({ userData }) => {
               <List>{generate()}</List>
             </div>
           </Grid>
-          {feildType.name && (
+          {fieldType.name && (
             <>
               <Grid item xs>
                 <Button
@@ -162,10 +161,10 @@ const DataList = ({ userData }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    userData: state.userData,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     userData: state.
+//   };
+// };
 
-export default connect(mapStateToProps)(DataList);
+export default DataList;
