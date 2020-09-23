@@ -4,18 +4,21 @@ import path from "path";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import passport from "passport";
 
 // response function
 import response from "./utils/response";
 
 // routes
 import userRoute from "./routes/user.route";
+import protectedRoute from "./routes/protected.route";
 
 // connecting to database
 import "./database";
 
-// passport local strategy
+// passport strategies
 import "./local.passport";
+import "./middlewares/authentication/passport.middleware";
 
 dotenv.config();
 
@@ -50,6 +53,11 @@ app.use(express.static(path.join(__dirname, "../src/client/build")));
 
 // routes
 app.use("/api/users", userRoute);
+app.use(
+  "/api/protected",
+  passport.authenticate("jwt", { session: false }),
+  protectedRoute
+);
 
 // 404 error handling
 app.use("/api/*", (req, res, next) => {
