@@ -11,7 +11,7 @@ const axiosDefaultConfig = {
 };
 
 const createConfig = () => {
-  const authToken = localStorage.getItem("access_token");
+  const authToken = localStorage.getItem("token");
   const isAuth = !!authToken;
   if (isAuth) {
     axiosDefaultConfig.headers["Authorization"] = `Bearer ${authToken}`;

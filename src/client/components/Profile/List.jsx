@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -16,6 +16,10 @@ import ShortTextTwoToneIcon from "@material-ui/icons/ShortTextTwoTone";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { map } from "lodash";
+import axios from "axios";
+
+// importing axios config to send form data
+import createConfig from "./form_axios.config";
 
 // styles
 import useStyles from "./list.style";
@@ -37,6 +41,26 @@ const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
 
   const onChangeHandler = (e) => {
     setData({ ...data, [e.currentTarget.id]: e.currentTarget.value });
+  };
+
+  const saveHandler = () => {
+    let form_data = new FormData();
+
+    Object.keys(data).forEach((key) => {
+      form_data.append(key, data[key]);
+    });
+
+    let response = axios.post(
+      "http://localhost:5000/api/protected/profile",
+      form_data,
+      createConfig()
+    );
+
+    console.log(response);
+
+    // setting state variables based on response
+    // setFieldType({ name: "" });
+    // setData(init_data);
   };
 
   const discardHandler = () => {
@@ -118,7 +142,7 @@ const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
                 color="primary"
                 className={classes.submit}
                 style={{ float: "left", marginTop: "10px" }}
-                // onClick={onClickHandler}
+                onClick={saveHandler}
               >
                 <CheckCircleIcon style={{ marginRight: "10px" }} /> Save
               </Button>
