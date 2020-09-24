@@ -1,10 +1,6 @@
 // importing packages
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import formidable from "formidable";
-import path from "path";
-import fs from "fs";
-import cloudLib from "cloudinary";
 
 // models
 import model from "../models/user.model";
@@ -14,21 +10,6 @@ import response from "../utils/response";
 import catchError from "../utils/catchError";
 // secret key for jwt
 import { secret } from "../configs/secretKey";
-
-// importing cloudinary config variables
-import {
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-  CLOUDINARY_CLOUD_NAME,
-} from "../configs/cloudinary";
-
-const cloudinary = cloudLib.v2;
-
-cloudinary.config({
-  cloud_name: CLOUDINARY_CLOUD_NAME,
-  api_key: CLOUDINARY_API_KEY,
-  api_secret: CLOUDINARY_API_SECRET,
-});
 
 const controller = {};
 
@@ -124,39 +105,7 @@ controller.customRegister = catchError(async (req, res, next) => {
 
 // user profile update --------------------------------------------------------------------
 controller.profile = catchError(async (req, res, next) => {
-  // formidable config
-  const form = formidable({
-    multiples: true,
-    uploadDir: path.join(__dirname, "../../public/tempAssets"),
-    keepExtensions: true,
-  });
-
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log("fields --> ", fields, files);
-
-    let image_url;
-
-    if (!!files.file) {
-      await cloudinary.uploader.upload(
-        files.file.path,
-        (err, imageResponse) => {
-          if (err) console.log(err);
-          else {
-            image_url = imageResponse.secure_url;
-            console.log("image url from from cloudinary ==> ", image_url);
-            fs.unlink(files.file.path, (err) => {
-              if (err) console.log(err);
-            });
-          }
-        }
-      );
-    }
-  });
-
-  // console.log("from profile -- server --> ", req);
+  console.log("from profile -- server --> ", req.imgUrl);
   response(res, req.user, "user profile", false, 200);
 });
 
