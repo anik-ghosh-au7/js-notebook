@@ -13,5 +13,6 @@ route.post("/signup", userController.signup);
 route.post("/verify", userController.verify);
 route.post("/otp", userController.otp);
 route.post("/password", userController.setPassword);
+route.post("/custom", userController.customRegister);
 
 export default route;

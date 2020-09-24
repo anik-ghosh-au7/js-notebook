@@ -81,7 +81,7 @@ const SignIn = ({
   };
 
   // Google response
-  const responseGoogle = (response, status) => {
+  const responseGoogle = async (response, status) => {
     if (!status) {
       return setNotification({
         open: true,
@@ -97,13 +97,24 @@ const SignIn = ({
       email: response.profileObj.email,
       img: response.profileObj.imageUrl,
     };
-    setUser(userData, response.accessToken);
+
+    // sending data to server
+    let res = await httpRequest({
+      method: "POST",
+      url: "http://localhost:5000/api/users/custom",
+      data: userData,
+    });
+
+    const { user, token } = res.data.data;
+
+    setUser(user, token);
+
     setNotification({
       open: true,
       severity: "success",
       msg: "Login Successful",
     });
-    toggleSignIn();
+    toggleSignUp();
   };
 
   // github response
@@ -130,9 +141,9 @@ const SignIn = ({
         },
       });
 
-      let data = {
+      let userData = {
         img: user_data.data.avatar_url,
-        githubUrl: user_data.data.url,
+        github: user_data.data.url,
         email: user_data.data.email,
         firstName: user_data.data.name
           ? user_data.data.name.split(" ")[0]
@@ -142,8 +153,19 @@ const SignIn = ({
           : null,
       };
 
-      setUser(data, response_data.data.access_token);
+      // sending data to server
+      let res = await httpRequest({
+        method: "POST",
+        url: "http://localhost:5000/api/users/custom",
+        data: userData,
+      });
+
+      const { user, token } = res.data.data;
+
+      setUser(user, token);
+
       console.log("github user_data --> ", user_data.data);
+
       setNotification({
         open: true,
         severity: "success",

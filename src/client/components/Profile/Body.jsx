@@ -37,8 +37,8 @@ const Body = ({ userData }) => {
     Name: `${userData.firstName} ${
       !!userData.lastName ? userData.lastName : ""
     }`,
-    Email: !!userData.email ? userData.email : null,
-    Github: !!userData.githubUrl ? userData.githubUrl : null,
+    Email: !!userData.email ? userData.email : "",
+    Github: !!userData.github ? userData.github : "",
     Image: !!userData.img ? userData.img : null,
   };
 

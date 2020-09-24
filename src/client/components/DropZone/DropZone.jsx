@@ -6,24 +6,27 @@ import axios from "axios";
 import createConfig from "../Profile/form_axios.config";
 
 const DropZone = ({ isOpen, setIsOpen, data, setData }) => {
-  const onSave = (files) => {
-    const file = files[0];
-    console.log(file);
-    // upload image to server and save url into data object from response
+  const onSave = async (files) => {
+    try {
+      const file = files[0];
+      console.log(file);
+      // upload image to server and save url into data object from response
 
-    let form_data = new FormData();
-    form_data.append("file", file);
+      let form_data = new FormData();
+      form_data.append("file", file);
 
-    let response = axios.post(
-      "http://localhost:5000/api/protected/profile",
-      form_data,
-      createConfig()
-    );
+      let response = await axios.post(
+        "http://localhost:5000/api/protected/profile",
+        form_data,
+        createConfig()
+      );
 
-    console.log(response);
-
-    // setData({ ...data, Image: file });
-    setIsOpen(false);
+      console.log(response);
+      // setData({ ...data, Image: file });
+      setIsOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <DropzoneDialog
@@ -37,6 +40,7 @@ const DropZone = ({ isOpen, setIsOpen, data, setData }) => {
       onSave={onSave}
       showPreviews={true}
       showFileNamesInPreview={true}
+      canRestart={false}
     />
   );
 };

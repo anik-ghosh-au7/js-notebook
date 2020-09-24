@@ -43,14 +43,14 @@ const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
     setData({ ...data, [e.currentTarget.id]: e.currentTarget.value });
   };
 
-  const saveHandler = () => {
+  const saveHandler = async () => {
     let form_data = new FormData();
 
     Object.keys(data).forEach((key) => {
       form_data.append(key, data[key]);
     });
 
-    let response = axios.post(
+    let response = await axios.post(
       "http://localhost:5000/api/protected/profile",
       form_data,
       createConfig()
@@ -71,7 +71,7 @@ const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
   // function to generate profile fields dynamically
   const generate = () => {
     return map(Object.keys(data), (name, idx) => {
-      if (!!data[name] && name !== "Image") {
+      if (name !== "Image") {
         return (
           <ListItem key={idx}>
             <ListItemAvatar>

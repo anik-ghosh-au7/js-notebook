@@ -1,6 +1,10 @@
 // importing packages
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import formidable from "formidable";
+import path from "path";
+import fs from "fs";
+import cloudLib from "cloudinary";
 
 // models
 import model from "../models/user.model";
@@ -10,6 +14,21 @@ import response from "../utils/response";
 import catchError from "../utils/catchError";
 // secret key for jwt
 import { secret } from "../configs/secretKey";
+
+// importing cloudinary config variables
+import {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_CLOUD_NAME,
+} from "../configs/cloudinary";
+
+const cloudinary = cloudLib.v2;
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_CLOUD_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+});
 
 const controller = {};
 
@@ -71,6 +90,74 @@ controller.setPassword = catchError(async (req, res, next) => {
   if (!user) return response(res, null, "email not registered", true, 404);
 
   response(res, null, "password changed successfully", false, 200);
+});
+
+// custom register ----------------------------------------------------------------------
+controller.customRegister = catchError(async (req, res, next) => {
+  let user = null;
+
+  if (!!req.body.email) {
+    // finding user by email
+    user = await model.findOne({ email: req.body.email });
+  } else if (!!req.body.github) {
+    // finding user by github
+    user = await model.findOne({ github: req.body.github });
+  }
+
+  // if user not found
+  if (!user) {
+    user = new model({ ...req.body });
+    user = await user.save();
+  }
+
+  // generate token
+  const { firstName, lastName, email, _id, img, github } = user;
+  const token = jwt.sign({ firstName, lastName, email, _id, github }, secret);
+  response(
+    res,
+    { user: { firstName, lastName, email, _id, img, github }, token },
+    "Register Successful",
+    false,
+    200
+  );
+});
+
+// user profile update --------------------------------------------------------------------
+controller.profile = catchError(async (req, res, next) => {
+  // formidable config
+  const form = formidable({
+    multiples: true,
+    uploadDir: path.join(__dirname, "../../public/tempAssets"),
+    keepExtensions: true,
+  });
+
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log("fields --> ", fields, files);
+
+    let image_url;
+
+    if (!!files.file) {
+      await cloudinary.uploader.upload(
+        files.file.path,
+        (err, imageResponse) => {
+          if (err) console.log(err);
+          else {
+            image_url = imageResponse.secure_url;
+            console.log("image url from from cloudinary ==> ", image_url);
+            fs.unlink(files.file.path, (err) => {
+              if (err) console.log(err);
+            });
+          }
+        }
+      );
+    }
+  });
+
+  // console.log("from profile -- server --> ", req);
+  response(res, req.user, "user profile", false, 200);
 });
 
 export default controller;
