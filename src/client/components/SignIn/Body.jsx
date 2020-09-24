@@ -114,7 +114,7 @@ const SignIn = ({
       severity: "success",
       msg: "Login Successful",
     });
-    toggleSignUp();
+    toggleSignIn();
   };
 
   // github response
