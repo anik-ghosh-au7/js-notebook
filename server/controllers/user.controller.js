@@ -87,10 +87,31 @@ controller.customRegister = catchError(async (req, res, next) => {
     user = await model.findOne({ github: req.body.github });
   }
 
-  // if user not found
   if (!user) {
+    // if user not found
     user = new model({ ...req.body });
     user = await user.save();
+  } else {
+    // if user is found but github is not there
+    if (!!req.body.github && !user.github) {
+      user = await model.findOneAndUpdate(
+        {
+          email: req.body.email,
+        },
+        { $set: { github: req.body.github } },
+        { new: true }
+      );
+    }
+    // if user is found but email is not there
+    if (!!req.body.email && !user.email) {
+      user = await model.findOneAndUpdate(
+        {
+          github: req.body.github,
+        },
+        { $set: { email: req.body.email } },
+        { new: true }
+      );
+    }
   }
 
   // generate token

@@ -72,6 +72,8 @@ app.get("/*", function (req, res) {
 
 // global error handler
 app.use((err, req, res, next) => {
+  console.log("global error handler ==>>", err);
+
   if (err.message === "Path not found")
     return response(res, null, "Path not found", true, 404);
 

@@ -10,12 +10,9 @@ const user = new userSchema(
   {
     email: {
       type: String,
-      default: null,
-      unique: true,
     },
     password: {
       type: String,
-      required: true,
       default: secretPassword,
     },
     firstName: {
@@ -32,8 +29,6 @@ const user = new userSchema(
     },
     github: {
       type: String,
-      default: null,
-      unique: true,
     },
   },
   {
@@ -41,6 +36,8 @@ const user = new userSchema(
   }
 );
 
+user.index({ email: 1, github: 1 }, { unique: true });
+user.index({ email: 1, github: 1 }, { required: true });
 // creating model
 const userModel = mongoose.model("user", user);
 
