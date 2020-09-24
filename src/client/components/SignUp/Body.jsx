@@ -85,39 +85,50 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
 
   // google response
   const responseGoogle = async (response, status) => {
-    if (!status) {
-      return setNotification({
-        open: true,
-        severity: "error",
-        msg: "Login Unsuccessful",
+    try {
+      if (!status) {
+        return setNotification({
+          open: true,
+          severity: "error",
+          msg: "Login Unsuccessful",
+        });
+      }
+      console.log("google token --> ", response.accessToken);
+      console.log("google user_data --> ", response.profileObj);
+      let userData = {
+        firstName: response.profileObj.givenName,
+        lastName: response.profileObj.familyName,
+        email: response.profileObj.email,
+        img: response.profileObj.imageUrl,
+      };
+
+      // sending data to server
+      let res = await httpRequest({
+        method: "POST",
+        url: "http://localhost:5000/api/users/custom",
+        data: userData,
       });
+
+      const { user, token } = res.data.data;
+
+      setUser(user, token);
+
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: "Login Successful",
+      });
+      toggleSignUp();
+    } catch (err) {
+      console.log(err);
+
+      if (!!err.response)
+        setNotification({
+          open: true,
+          severity: "error",
+          msg: err.response.data.msg,
+        });
     }
-    console.log("google token --> ", response.accessToken);
-    console.log("google user_data --> ", response.profileObj);
-    let userData = {
-      firstName: response.profileObj.givenName,
-      lastName: response.profileObj.familyName,
-      email: response.profileObj.email,
-      img: response.profileObj.imageUrl,
-    };
-
-    // sending data to server
-    let res = await httpRequest({
-      method: "POST",
-      url: "http://localhost:5000/api/users/custom",
-      data: userData,
-    });
-
-    const { user, token } = res.data.data;
-
-    setUser(user, token);
-
-    setNotification({
-      open: true,
-      severity: "success",
-      msg: "Login Successful",
-    });
-    toggleSignUp();
   };
 
   // github response
@@ -178,11 +189,13 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       toggleSignUp();
     } catch (err) {
       console.log(err);
-      setNotification({
-        open: true,
-        severity: "error",
-        msg: "Login Unsuccessful!!",
-      });
+
+      if (!!err.response)
+        setNotification({
+          open: true,
+          severity: "error",
+          msg: err.response.data.msg,
+        });
     }
   };
 

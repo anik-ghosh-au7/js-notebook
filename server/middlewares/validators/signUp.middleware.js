@@ -1,14 +1,33 @@
 import { check, validationResult } from "express-validator";
-// import isGitUrl from "is-git-url";
 
+// model
+import userModel from "../../models/user.model";
+
+// simplify error
 import simplyfyErr from "../../utils/simplyfyErr";
+
+// checking if email is uniq or not
+const isUniqEmail = async (value) => {
+  try {
+    let user = await userModel.findOne({ email: value });
+
+    // if no user
+    if (!!user) throw new Error("");
+
+    return true;
+  } catch (err) {
+    throw err;
+  }
+};
 
 export const signUpChecker = [
   check("email")
     .exists()
     .withMessage("Please provide email.")
     .isEmail()
-    .withMessage("Please provide correct email."),
+    .withMessage("Please provide correct email.")
+    .custom(isUniqEmail)
+    .withMessage(`Email is already registered. Please try Login`),
 
   check("password")
     .exists()

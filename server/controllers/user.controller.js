@@ -77,6 +77,9 @@ controller.setPassword = catchError(async (req, res, next) => {
 
 // custom register ----------------------------------------------------------------------
 controller.customRegister = catchError(async (req, res, next) => {
+  if (!!req.validationErr)
+    return response(res, null, req.validationErr, true, 400);
+
   let user = null;
 
   if (!!req.body.email) {
@@ -128,8 +131,10 @@ controller.customRegister = catchError(async (req, res, next) => {
 
 // user profile update --------------------------------------------------------------------
 controller.profile = catchError(async (req, res, next) => {
-  console.log("from profile -- server --> ", req.imgUrl);
-  response(res, req.user, "user profile", false, 200);
+  console.log("fields===>", req.fields);
+  console.log("files==>", req.files);
+  // console.log("from profile -- server --> ", req.imgUrl);
+  // response(res, req.user, "user profile", false, 200);
 });
 
 export default controller;

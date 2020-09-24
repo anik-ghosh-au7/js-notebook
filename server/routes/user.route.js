@@ -5,7 +5,11 @@ import express from "express";
 import {
   signUpChecker,
   signUpError,
-} from "../middlewares/validators/signin.middleware";
+} from "../middlewares/validators/signUp.middleware";
+import {
+  registerChecker,
+  registerError,
+} from "../middlewares/validators/register.middleware";
 
 // controller
 import userController from "../controllers/user.controller";
@@ -19,6 +23,15 @@ route.post("/signup", signUpChecker, signUpError, userController.signup);
 route.post("/verify", userController.verify);
 route.post("/otp", userController.otp);
 route.post("/password", userController.setPassword);
-route.post("/custom", userController.customRegister);
+route.post(
+  "/custom",
+  (req, res, next) => {
+    console.log(req.body);
+    next();
+  },
+  registerChecker,
+  registerError,
+  userController.customRegister
+);
 
 export default route;
