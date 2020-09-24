@@ -15,6 +15,8 @@ const controller = {};
 
 //  user signin control -------------------------------------------
 controller.signup = catchError(async (req, res, next) => {
+  if (!!req.validationErr)
+    return response(res, null, req.validationErr, true, 400);
   const user = new model(req.body);
   const data = await user.save();
   response(res, data, "register successful", false, 200);
