@@ -8,6 +8,11 @@ import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import BuildRoundedIcon from "@material-ui/icons/BuildRounded";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 import SaveRoundedIcon from "@material-ui/icons/SaveRounded";
+import NotesRoundedIcon from "@material-ui/icons/NotesRounded";
+import CodeRoundedIcon from "@material-ui/icons/CodeRounded";
+import ImageRoundedIcon from "@material-ui/icons/ImageRounded";
+import LinkRoundedIcon from "@material-ui/icons/LinkRounded";
+import InsertChartRoundedIcon from "@material-ui/icons/InsertChartRounded";
 
 export const mainButtons = (isSignIn, toggleSignIn) => {
   return [
@@ -82,6 +87,46 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
       Icon: () => <DeleteRoundedIcon />,
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
+        console.log(e.currentTarget);
+      },
+    },
+  ];
+};
+
+export const toolButtons = () => {
+  return [
+    {
+      name: "Note",
+      Icon: () => <NotesRoundedIcon />,
+      onClick: (e) => {
+        console.log(e.currentTarget);
+      },
+    },
+    {
+      name: "Code Snippet",
+      Icon: () => <CodeRoundedIcon />,
+      onClick: (e) => {
+        console.log(e.currentTarget);
+      },
+    },
+    {
+      name: "Image",
+      Icon: () => <ImageRoundedIcon />,
+      onClick: (e) => {
+        console.log(e.currentTarget);
+      },
+    },
+    {
+      name: "Link",
+      Icon: () => <LinkRoundedIcon />,
+      onClick: (e) => {
+        console.log(e.currentTarget);
+      },
+    },
+    {
+      name: "Chart",
+      Icon: () => <InsertChartRoundedIcon />,
+      onClick: (e) => {
         console.log(e.currentTarget);
       },
     },

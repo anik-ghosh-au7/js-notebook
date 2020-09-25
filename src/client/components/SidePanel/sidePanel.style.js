@@ -21,8 +21,13 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
-    marginRight: 36,
+  mainButton: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  notebookButton: {
+    marginTop: 15,
+    marginBottom: 15,
   },
   hide: {
     display: "none",

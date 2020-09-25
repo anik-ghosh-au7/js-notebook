@@ -13,8 +13,6 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
 
@@ -92,7 +90,12 @@ const SidePanel = ({ isSignIn, toggleSignIn }) => {
           {mainButtons(isSignIn, toggleSignIn).map((button, index) => {
             const { name, Icon, onClick } = button;
             return (
-              <ListItem button key={index} onClick={onClick}>
+              <ListItem
+                button
+                key={index}
+                onClick={onClick}
+                className={classes.mainButton}
+              >
                 <ListItemIcon>
                   <Icon />
                 </ListItemIcon>
@@ -107,7 +110,12 @@ const SidePanel = ({ isSignIn, toggleSignIn }) => {
             (button, index) => {
               const { name, Icon, onClick } = button;
               return (
-                <ListItem button key={index} onClick={onClick}>
+                <ListItem
+                  button
+                  key={index}
+                  onClick={onClick}
+                  className={classes.notebookButton}
+                >
                   <ListItemIcon>
                     <Icon />
                   </ListItemIcon>
