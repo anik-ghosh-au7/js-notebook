@@ -15,14 +15,23 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import { connect } from "react-redux";
+import { isEmpty } from "lodash";
 
 // styles
 import useStyles from "./sidePanel.style";
 
 // components
 import Navbar from "../NavBar/Navbar";
+import Tools from "./Tools";
 
-const SidePanel = (props) => {
+// All Buttons
+import { mainButtons, notebookButtons } from "./buttons";
+
+// reducer actions
+import { signin } from "../../redux/actions/sign.action";
+
+const SidePanel = ({ isSignIn, toggleSignIn }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -33,6 +42,16 @@ const SidePanel = (props) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -70,26 +89,35 @@ const SidePanel = (props) => {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {mainButtons(isSignIn, toggleSignIn).map((button, index) => {
+            const { name, Icon, onClick } = button;
+            return (
+              <ListItem button key={index} onClick={onClick}>
+                <ListItemIcon>
+                  <Icon />
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            );
+          })}
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {notebookButtons(isSignIn, toggleSignIn, handleClick).map(
+            (button, index) => {
+              const { name, Icon, onClick } = button;
+              return (
+                <ListItem button key={index} onClick={onClick}>
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                  <ListItemText primary={name} />
+                </ListItem>
+              );
+            }
+          )}
         </List>
+        <Tools anchorEl={anchorEl} handleClose={handleClose} />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
@@ -197,4 +225,20 @@ const SidePanel = (props) => {
   );
 };
 
-export default SidePanel;
+const mapStateToProps = (state) => {
+  return {
+    isSignIn: !isEmpty(state.userData),
+  };
+};
+
+const mapActionToProps = (dispatch) => {
+  return {
+    toggleSignIn: () => {
+      dispatch({
+        type: signin,
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapActionToProps)(SidePanel);
