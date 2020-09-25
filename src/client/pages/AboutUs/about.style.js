@@ -1,16 +1,13 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  parent: {
-    position: "relative",
-  },
-
-  child: {
-    position: "absolute",
-    left: "50%",
-    marginTop: "20%",
+  heading: {
+    margin: theme.spacing(3, 0),
     textAlign: "center",
-    transform: "translate(-50%, -50%)",
+  },
+  details: {
+    marginTop: theme.spacing(5),
+    textAlign: "center",
   },
 }));
 
