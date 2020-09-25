@@ -12,6 +12,7 @@ import DropZone from "../DropZone/DropZone";
 
 // styles
 import useStyles from "./body.style";
+import { SET_USER } from "../../redux/actions/user.action";
 
 // edit button
 const Button = ({ className, onClick }) => (
@@ -26,7 +27,7 @@ const Button = ({ className, onClick }) => (
   </IconButton>
 );
 
-const Body = ({ userData }) => {
+const Body = ({ userData, set_data }) => {
   const classes = useStyles();
 
   // state for button
@@ -43,7 +44,21 @@ const Body = ({ userData }) => {
   };
 
   // field value state
-  const [data, setData] = React.useState(init_data);
+  const [data, setUserData] = React.useState(init_data);
+
+  const setData = (data) => {
+    let names = data.Name.split(" ");
+    let firstName = names[0];
+    let lastName = names.slice(1, names.length).join(" ");
+    setUserData(data);
+    set_data({
+      email: data.Email,
+      github: data.Github,
+      img: data.Image,
+      firstName,
+      lastName,
+    });
+  };
 
   // input modal open state
   const [isOpen, setIsOpen] = React.useState(false);
@@ -109,4 +124,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Body);
+const mapActionToProps = (dispatch) => {
+  return {
+    set_data: (data) => dispatch({ type: SET_USER, payload: data }),
+  };
+};
+
+export default connect(mapStateToProps, mapActionToProps)(Body);

@@ -6,6 +6,7 @@ const initUser = {};
 // reducer
 const reducer = (state = initUser, action) => {
   if (action.type === SET_USER) {
+    console.log("payload ===>>>>", action.payload);
     return { ...state, ...action.payload };
   }
   if (action.type === CLEAR_USER) {
