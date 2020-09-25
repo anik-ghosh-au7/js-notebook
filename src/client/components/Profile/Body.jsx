@@ -72,7 +72,7 @@ const Body = ({ userData }) => {
             <CardMedia title="Profile Image">
               <Fragment>
                 <img
-                  src={userData.img || "default_image.png"}
+                  src={data.Image}
                   className={classes.profile_img}
                   alt="profile"
                 />

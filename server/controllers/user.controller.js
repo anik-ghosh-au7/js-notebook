@@ -1,6 +1,7 @@
 // importing packages
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import { isEmpty } from "lodash";
 
 // models
 import model from "../models/user.model";
@@ -10,6 +11,7 @@ import response from "../utils/response";
 import catchError from "../utils/catchError";
 // secret key for jwt
 import { secret } from "../configs/secretKey";
+import userModel from "../models/user.model";
 
 const controller = {};
 
@@ -131,10 +133,31 @@ controller.customRegister = catchError(async (req, res, next) => {
 
 // user profile update --------------------------------------------------------------------
 controller.profile = catchError(async (req, res, next) => {
-  console.log("fields===>", req.fields);
-  console.log("files==>", req.files);
-  // console.log("from profile -- server --> ", req.imgUrl);
-  // response(res, req.user, "user profile", false, 200);
+  let user;
+
+  if (!isEmpty(req.fields)) {
+    let { Name: name, Email: email, Github: github } = req.fields;
+    let names = name.split(" ");
+    let firstName = names[0];
+    let lastName = names.slice(1, names.length).join(" ");
+
+    user = await userModel.findByIdAndUpdate(
+      req.user._id,
+      { $set: { firstName, lastName, email, github } },
+      { new: true, useFindAndModify: false }
+    );
+  }
+
+  if (!!req.imgUrl) {
+    user = await userModel.findByIdAndUpdate(
+      req.user._id,
+      { $set: { img: req.imgUrl } },
+      { new: true, useFindAndModify: false }
+    );
+  }
+
+  if (!user) return response(res, null, "invalid data", true, 404);
+  response(res, user, "profile update successful", false, 200);
 });
 
 export default controller;

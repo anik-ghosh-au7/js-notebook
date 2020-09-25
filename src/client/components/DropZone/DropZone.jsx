@@ -4,8 +4,10 @@ import axios from "axios";
 
 // importing axios config to send form data
 import createConfig from "../Profile/form_axios.config";
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
+import { connect } from "react-redux";
 
-const DropZone = ({ isOpen, setIsOpen, data, setData }) => {
+const DropZone = ({ isOpen, setIsOpen, data, setData, setNotification }) => {
   const onSave = async (files) => {
     try {
       const file = files[0];
@@ -21,11 +23,24 @@ const DropZone = ({ isOpen, setIsOpen, data, setData }) => {
         createConfig()
       );
 
-      console.log(response);
-      // setData({ ...data, Image: file });
+      console.log("response ===>>>> ", response);
+      setData({ ...data, Image: response.data.data.img });
+
+      // if all good
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: response.data.msg,
+      });
+
       setIsOpen(false);
     } catch (err) {
-      console.log(err);
+      // if err
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: err.response.data.msg,
+      });
     }
   };
   return (
@@ -45,4 +60,15 @@ const DropZone = ({ isOpen, setIsOpen, data, setData }) => {
   );
 };
 
-export default DropZone;
+const mapActionToProps = (dispatch) => {
+  return {
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
+      });
+    },
+  };
+};
+
+export default connect(null, mapActionToProps)(DropZone);

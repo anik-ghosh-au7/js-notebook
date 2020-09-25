@@ -24,6 +24,8 @@ import createConfig from "./form_axios.config";
 // styles
 import useStyles from "./list.style";
 import { Button, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
 const getFieldIcon = (name) => {
   if (name === "Name") return <ShortTextTwoToneIcon />;
@@ -32,7 +34,14 @@ const getFieldIcon = (name) => {
   return <FolderIcon />;
 };
 
-const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
+const DataList = ({
+  data,
+  setData,
+  init_data,
+  fieldType,
+  setFieldType,
+  setNotification,
+}) => {
   const classes = useStyles();
 
   const onEditHandler = (e) => {
@@ -44,23 +53,47 @@ const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
   };
 
   const saveHandler = async () => {
-    let form_data = new FormData();
+    try {
+      let form_data = new FormData();
 
-    Object.keys(data).forEach((key) => {
-      form_data.append(key, data[key]);
-    });
+      Object.keys(data).forEach((key) => {
+        form_data.append(key, data[key]);
+      });
 
-    let response = await axios.post(
-      "http://localhost:5000/api/protected/profile",
-      form_data,
-      createConfig()
-    );
+      let response = await axios.post(
+        "http://localhost:5000/api/protected/profile",
+        form_data,
+        createConfig()
+      );
 
-    console.log(response);
+      // setting state variables based on response
+      setFieldType({ name: "" });
 
-    // setting state variables based on response
-    // setFieldType({ name: "" });
-    // setData(init_data);
+      const responseData = {
+        Name: `${response.data.data.firstName} ${
+          !!response.data.data.lastName ? response.data.data.lastName : ""
+        }`,
+        Email: !!response.data.data.email ? response.data.data.email : "",
+        Github: !!response.data.data.github ? response.data.data.github : "",
+        Image: !!response.data.data.img ? response.data.data.img : null,
+      };
+
+      setData({ ...responseData });
+
+      // if all good
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: response.data.msg,
+      });
+    } catch (err) {
+      // if err
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: err.response.data.msg,
+      });
+    }
   };
 
   const discardHandler = () => {
@@ -168,10 +201,15 @@ const DataList = ({ data, setData, init_data, fieldType, setFieldType }) => {
   );
 };
 
-// const mapStateToProps = (state) => {
-//   return {
-//     userData: state.
-//   };
-// };
+const mapActionToProps = (dispatch) => {
+  return {
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
+      });
+    },
+  };
+};
 
-export default DataList;
+export default connect(null, mapActionToProps)(DataList);

@@ -14,7 +14,6 @@ const isGitHubUrl = (value, { req }) => {
 };
 
 const isEmailBlank = (value, { req }) => {
-  console.log(req);
   if (!value && req.body.github) return true;
 
   if (!!value) return true;
