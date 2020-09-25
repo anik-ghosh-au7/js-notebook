@@ -32,6 +32,7 @@ const NavBar = (props) => {
     toggleProfile,
     isLogin,
     userName,
+    onDrawerClick,
   } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -141,13 +142,14 @@ const NavBar = (props) => {
   // return component ----------------------------------------------------------------
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           {/*start icon*/}
           <IconButton
             edge="start"
             className={classes.menuButton}
             color="secondary"
+            onClick={onDrawerClick}
           >
             <MenuIcon />
           </IconButton>
