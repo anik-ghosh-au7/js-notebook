@@ -1,17 +1,18 @@
-import React, { Fragment } from "react";
-import { map } from "lodash";
+import React from "react";
 import { connect } from "react-redux";
 
 // components
-import NewNotebook from "../../components/NewNotebook/NewNotebook";
+import NotebookTabs from "../../components/NotebookTabs/NotebookTabs";
+
+//styles
+import useStyles from "./create.style";
 
 const Create = ({ notebooks }) => {
+  const classes = useStyles();
   return (
-    <Fragment>
-      {map(notebooks, (Notebook) => {
-        return <NewNotebook key={Notebook.id} />;
-      })}
-    </Fragment>
+    <div className={classes.parent}>
+      <NotebookTabs notebooks={notebooks} />
+    </div>
   );
 };
 

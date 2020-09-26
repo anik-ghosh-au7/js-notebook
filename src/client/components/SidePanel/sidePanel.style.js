@@ -53,14 +53,14 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(9) + 1,
     },
   },
-  toolbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(1, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-  },
+  // toolbar: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   justifyContent: "flex-end",
+  //   padding: theme.spacing(1, 1),
+  //   // necessary for content to be below app bar
+  //   ...theme.mixins.toolbar,
+  // },
   content: {
     flexGrow: 1,
     padding: theme.spacing(6, 4),

@@ -137,7 +137,7 @@ const SidePanel = ({
         <Tools anchorEl={anchorEl} handleClose={handleClose} />
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
+        {/* <div className={classes.toolbar} /> */}
         {children}
       </main>
     </div>
