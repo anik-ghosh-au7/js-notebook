@@ -6,8 +6,14 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   details: {
-    marginTop: theme.spacing(5),
+    margin: theme.spacing(28, 5),
     textAlign: "center",
+  },
+  card: {
+    "&:hover": {
+      transform: "scale(1.2, 1.2)",
+      boxShadow: "0px 0px 4px 1px rgba(0,0,0,0.4)",
+    },
   },
 }));
 

@@ -11,6 +11,9 @@ import { isEqual } from "lodash";
 import useStyles from "./about.style";
 import { Grid } from "@material-ui/core";
 
+// components
+import Copyright from "../../components/Copyright/Copyright";
+
 const AboutUs = () => {
   const classes = useStyles();
 
@@ -49,7 +52,7 @@ const AboutUs = () => {
         alignItems="flex-start"
       >
         <Grid item xs={12} sm={6} md={3} className={classes.details}>
-          <Card>
+          <Card className={classes.card}>
             <PeopleAltTwoToneIcon style={{ fontSize: 100 }} />
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -60,7 +63,7 @@ const AboutUs = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3} className={classes.details}>
-          <Card>
+          <Card className={classes.card}>
             <FileCopyTwoToneIcon style={{ fontSize: 100 }} />
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -71,7 +74,7 @@ const AboutUs = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3} className={classes.details}>
-          <Card>
+          <Card className={classes.card}>
             <FolderSharedTwoToneIcon style={{ fontSize: 100 }} />
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -81,6 +84,7 @@ const AboutUs = () => {
           </Card>
         </Grid>
       </Grid>
+      <Copyright />
     </Grid>
   );
 };
