@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 import clsx from "clsx";
 import { useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -27,8 +28,15 @@ import { mainButtons, notebookButtons } from "./buttons";
 
 // reducer actions
 import { signin } from "../../redux/actions/sign.action";
+import { ADD_NOTEBOOK } from "../../redux/actions/notebooks.action";
 
-const SidePanel = ({ isSignIn, toggleSignIn, children }) => {
+const SidePanel = ({
+  isSignIn,
+  toggleSignIn,
+  children,
+  history,
+  addNotebook,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -86,22 +94,24 @@ const SidePanel = ({ isSignIn, toggleSignIn, children }) => {
         </div>
         <Divider />
         <List>
-          {mainButtons(isSignIn, toggleSignIn).map((button, index) => {
-            const { name, Icon, onClick } = button;
-            return (
-              <ListItem
-                button
-                key={index}
-                onClick={onClick}
-                className={classes.mainButton}
-              >
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={name} />
-              </ListItem>
-            );
-          })}
+          {mainButtons(isSignIn, toggleSignIn, history, addNotebook).map(
+            (button, index) => {
+              const { name, Icon, onClick } = button;
+              return (
+                <ListItem
+                  button
+                  key={index}
+                  onClick={onClick}
+                  className={classes.mainButton}
+                >
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                  <ListItemText primary={name} />
+                </ListItem>
+              );
+            }
+          )}
         </List>
         <Divider />
         <List>
@@ -147,7 +157,14 @@ const mapActionToProps = (dispatch) => {
         type: signin,
       });
     },
+    addNotebook: () =>
+      dispatch({
+        type: ADD_NOTEBOOK,
+      }),
   };
 };
 
-export default connect(mapStateToProps, mapActionToProps)(SidePanel);
+export default connect(
+  mapStateToProps,
+  mapActionToProps
+)(withRouter(SidePanel));

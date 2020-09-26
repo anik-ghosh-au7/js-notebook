@@ -14,13 +14,14 @@ import ImageRoundedIcon from "@material-ui/icons/ImageRounded";
 import LinkRoundedIcon from "@material-ui/icons/LinkRounded";
 import InsertChartRoundedIcon from "@material-ui/icons/InsertChartRounded";
 
-export const mainButtons = (isSignIn, toggleSignIn) => {
+export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
   return [
     {
       name: "Create",
       Icon: () => <NoteAddRoundedIcon />,
       onClick: (e) => {
-        console.log(e.currentTarget);
+        if (history.location.pathname !== "/create") history.push("/create");
+        else addNotebook();
       },
     },
     {

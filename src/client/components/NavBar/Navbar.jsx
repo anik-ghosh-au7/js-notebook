@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -155,14 +156,16 @@ const NavBar = (props) => {
           </IconButton>
 
           {/*logo*/}
-          <Typography
-            color="secondary"
-            className={classes.title}
-            variant="h6"
-            noWrap
-          >
-            JS-NoteBook
-          </Typography>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Typography
+              color="secondary"
+              className={classes.title}
+              variant="h6"
+              noWrap
+            >
+              JS-NoteBook
+            </Typography>
+          </Link>
 
           {/*search bar*/}
           <div className={classes.search}>
