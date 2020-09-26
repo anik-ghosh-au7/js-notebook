@@ -1,3 +1,4 @@
+import { Typography, useTheme } from "@material-ui/core";
 import React from "react";
 
 // styles
@@ -13,6 +14,7 @@ const NewNotebook = ({
   id,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
   return (
     <>
       <div className={classes.container}>
@@ -25,6 +27,11 @@ const NewNotebook = ({
             <b>Author : </b>
             <em>{author}</em>
           </h2>
+        </div>
+        <div className={classes.wrapper}>
+          <Typography variant="h3" component="h3" className={classes.logo_text}>
+            Notebook
+          </Typography>
         </div>
         <div className={classes.wrapper}>
           <h4 className={classes.label}>
@@ -41,7 +48,15 @@ const NewNotebook = ({
           </h4>
         </div>
       </div>
-      <div style={{ marginTop: 20 }}>
+      <div
+        style={{
+          marginTop: 20,
+          backgroundColor: theme.palette.common.white,
+          borderRadius: 5,
+          boxShadow: "0px 0px 4px 1px rgba(0,0,0,0.4)",
+          padding: 20,
+        }}
+      >
         `The standard Lorem Ipsum passage, used since the 1500s "Lorem ipsum
         dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
