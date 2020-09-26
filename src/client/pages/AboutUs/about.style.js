@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   details: {
-    margin: theme.spacing(28, 5),
+    margin: theme.spacing(20, 5),
     textAlign: "center",
   },
   card: {

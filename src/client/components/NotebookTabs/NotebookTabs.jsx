@@ -1,40 +1,39 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { connect } from "react-redux";
 import { map } from "lodash";
+import CloseIcon from "@material-ui/icons/Close";
+
+// styles
+import useStyles from "./notebook.styles";
 
 // components
 import NewNotebook from "../NewNotebook/NewNotebook";
 
-const useStyles = makeStyles((theme) => ({
-  stickToBottom: {
-    position: "fixed",
-    paddingLeft: "4%",
-    top: "94vh",
-    backgroundColor: fade(theme.palette.common.black, 0.005),
-  },
-}));
+const closeHandler = (id, idx) => {
+  console.log(id, idx);
+};
+
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
+  const classes = useStyles();
 
   return (
     <div
       role="tabpanel"
       hidden={value !== index}
       id={`scrollable-force-tabpanel-${index}`}
-      style={{ width: "300px" }}
+      className={classes.container}
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
+        <Box component="div" m={2}>
+          {children}
         </Box>
       )}
     </div>
@@ -54,8 +53,8 @@ const a11yProps = (index) => {
 };
 
 const NotebookTabs = ({ notebooks }) => {
-  const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const classes = useStyles();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -87,7 +86,21 @@ const NotebookTabs = ({ notebooks }) => {
           aria-label="scrollable force tabs example"
         >
           {map(notebooks, (notebook, idx) => {
-            return <Tab label={notebook.title} {...a11yProps(idx)} />;
+            return (
+              <Tab
+                label={
+                  <div className={classes.tab_label}>
+                    {notebook.title}
+                    <CloseIcon
+                      className={classes.icon}
+                      onClick={() => closeHandler(notebook.id, idx)}
+                    />
+                  </div>
+                }
+                {...a11yProps(idx)}
+                key={idx}
+              />
+            );
           })}
         </Tabs>
       </AppBar>
