@@ -31,8 +31,8 @@ import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../../config/github";
 
 // Components
 import DividerWithText from "../../Divider/DividerWithText";
-import GoogleButton from "../../Buttons/Google.button";
-import GithubButton from "../../Buttons/Github.button";
+import GoogleButton from "../Buttons/Google.button";
+import GithubButton from "../Buttons/Github.button";
 
 // reducer actions
 import { forget, signin, signup } from "../../../redux/actions/sign.action";

@@ -36,8 +36,8 @@ import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../../config/github";
 
 // components
 import DividerWithText from "../../Divider/DividerWithText";
-import GoogleButton from "../../Buttons/Google.button";
-import GitHubButton from "../../Buttons/Github.button";
+import GoogleButton from "../Buttons/Google.button";
+import GitHubButton from "../Buttons/Github.button";
 
 const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
   const classes = useStyles();

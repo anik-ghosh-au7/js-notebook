@@ -3,7 +3,7 @@ import { GoogleLogin } from "react-google-login";
 import Button from "@material-ui/core/Button";
 
 // google credentials
-import { GOOGLE_CLIENT_ID } from "../../config/google";
+import { GOOGLE_CLIENT_ID } from "../../../config/google";
 
 // font-awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
