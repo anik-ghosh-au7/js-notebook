@@ -6,7 +6,7 @@ const demoData = {
   id: uuidv4(),
   title: "New Title",
   author: "Guest",
-  createdOn: moment().format("Do MMMM, YYYY"),
+  createdOn: moment().format("Do MMM, YYYY"),
   time: moment().format("hh:mm a"),
   modifiedOn: "just now",
   components: [],

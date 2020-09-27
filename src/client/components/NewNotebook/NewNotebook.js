@@ -20,32 +20,28 @@ const NewNotebook = ({
       <div className={classes.container}>
         <div className={classes.wrapper}>
           <h2 className={classes.label}>
-            <b>Name : </b>
-            <em>{title}</em>
-          </h2>
-          <h2 className={classes.label}>
             <b>Author : </b>
             <em>{author}</em>
           </h2>
+          <h3 className={classes.label}>
+            <b>Modified : </b>
+            {modifiedOn}
+          </h3>
         </div>
         <div className={classes.wrapper}>
           <Typography variant="h3" component="h3" className={classes.logo_text}>
-            Notebook
+            {title}
           </Typography>
         </div>
         <div className={classes.wrapper}>
-          <h4 className={classes.label}>
+          <h3 className={classes.label}>
             <b>Created : </b>
             {createdOn}
-          </h4>
-          <h4 className={classes.label}>
+          </h3>
+          <h3 className={classes.label}>
             <b>Time : </b>
             {time}
-          </h4>
-          <h4 className={classes.label}>
-            <b>Modified : </b>
-            {modifiedOn}
-          </h4>
+          </h3>
         </div>
       </div>
       <div
