@@ -2,16 +2,16 @@ import React from "react";
 import Modal from "@material-ui/core/Modal";
 import { connect } from "react-redux";
 
-// styles
-import { getModalStyle, useStyles } from "./signUp.style";
-
-// reducer actions
-import { signup } from "../../redux/actions/sign.action";
-
-// components
+// component
 import Body from "./Body";
 
-const SignUpModal = ({ isSignUp, toggleSignUp }) => {
+// styles
+import { getModalStyle, useStyles } from "./signIn.style";
+
+// reducer actions
+import { signin } from "../../../redux/actions/sign.action";
+
+const SignInModal = ({ isSignIn, toggleSignIn }) => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -24,7 +24,7 @@ const SignUpModal = ({ isSignUp, toggleSignUp }) => {
 
   return (
     <div>
-      <Modal open={isSignUp} onClose={toggleSignUp}>
+      <Modal open={isSignIn} onClose={toggleSignIn}>
         {body}
       </Modal>
     </div>
@@ -33,18 +33,18 @@ const SignUpModal = ({ isSignUp, toggleSignUp }) => {
 
 const mapStateToProps = ({ signData }) => {
   return {
-    isSignUp: signData.signup,
+    isSignIn: signData.signin,
   };
 };
 
 const mapActionToProps = (dispatch) => {
   return {
-    toggleSignUp: () => {
+    toggleSignIn: () => {
       dispatch({
-        type: signup,
+        type: signin,
       });
     },
   };
 };
 
-export default connect(mapStateToProps, mapActionToProps)(SignUpModal);
+export default connect(mapStateToProps, mapActionToProps)(SignInModal);

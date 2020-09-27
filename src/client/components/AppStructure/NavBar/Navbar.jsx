@@ -23,7 +23,7 @@ import {
   signup,
   signout,
   profile,
-} from "../../redux/actions/sign.action";
+} from "../../../redux/actions/sign.action";
 
 const NavBar = (props) => {
   const {

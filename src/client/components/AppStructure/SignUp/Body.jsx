@@ -16,28 +16,28 @@ import GitHubLogin from "react-github-login";
 import axios from "axios";
 
 // axios
-import httpRequest from "../../config/axios.config";
+import httpRequest from "../../../config/axios.config";
 
 // styles
 import useStyles from "./body.style";
 
 // copyright
-import Copyright from "../Copyright/Copyright";
+import Copyright from "../../Copyright/Copyright";
 
 // reducer actions
-import { signin, signup } from "../../redux/actions/sign.action";
-import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
+import { signin, signup } from "../../../redux/actions/sign.action";
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 // user data reducer
-import { setUserData } from "../../utils/storageData";
+import { setUserData } from "../../../utils/storageData";
 
 // github credentials
-import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../config/github";
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../../config/github";
 
 // components
-import DividerWithText from "../Divider/DividerWithText";
-import GoogleButton from "../Buttons/Google.button";
-import GitHubButton from "../Buttons/Github.button";
+import DividerWithText from "../../Divider/DividerWithText";
+import GoogleButton from "../../Buttons/Google.button";
+import GitHubButton from "../../Buttons/Github.button";
 
 const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
   const classes = useStyles();

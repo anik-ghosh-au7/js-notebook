@@ -1,18 +1,12 @@
 import { Typography } from "@material-ui/core";
 import React, { Fragment } from "react";
-import { map, isEqual } from "lodash";
+import { map } from "lodash";
 
 // styles
 import useStyles from "./newNotebook.style";
 
 const NewNotebook = (props) => {
   const classes = useStyles();
-
-  const [isChange, setIsChange] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   if(isEqual(props), )
-  // }, [props]);
 
   return (
     console.log(props),

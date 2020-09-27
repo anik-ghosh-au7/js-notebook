@@ -6,25 +6,25 @@ import { connect } from "react-redux";
 import Body from "./Body";
 
 // styles
-import { getModalStyle, useStyles } from "./forgetPassword.style";
+import { getModalStyle, useStyles } from "./profile.style";
 
 // reducer actions
-import { forget } from "../../redux/actions/sign.action";
+import { profile } from "../../../redux/actions/sign.action";
 
-const SignInModal = ({ isForget, toggleForget }) => {
+const ProfileModal = ({ isProfile, toggleProfile }) => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <Body />
+      <Body toggleProfile={toggleProfile} />
     </div>
   );
 
   return (
     <div>
-      <Modal open={isForget} onClose={toggleForget}>
+      <Modal open={isProfile} onClose={toggleProfile}>
         {body}
       </Modal>
     </div>
@@ -33,18 +33,18 @@ const SignInModal = ({ isForget, toggleForget }) => {
 
 const mapStateToProps = ({ signData }) => {
   return {
-    isForget: signData.forget,
+    isProfile: signData.profile,
   };
 };
 
 const mapActionToProps = (dispatch) => {
   return {
-    toggleForget: () => {
+    toggleProfile: () => {
       dispatch({
-        type: forget,
+        type: profile,
       });
     },
   };
 };
 
-export default connect(mapStateToProps, mapActionToProps)(SignInModal);
+export default connect(mapStateToProps, mapActionToProps)(ProfileModal);

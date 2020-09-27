@@ -27,9 +27,9 @@ import Tools from "./Tools";
 import { mainButtons, notebookButtons } from "./buttons";
 
 // reducer actions
-import { signin } from "../../redux/actions/sign.action";
-import { ADD_NOTEBOOK } from "../../redux/actions/notebooks.action";
-import { SHIFT, UNSHIFT } from "../../redux/actions/tabbar.action";
+import { signin } from "../../../redux/actions/sign.action";
+import { ADD_NOTEBOOK } from "../../../redux/actions/notebooks.action";
+import { SHIFT, UNSHIFT } from "../../../redux/actions/tabbar.action";
 
 const SidePanel = ({
   isSignIn,

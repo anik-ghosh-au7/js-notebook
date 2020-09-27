@@ -12,17 +12,17 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 
 // axios
-import httpRequest from "../../config/axios.config";
+import httpRequest from "../../../config/axios.config";
 
 // styles
 import useStyles from "./body.style";
 
 // copyright
-import Copyright from "../Copyright/Copyright";
+import Copyright from "../../Copyright/Copyright";
 
 // reducer actions
-import { forget } from "../../redux/actions/sign.action";
-import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
+import { forget } from "../../../redux/actions/sign.action";
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 // Forget Password component -----------------------------------------
 const ForgetPassword = ({ toggleForget, setNotification }) => {

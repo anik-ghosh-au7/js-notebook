@@ -17,7 +17,7 @@ import useStyles from "./notebook.styles";
 import NewNotebook from "../NewNotebook/NewNotebook";
 
 // reducer action
-import { SET_TAB } from "../../redux/actions/activetab.action";
+import { SET_TAB } from "../../../redux/actions/activetab.action";
 
 const closeHandler = (id, idx) => {
   console.log(id, idx);

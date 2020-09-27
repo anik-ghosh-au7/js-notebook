@@ -15,7 +15,7 @@ import LinkRoundedIcon from "@material-ui/icons/LinkRounded";
 import InsertChartRoundedIcon from "@material-ui/icons/InsertChartRounded";
 
 // handlers
-import { addComponent } from "../../Handlers";
+import { addComponent } from "../../../Handlers";
 
 export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
   return [

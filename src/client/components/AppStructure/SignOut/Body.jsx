@@ -14,15 +14,15 @@ import { connect } from "react-redux";
 import useStyles from "./body.style";
 
 // copyright
-import Copyright from "../Copyright/Copyright";
+import Copyright from "../../Copyright/Copyright";
 
 // reducer actions
-import { clearUserData } from "../../utils/storageData";
-import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
+import { clearUserData } from "../../../utils/storageData";
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 import { Grid } from "@material-ui/core";
 
 // Components
-import DividerWithText from "../Divider/DividerWithText";
+import DividerWithText from "../../Divider/DividerWithText";
 
 // Forget Password component -----------------------------------------
 const Body = ({ toggleSignOut, clearUserData, setNotification }) => {

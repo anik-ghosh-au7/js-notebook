@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 
 // components
-import SignUp from "./client/components/SignUp/SignUp";
-import SignIn from "./client/components/SignIn/SignIn";
-import SignOut from "./client/components/SignOut/SignOut";
-import Profile from "./client/components/Profile/Profile";
+import SignUp from "./client/components/AppStructure/SignUp/SignUp";
+import SignIn from "./client/components/AppStructure/SignIn/SignIn";
+import SignOut from "./client/components/AppStructure/SignOut/SignOut";
+import Profile from "./client/components/AppStructure/Profile/Profile";
 import Notification from "./client/components/Notification/Notification";
-import ForgetPassword from "./client/components/ForgetPassword/ForgetPassword";
-import SidePanel from "./client/components/SidePanel/SidePanel";
+import ForgetPassword from "./client/components/AppStructure/ForgetPassword/ForgetPassword";
+import SidePanel from "./client/components/AppStructure/SidePanel/SidePanel";
 
 const MainStructure = ({ children }) => {
   return (

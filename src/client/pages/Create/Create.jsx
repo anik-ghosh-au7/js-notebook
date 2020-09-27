@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 // components
-import NotebookTabs from "../../components/NotebookTabs/NotebookTabs";
+import NotebookTabs from "../../components/Notebooks/NotebookTabs/NotebookTabs";
 
 //styles
 import useStyles from "./create.style";

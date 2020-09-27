@@ -3,7 +3,7 @@ import { DropzoneDialog } from "material-ui-dropzone";
 import axios from "axios";
 
 // importing axios config to send form data
-import createConfig from "../Profile/form_axios.config";
+import createConfig from "../AppStructure/Profile/form_axios.config";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 import { connect } from "react-redux";
 
