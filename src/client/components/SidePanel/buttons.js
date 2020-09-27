@@ -14,6 +14,9 @@ import ImageRoundedIcon from "@material-ui/icons/ImageRounded";
 import LinkRoundedIcon from "@material-ui/icons/LinkRounded";
 import InsertChartRoundedIcon from "@material-ui/icons/InsertChartRounded";
 
+// handlers
+import { addComponent } from "../../Handlers";
+
 export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
   return [
     {
@@ -100,35 +103,35 @@ export const toolButtons = () => {
       name: "Note",
       Icon: () => <NotesRoundedIcon />,
       onClick: (e) => {
-        console.log(e.currentTarget);
+        addComponent("Note");
       },
     },
     {
       name: "Code Snippet",
       Icon: () => <CodeRoundedIcon />,
       onClick: (e) => {
-        console.log(e.currentTarget);
+        addComponent("Code");
       },
     },
     {
       name: "Image",
       Icon: () => <ImageRoundedIcon />,
       onClick: (e) => {
-        console.log(e.currentTarget);
+        addComponent("Image");
       },
     },
     {
       name: "Link",
       Icon: () => <LinkRoundedIcon />,
       onClick: (e) => {
-        console.log(e.currentTarget);
+        addComponent("Link");
       },
     },
     {
       name: "Chart",
       Icon: () => <InsertChartRoundedIcon />,
       onClick: (e) => {
-        console.log(e.currentTarget);
+        addComponent("Chart");
       },
     },
   ];

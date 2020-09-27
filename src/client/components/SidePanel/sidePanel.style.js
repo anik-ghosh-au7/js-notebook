@@ -22,10 +22,10 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   mainButton: {
-    margin: theme.spacing(1.5, 0, 1.5, 1),
+    margin: theme.spacing(1.5, 0),
   },
   notebookButton: {
-    margin: theme.spacing(0.8, 0, 0.8, 1),
+    margin: theme.spacing(0.8, 0),
   },
   hide: {
     display: "none",

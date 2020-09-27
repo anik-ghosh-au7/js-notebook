@@ -16,6 +16,9 @@ import useStyles from "./notebook.styles";
 // components
 import NewNotebook from "../NewNotebook/NewNotebook";
 
+// reducer action
+import { SET_TAB } from "../../redux/actions/activetab.action";
+
 const closeHandler = (id, idx) => {
   console.log(id, idx);
 };
@@ -55,12 +58,23 @@ const a11yProps = (index) => {
   };
 };
 
-const NotebookTabs = ({ notebooks, isDrawerOpen }) => {
+const NotebookTabs = ({ notebooks, isDrawerOpen, setActiveTab }) => {
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
 
+  const firstTabId = notebooks[0].id;
+
+  // component did mount
+  React.useEffect(() => {
+    setActiveTab(firstTabId);
+  }, [firstTabId, setActiveTab]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const tabHandler = (id) => {
+    setActiveTab(id);
   };
 
   return (
@@ -98,6 +112,7 @@ const NotebookTabs = ({ notebooks, isDrawerOpen }) => {
           {map(notebooks, (notebook, idx) => {
             return (
               <Tab
+                onClick={() => tabHandler(notebook.id)}
                 label={
                   <div className={classes.tab_label}>
                     {notebook.title}
@@ -124,4 +139,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(NotebookTabs);
+const mapActionToProps = (dispatch) => {
+  return {
+    setActiveTab: (id) => {
+      dispatch({
+        type: SET_TAB,
+        payload: id,
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapActionToProps)(NotebookTabs);

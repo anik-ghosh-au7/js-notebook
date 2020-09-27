@@ -6,6 +6,7 @@ import notificationReducer from "./notification.reducer";
 import userReducer from "./user.reducer";
 import notebooksReducer from "./notebooks.reducer";
 import tabReducer from "./tabbar.reducer";
+import activeTabReducer from "./activetab.reducer";
 
 export default combineReducers({
   signData: signReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   userData: userReducer,
   notebooks: notebooksReducer,
   tab: tabReducer,
+  activeTab: activeTabReducer,
 });
