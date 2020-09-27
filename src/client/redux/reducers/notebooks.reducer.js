@@ -31,14 +31,16 @@ const reducer = (state = initNotebooks, action) => {
     case ADD_COMPONENT:
       for (let i = 0; i < state.length; i++) {
         if (state[i].id === action.payload.id) {
-          state[i] = {
+          let newNotebook = {
             ...state[i],
             components: [...state[i].components, action.payload.component],
           };
-          break;
+
+          let newState = state.slice();
+          newState[i] = newNotebook;
+          return newState;
         }
       }
-      console.log(state);
       return state;
 
     default:
