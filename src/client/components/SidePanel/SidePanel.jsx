@@ -29,6 +29,7 @@ import { mainButtons, notebookButtons } from "./buttons";
 // reducer actions
 import { signin } from "../../redux/actions/sign.action";
 import { ADD_NOTEBOOK } from "../../redux/actions/notebooks.action";
+import { SHIFT, UNSHIFT } from "../../redux/actions/tabbar.action";
 
 const SidePanel = ({
   isSignIn,
@@ -36,6 +37,8 @@ const SidePanel = ({
   children,
   history,
   addNotebook,
+  shift,
+  unshift,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -43,10 +46,12 @@ const SidePanel = ({
 
   const handleDrawerOpen = () => {
     setOpen(true);
+    shift();
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    unshift();
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -160,6 +165,14 @@ const mapActionToProps = (dispatch) => {
     addNotebook: () =>
       dispatch({
         type: ADD_NOTEBOOK,
+      }),
+    shift: () =>
+      dispatch({
+        type: SHIFT,
+      }),
+    unshift: () =>
+      dispatch({
+        type: UNSHIFT,
       }),
   };
 };

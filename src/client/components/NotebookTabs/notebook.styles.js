@@ -1,15 +1,32 @@
 import { fade, makeStyles } from "@material-ui/core/styles";
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
   stickToBottom: {
     position: "fixed",
-    paddingLeft: "4%",
+    paddingLeft: "4.5%",
     top: "94vh",
     backgroundColor: theme.palette.common.white,
+  },
+  tabBarShift: {
+    paddingLeft: "0%",
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   container: {
     width: "inherit",
     margin: "50px",
+  },
+  containerShrink: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   tab_label: {
     display: "flex",

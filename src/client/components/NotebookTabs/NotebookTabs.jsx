@@ -8,6 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { connect } from "react-redux";
 import { map } from "lodash";
 import CloseIcon from "@material-ui/icons/Close";
+import clsx from "clsx";
 
 // styles
 import useStyles from "./notebook.styles";
@@ -20,7 +21,7 @@ const closeHandler = (id, idx) => {
 };
 
 const TabPanel = (props) => {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, isDrawerOpen, ...other } = props;
   const classes = useStyles();
 
   return (
@@ -28,7 +29,9 @@ const TabPanel = (props) => {
       role="tabpanel"
       hidden={value !== index}
       id={`scrollable-force-tabpanel-${index}`}
-      className={classes.container}
+      className={clsx(classes.container, {
+        [classes.containerShrink]: isDrawerOpen,
+      })}
       {...other}
     >
       {value === index && (
@@ -52,7 +55,7 @@ const a11yProps = (index) => {
   };
 };
 
-const NotebookTabs = ({ notebooks }) => {
+const NotebookTabs = ({ notebooks, isDrawerOpen }) => {
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
 
@@ -65,7 +68,12 @@ const NotebookTabs = ({ notebooks }) => {
       <CssBaseline />
       {map(notebooks, (notebook, idx) => {
         return (
-          <TabPanel value={value} index={idx} key={notebook.id}>
+          <TabPanel
+            value={value}
+            index={idx}
+            key={notebook.id}
+            isDrawerOpen={isDrawerOpen}
+          >
             <NewNotebook {...notebook} />
           </TabPanel>
         );
@@ -74,7 +82,9 @@ const NotebookTabs = ({ notebooks }) => {
       <AppBar
         position="sticky"
         color="default"
-        className={classes.stickToBottom}
+        className={clsx(classes.stickToBottom, {
+          [classes.tabBarShift]: isDrawerOpen,
+        })}
       >
         <Tabs
           value={value}
@@ -108,4 +118,10 @@ const NotebookTabs = ({ notebooks }) => {
   );
 };
 
-export default connect()(NotebookTabs);
+const mapStateToProps = (state) => {
+  return {
+    isDrawerOpen: state.tab,
+  };
+};
+
+export default connect(mapStateToProps)(NotebookTabs);
