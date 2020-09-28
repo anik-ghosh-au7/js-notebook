@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography, TextField } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { map } from "lodash";
 import { connect } from "react-redux";
@@ -18,7 +18,11 @@ import {
 } from "../../NotebookComponents/";
 
 // reducer action
-import { CHANGE_ARRANGEMENT } from "../../../redux/actions/notebooks.action";
+import {
+  CHANGE_ARRANGEMENT,
+  DELETE_COMPONENT,
+  UPDATE_NOTEBOOK,
+} from "../../../redux/actions/notebooks.action";
 
 // sortable container
 const SortableContainer = sortableContainer(({ children }) => {
@@ -28,16 +32,26 @@ const SortableContainer = sortableContainer(({ children }) => {
 const NewNotebook = (props) => {
   const classes = useStyles();
 
+  // flag for edit Title
+  const [flag, setFlag] = React.useState(false);
+
+  // title state
+  const [title, setTitle] = React.useState(props.title);
+
+  // error state
+  const [isError, setIsError] = React.useState(false);
+
   const deleteHandler = (idx) => {
-    console.log("component to be deleted - ", idx);
+    props.deleteComponent(props.notebookId, idx);
   };
 
   const editHandler = (idx) => {
     console.log("component to be edited - ", idx);
   };
 
-  const editNotebookHandler = () => {
-    console.log("notebook to be edited - ", props.notebookId);
+  const editTitleHandler = () => {
+    setFlag(true);
+    console.log("edit");
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -45,11 +59,32 @@ const NewNotebook = (props) => {
     props.changeArrangement(props.notebookId, oldIndex, newIndex);
   };
 
+  // custom title validation
+  const checkTitle = (title) => {
+    let text = title.trim();
+    if (text.length < 2 || text.length > 30) return setIsError(true);
+    setIsError(false);
+  };
+
+  const onTitleChangeHandler = (e) => {
+    setTitle(e.currentTarget.value);
+    checkTitle(e.currentTarget.value);
+  };
+
+  const saveTitleHandler = () => {
+    if (flag && !isError) {
+      setFlag(false);
+      props.updateNotebook(props.notebookId, "title", title.trim());
+      setTitle(title.trim());
+    }
+  };
+
   return (
     <Fragment>
       <div
         className={classes.container}
-        onDoubleClick={editNotebookHandler}
+        onClick={saveTitleHandler}
+        onDoubleClick={editTitleHandler}
         title="Double click to edit"
       >
         <div className={classes.wrapper}>
@@ -63,9 +98,26 @@ const NewNotebook = (props) => {
           </h3>
         </div>
         <div className={classes.wrapper}>
-          <Typography variant="h3" component="h3" className={classes.logo_text}>
-            {props.title}
-          </Typography>
+          {flag ? (
+            <TextField
+              error={isError}
+              id="filled-basic"
+              label="Title"
+              variant="outlined"
+              value={title}
+              autoFocus={true}
+              onChange={onTitleChangeHandler}
+              helperText={isError && "Title should be 2 to 30 char long"}
+            />
+          ) : (
+            <Typography
+              variant="h3"
+              component="h3"
+              className={classes.logo_text}
+            >
+              {props.title}
+            </Typography>
+          )}
         </div>
         <div className={classes.wrapper}>
           <h3 className={classes.label}>
@@ -163,6 +215,18 @@ const mapActionToProps = (dispatch) => {
           to,
         },
       }),
+    deleteComponent: (id, index) => {
+      dispatch({
+        type: DELETE_COMPONENT,
+        payload: { id, index },
+      });
+    },
+    updateNotebook: (id, name, value) => {
+      dispatch({
+        type: UPDATE_NOTEBOOK,
+        payload: { id, name, value },
+      });
+    },
   };
 };
 

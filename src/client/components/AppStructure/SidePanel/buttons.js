@@ -16,7 +16,11 @@ import InsertChartRoundedIcon from "@material-ui/icons/InsertChartRounded";
 import ClearAllRoundedIcon from "@material-ui/icons/ClearAllRounded";
 
 // handlers
-import { addComponent } from "../../../Handlers";
+import {
+  addComponent,
+  clearAllComponents,
+  deleteNotebook,
+} from "../../../Handlers";
 
 export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
   return [
@@ -99,17 +103,16 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
       name: "Clear All",
       Icon: () => <ClearAllRoundedIcon />,
       label: "Clear All",
-      onClick: (e) => {
-        console.log(e.currentTarget);
+      onClick: () => {
+        clearAllComponents();
       },
     },
     {
       name: "Delete",
       Icon: () => <DeleteRoundedIcon />,
       label: "Delete",
-      onClick: (e) => {
-        if (!isSignIn) toggleSignIn();
-        console.log(e.currentTarget);
+      onClick: () => {
+        deleteNotebook();
       },
     },
   ];

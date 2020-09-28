@@ -12,7 +12,7 @@ const ImageComponent = ({ component, idx, deleteHandler, editHandler }) => {
 
   //Drag handler
   const DragHandle = sortableHandle(() => (
-    <span className={classes.component_icon}>
+    <span className={classes.component_icon} title="Move Vertically">
       <ImageOutlinedIcon />
     </span>
   ));

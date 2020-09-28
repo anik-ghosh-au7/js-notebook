@@ -2,6 +2,10 @@ import {
   ADD_NOTEBOOK,
   ADD_COMPONENT,
   CHANGE_ARRANGEMENT,
+  DELETE_COMPONENT,
+  CLEAR_ALL_COMPONENTS,
+  DELETE_NOTEBOOK,
+  UPDATE_NOTEBOOK,
 } from "../actions/notebooks.action";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
@@ -34,7 +38,16 @@ const arrayMove = (components, from, to) => {
   return newComponents;
 };
 
+// new component for delete handler
+const newCompo = (components, idx) => {
+  let newComponents = components.slice();
+  newComponents.splice(idx, 1);
+  return newComponents;
+};
+
 const reducer = (state = initNotebooks, action) => {
+  let idx = -1;
+
   switch (action.type) {
     case ADD_NOTEBOOK:
       return [
@@ -47,6 +60,34 @@ const reducer = (state = initNotebooks, action) => {
           time: moment().format("hh:mm a"),
         },
       ];
+
+    case DELETE_NOTEBOOK:
+      idx = state.findIndex((notebook) => notebook.id === action.payload.id);
+      if (idx !== -1) {
+        let newState = state.slice();
+        newState.splice(idx, 1);
+
+        // if state has no notebook
+        if (newState.length === 0) return initNotebooks;
+
+        return newState;
+      }
+      return state;
+
+    case UPDATE_NOTEBOOK:
+      idx = state.findIndex((notebook) => notebook.id === action.payload.id);
+      if (idx !== -1) {
+        let newNotebook = {
+          ...state[idx],
+          [action.payload.name]: action.payload.value,
+        };
+
+        let newState = state.slice();
+        newState[idx] = newNotebook;
+
+        return newState;
+      }
+      return state;
 
     case ADD_COMPONENT:
       for (let i = 0; i < state.length; i++) {
@@ -74,6 +115,36 @@ const reducer = (state = initNotebooks, action) => {
               action.payload.to
             ),
           };
+          let newState = state.slice();
+          newState[i] = newNotebook;
+          return newState;
+        }
+      }
+      return state;
+
+    case DELETE_COMPONENT:
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id === action.payload.id) {
+          let newNotebook = {
+            ...state[i],
+            components: newCompo(state[i].components, action.payload.index),
+          };
+
+          let newState = state.slice();
+          newState[i] = newNotebook;
+          return newState;
+        }
+      }
+      return state;
+
+    case CLEAR_ALL_COMPONENTS:
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id === action.payload.id) {
+          let newNotebook = {
+            ...state[i],
+            components: [],
+          };
+
           let newState = state.slice();
           newState[i] = newNotebook;
           return newState;

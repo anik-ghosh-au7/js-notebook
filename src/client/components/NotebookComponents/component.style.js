@@ -95,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 30,
     color: fade(theme.palette.common.black, 0.25),
     cursor: "grab",
+    title: "Drag",
   },
 }));
 
