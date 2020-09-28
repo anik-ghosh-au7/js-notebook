@@ -4,7 +4,7 @@ import FileCopyRoundedIcon from "@material-ui/icons/FileCopyRounded";
 import FolderSharedRoundedIcon from "@material-ui/icons/FolderSharedRounded";
 import ShareRoundedIcon from "@material-ui/icons/ShareRounded";
 import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
+import PlayCircleFilledRoundedIcon from "@material-ui/icons/PlayCircleFilledRounded";
 import BuildRoundedIcon from "@material-ui/icons/BuildRounded";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 import SaveRoundedIcon from "@material-ui/icons/SaveRounded";
@@ -13,6 +13,7 @@ import CodeRoundedIcon from "@material-ui/icons/CodeRounded";
 import ImageRoundedIcon from "@material-ui/icons/ImageRounded";
 import LinkRoundedIcon from "@material-ui/icons/LinkRounded";
 import InsertChartRoundedIcon from "@material-ui/icons/InsertChartRounded";
+import ClearAllRoundedIcon from "@material-ui/icons/ClearAllRounded";
 
 // handlers
 import { addComponent } from "../../../Handlers";
@@ -22,6 +23,7 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
     {
       name: "Create",
       Icon: () => <NoteAddRoundedIcon />,
+      label: "Create",
       onClick: (e) => {
         if (history.location.pathname !== "/create") history.push("/create");
         else addNotebook();
@@ -30,6 +32,7 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
     {
       name: "All Notebooks",
       Icon: () => <FileCopyRoundedIcon />,
+      label: "All Notebooks",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
         console.log(e.currentTarget);
@@ -38,6 +41,7 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
     {
       name: "Shared Notebooks",
       Icon: () => <FolderSharedRoundedIcon />,
+      label: "Shared Notebooks",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
         console.log(e.currentTarget);
@@ -51,14 +55,16 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
     {
       name: "Tools",
       Icon: () => <BuildRoundedIcon />,
+      label: "Tools",
       onClick: (e) => {
         console.log(e.currentTarget);
         handleClick(e);
       },
     },
     {
-      name: "Edit",
-      Icon: () => <EditRoundedIcon />,
+      name: "Run All",
+      Icon: () => <PlayCircleFilledRoundedIcon />,
+      label: "Run All",
       onClick: (e) => {
         console.log(e.currentTarget);
       },
@@ -66,6 +72,7 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
     {
       name: "Save",
       Icon: () => <SaveRoundedIcon />,
+      label: "Save",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
         console.log(e.currentTarget);
@@ -74,6 +81,7 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
     {
       name: "Download",
       Icon: () => <GetAppRoundedIcon />,
+      label: "Download",
       onClick: (e) => {
         console.log(e.currentTarget);
       },
@@ -81,14 +89,24 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
     {
       name: "Share",
       Icon: () => <ShareRoundedIcon />,
+      label: "Share",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
         console.log(e.currentTarget);
       },
     },
     {
+      name: "Clear All",
+      Icon: () => <ClearAllRoundedIcon />,
+      label: "Clear All",
+      onClick: (e) => {
+        console.log(e.currentTarget);
+      },
+    },
+    {
       name: "Delete",
       Icon: () => <DeleteRoundedIcon />,
+      label: "Delete",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
         console.log(e.currentTarget);

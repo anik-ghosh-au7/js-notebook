@@ -1,15 +1,20 @@
 import { Typography } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { map } from "lodash";
-import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import PlayCircleFilledWhiteOutlinedIcon from "@material-ui/icons/PlayCircleFilledWhiteOutlined";
+import { connect } from "react-redux";
 
 // styles
 import useStyles from "./newNotebook.style";
 
 // components
 import ScrollDown from "../../ScrollDown/ScrollDown";
+import {
+  CodeComponent,
+  ChartComponent,
+  LinkComponent,
+  NoteComponent,
+  ImageComponent,
+} from "../../NotebookComponents/";
 
 const NewNotebook = (props) => {
   const classes = useStyles();
@@ -22,13 +27,17 @@ const NewNotebook = (props) => {
     console.log("component to be edited - ", idx);
   };
 
-  const playHandler = (idx) => {
-    console.log("component to be runned - ", idx);
+  const editNotebookHandler = () => {
+    console.log("notebook to be edited - ", props.notebookId);
   };
 
   return (
     <Fragment>
-      <div className={classes.container}>
+      <div
+        className={classes.container}
+        onDoubleClick={editNotebookHandler}
+        title="Double click to edit"
+      >
         <div className={classes.wrapper}>
           <h2 className={classes.label}>
             <b>Author : </b>
@@ -56,36 +65,70 @@ const NewNotebook = (props) => {
         </div>
       </div>
       {map(props.components, (component, idx) => {
-        return (
-          <div
-            className={classes.component_wrapper}
-            key={idx}
-            onDoubleClick={() => editHandler(idx)}
-          >
-            <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
-            <div className={classes.component}>
-              <h1>{component}</h1>
-              <DeleteOutlineOutlinedIcon
-                className={classes.delete_icon}
-                onClick={() => deleteHandler(idx)}
+        switch (component) {
+          case "Note":
+            return (
+              <NoteComponent
+                component={component}
+                idx={idx}
+                key={idx}
+                deleteHandler={deleteHandler}
+                editHandler={editHandler}
               />
-              <EditOutlinedIcon
-                className={classes.edit_icon}
-                onClick={() => editHandler(idx)}
+            );
+          case "Link":
+            return (
+              <LinkComponent
+                component={component}
+                idx={idx}
+                key={idx}
+                deleteHandler={deleteHandler}
+                editHandler={editHandler}
               />
-              {(component === "Code" || component === "Chart") && (
-                <PlayCircleFilledWhiteOutlinedIcon
-                  className={classes.play_icon}
-                  onClick={() => playHandler(idx)}
-                />
-              )}
-            </div>
-          </div>
-        );
+            );
+          case "Chart":
+            return (
+              <ChartComponent
+                component={component}
+                idx={idx}
+                key={idx}
+                deleteHandler={deleteHandler}
+                editHandler={editHandler}
+              />
+            );
+          case "Code":
+            return (
+              <CodeComponent
+                component={component}
+                idx={idx}
+                key={idx}
+                deleteHandler={deleteHandler}
+                editHandler={editHandler}
+              />
+            );
+          case "Image":
+            return (
+              <ImageComponent
+                component={component}
+                idx={idx}
+                key={idx}
+                deleteHandler={deleteHandler}
+                editHandler={editHandler}
+              />
+            );
+          default:
+            break;
+        }
       })}
       <ScrollDown />
     </Fragment>
   );
 };
 
-export default NewNotebook;
+const mapStateToProps = (state) => {
+  return {
+    notebookId: state.activeTab,
+  };
+};
+
+export default connect(mapStateToProps)(NewNotebook);

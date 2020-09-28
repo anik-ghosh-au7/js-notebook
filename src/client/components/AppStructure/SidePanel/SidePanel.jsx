@@ -101,7 +101,7 @@ const SidePanel = ({
         <List>
           {mainButtons(isSignIn, toggleSignIn, history, addNotebook).map(
             (button, index) => {
-              const { name, Icon, onClick } = button;
+              const { name, Icon, onClick, label } = button;
               return (
                 <ListItem
                   button
@@ -109,7 +109,7 @@ const SidePanel = ({
                   onClick={onClick}
                   className={classes.mainButton}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon title={label}>
                     <Icon />
                   </ListItemIcon>
                   <ListItemText primary={name} />
@@ -122,7 +122,7 @@ const SidePanel = ({
         <List>
           {notebookButtons(isSignIn, toggleSignIn, handleClick).map(
             (button, index) => {
-              const { name, Icon, onClick } = button;
+              const { name, Icon, onClick, label } = button;
               return (
                 <ListItem
                   button
@@ -130,7 +130,7 @@ const SidePanel = ({
                   onClick={onClick}
                   className={classes.notebookButton}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon title={label}>
                     <Icon />
                   </ListItemIcon>
                   <ListItemText primary={name} />

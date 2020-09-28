@@ -1,0 +1,91 @@
+import React, { useState } from "react";
+import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import PlayCircleFilledWhiteOutlinedIcon from "@material-ui/icons/PlayCircleFilledWhiteOutlined";
+import RefreshRoundedIcon from "@material-ui/icons/RefreshRounded";
+import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
+import clsx from "clsx";
+
+//styles
+import useStyles from "../component.style";
+
+const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
+  const classes = useStyles();
+
+  const [run, setRun] = useState(false);
+
+  const playHandler = (idx) => {
+    console.log("component to be runned - ", idx);
+    setRun(true);
+  };
+
+  const refreshHandler = (idx) => {
+    console.log("component output refreshed - ", idx);
+  };
+
+  const closeHandler = (idx) => {
+    console.log("component output closed - ", idx);
+    setRun(false);
+  };
+
+  return (
+    <div className={classes.split_wrapper}>
+      <div
+        className={classes.component_wrapper}
+        key={idx}
+        onDoubleClick={() => editHandler(idx)}
+      >
+        <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
+        <div
+          className={clsx({
+            [classes.component]: !run,
+            [classes.shrink_component]: run,
+          })}
+        >
+          <h1 style={{ textAlign: "center" }}>{component}</h1>
+          <DeleteOutlineOutlinedIcon
+            className={classes.delete_icon}
+            onClick={() => deleteHandler(idx)}
+          />
+          <EditOutlinedIcon
+            className={classes.edit_icon}
+            onClick={() => editHandler(idx)}
+          />
+          <PlayCircleFilledWhiteOutlinedIcon
+            className={classes.play_icon}
+            onClick={() => playHandler(idx)}
+          />
+          <BarChartIcon className={classes.component_icon} />
+        </div>
+      </div>
+
+      {run && (
+        <div
+          className={clsx(classes.component_wrapper, {
+            [classes.move_shrink_component]: run,
+          })}
+          key={`split - ${idx}`}
+          onDoubleClick={() => editHandler(idx)}
+        >
+          <h3 className={classes.output}>{`Out [ ${idx + 1} ] : `}</h3>
+          <div className={classes.shrink_component}>
+            <h1 style={{ textAlign: "center" }}>{`${component} Output`}</h1>
+            <RefreshRoundedIcon
+              className={classes.edit_icon}
+              onClick={() => refreshHandler(idx)}
+            />
+            <CloseRoundedIcon
+              className={classes.delete_icon}
+              onClick={() => closeHandler(idx)}
+            />
+            <CompareArrowsIcon className={classes.component_icon} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChartComponent;
