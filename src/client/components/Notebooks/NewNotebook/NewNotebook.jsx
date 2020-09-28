@@ -83,8 +83,14 @@ const NewNotebook = (props) => {
     <Fragment>
       <div
         className={classes.container}
-        onClick={saveTitleHandler}
+        // onClick={saveTitleHandler}
+        onBlur={saveTitleHandler}
         onDoubleClick={editTitleHandler}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            saveTitleHandler();
+          }
+        }}
         title="Double click to edit"
       >
         <div className={classes.wrapper}>
@@ -130,70 +136,76 @@ const NewNotebook = (props) => {
           </h3>
         </div>
       </div>
-      <SortableContainer onSortEnd={onSortEnd} useDragHandle>
-        {map(props.components, (component, idx) => {
-          switch (component) {
-            case "Note":
-              return (
-                <NoteComponent
-                  key={`item-${idx}`}
-                  index={idx}
-                  idx={idx}
-                  component={component}
-                  deleteHandler={deleteHandler}
-                  editHandler={editHandler}
-                />
-              );
-            case "Link":
-              return (
-                <LinkComponent
-                  key={`item-${idx}`}
-                  index={idx}
-                  idx={idx}
-                  component={component}
-                  deleteHandler={deleteHandler}
-                  editHandler={editHandler}
-                />
-              );
-            case "Chart":
-              return (
-                <ChartComponent
-                  key={`item-${idx}`}
-                  index={idx}
-                  idx={idx}
-                  component={component}
-                  deleteHandler={deleteHandler}
-                  editHandler={editHandler}
-                />
-              );
-            case "Code":
-              return (
-                <CodeComponent
-                  component={component}
-                  key={`item-${idx}`}
-                  index={idx}
-                  idx={idx}
-                  deleteHandler={deleteHandler}
-                  editHandler={editHandler}
-                />
-              );
-            case "Image":
-              return (
-                <ImageComponent
-                  component={component}
-                  key={`item-${idx}`}
-                  index={idx}
-                  idx={idx}
-                  deleteHandler={deleteHandler}
-                  editHandler={editHandler}
-                />
-              );
-            default:
-              break;
-          }
-        })}
-        <ScrollDown />
-      </SortableContainer>
+      <div>
+        <SortableContainer
+          onSortEnd={onSortEnd}
+          useDragHandle
+          useWindowAsScrollContainer
+        >
+          {map(props.components, (component, idx) => {
+            switch (component) {
+              case "Note":
+                return (
+                  <NoteComponent
+                    key={`item-${idx}`}
+                    index={idx}
+                    idx={idx}
+                    component={component}
+                    deleteHandler={deleteHandler}
+                    editHandler={editHandler}
+                  />
+                );
+              case "Link":
+                return (
+                  <LinkComponent
+                    key={`item-${idx}`}
+                    index={idx}
+                    idx={idx}
+                    component={component}
+                    deleteHandler={deleteHandler}
+                    editHandler={editHandler}
+                  />
+                );
+              case "Chart":
+                return (
+                  <ChartComponent
+                    key={`item-${idx}`}
+                    index={idx}
+                    idx={idx}
+                    component={component}
+                    deleteHandler={deleteHandler}
+                    editHandler={editHandler}
+                  />
+                );
+              case "Code":
+                return (
+                  <CodeComponent
+                    component={component}
+                    key={`item-${idx}`}
+                    index={idx}
+                    idx={idx}
+                    deleteHandler={deleteHandler}
+                    editHandler={editHandler}
+                  />
+                );
+              case "Image":
+                return (
+                  <ImageComponent
+                    component={component}
+                    key={`item-${idx}`}
+                    index={idx}
+                    idx={idx}
+                    deleteHandler={deleteHandler}
+                    editHandler={editHandler}
+                  />
+                );
+              default:
+                break;
+            }
+          })}
+        </SortableContainer>
+      </div>
+      <ScrollDown components={props.components} />
     </Fragment>
   );
 };
