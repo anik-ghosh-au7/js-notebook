@@ -2,12 +2,21 @@ import React from "react";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
+import { sortableElement, sortableHandle } from "react-sortable-hoc";
 
 //styles
 import useStyles from "../component.style";
 
 const ImageComponent = ({ component, idx, deleteHandler, editHandler }) => {
   const classes = useStyles();
+
+  //Drag handler
+  const DragHandle = sortableHandle(() => (
+    <span className={classes.component_icon}>
+      <ImageOutlinedIcon />
+    </span>
+  ));
+
   return (
     <div
       className={classes.component_wrapper}
@@ -25,10 +34,13 @@ const ImageComponent = ({ component, idx, deleteHandler, editHandler }) => {
           className={classes.edit_icon}
           onClick={() => editHandler(idx)}
         />
-        <ImageOutlinedIcon className={classes.component_icon} />
+        <DragHandle />
       </div>
     </div>
   );
 };
 
-export default ImageComponent;
+//Draggable elements
+const SortableItem = sortableElement((props) => <ImageComponent {...props} />);
+
+export default SortableItem;

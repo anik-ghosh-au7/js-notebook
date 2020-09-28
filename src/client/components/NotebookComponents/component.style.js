@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
     left: "10px",
     fontSize: 30,
     color: fade(theme.palette.common.black, 0.25),
+    cursor: "grab",
   },
 }));
 

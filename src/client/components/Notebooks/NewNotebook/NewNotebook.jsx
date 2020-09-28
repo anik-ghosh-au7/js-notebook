@@ -2,6 +2,7 @@ import { Typography } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { map } from "lodash";
 import { connect } from "react-redux";
+import { sortableContainer } from "react-sortable-hoc";
 
 // styles
 import useStyles from "./newNotebook.style";
@@ -16,6 +17,14 @@ import {
   ImageComponent,
 } from "../../NotebookComponents/";
 
+// reducer action
+import { CHANGE_ARRANGEMENT } from "../../../redux/actions/notebooks.action";
+
+// sortable container
+const SortableContainer = sortableContainer(({ children }) => {
+  return <div>{children}</div>;
+});
+
 const NewNotebook = (props) => {
   const classes = useStyles();
 
@@ -29,6 +38,11 @@ const NewNotebook = (props) => {
 
   const editNotebookHandler = () => {
     console.log("notebook to be edited - ", props.notebookId);
+  };
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    console.log(oldIndex, newIndex);
+    props.changeArrangement(props.notebookId, oldIndex, newIndex);
   };
 
   return (
@@ -64,63 +78,70 @@ const NewNotebook = (props) => {
           </h3>
         </div>
       </div>
-      {map(props.components, (component, idx) => {
-        switch (component) {
-          case "Note":
-            return (
-              <NoteComponent
-                component={component}
-                idx={idx}
-                key={idx}
-                deleteHandler={deleteHandler}
-                editHandler={editHandler}
-              />
-            );
-          case "Link":
-            return (
-              <LinkComponent
-                component={component}
-                idx={idx}
-                key={idx}
-                deleteHandler={deleteHandler}
-                editHandler={editHandler}
-              />
-            );
-          case "Chart":
-            return (
-              <ChartComponent
-                component={component}
-                idx={idx}
-                key={idx}
-                deleteHandler={deleteHandler}
-                editHandler={editHandler}
-              />
-            );
-          case "Code":
-            return (
-              <CodeComponent
-                component={component}
-                idx={idx}
-                key={idx}
-                deleteHandler={deleteHandler}
-                editHandler={editHandler}
-              />
-            );
-          case "Image":
-            return (
-              <ImageComponent
-                component={component}
-                idx={idx}
-                key={idx}
-                deleteHandler={deleteHandler}
-                editHandler={editHandler}
-              />
-            );
-          default:
-            break;
-        }
-      })}
-      <ScrollDown />
+      <SortableContainer onSortEnd={onSortEnd} useDragHandle>
+        {map(props.components, (component, idx) => {
+          switch (component) {
+            case "Note":
+              return (
+                <NoteComponent
+                  key={`item-${idx}`}
+                  index={idx}
+                  idx={idx}
+                  component={component}
+                  deleteHandler={deleteHandler}
+                  editHandler={editHandler}
+                />
+              );
+            case "Link":
+              return (
+                <LinkComponent
+                  key={`item-${idx}`}
+                  index={idx}
+                  idx={idx}
+                  component={component}
+                  deleteHandler={deleteHandler}
+                  editHandler={editHandler}
+                />
+              );
+            case "Chart":
+              return (
+                <ChartComponent
+                  key={`item-${idx}`}
+                  index={idx}
+                  idx={idx}
+                  component={component}
+                  deleteHandler={deleteHandler}
+                  editHandler={editHandler}
+                />
+              );
+            case "Code":
+              return (
+                <CodeComponent
+                  component={component}
+                  key={`item-${idx}`}
+                  index={idx}
+                  idx={idx}
+                  deleteHandler={deleteHandler}
+                  editHandler={editHandler}
+                />
+              );
+            case "Image":
+              return (
+                <ImageComponent
+                  component={component}
+                  key={`item-${idx}`}
+                  index={idx}
+                  idx={idx}
+                  deleteHandler={deleteHandler}
+                  editHandler={editHandler}
+                />
+              );
+            default:
+              break;
+          }
+        })}
+        <ScrollDown />
+      </SortableContainer>
     </Fragment>
   );
 };
@@ -131,4 +152,18 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(NewNotebook);
+const mapActionToProps = (dispatch) => {
+  return {
+    changeArrangement: (id, from, to) =>
+      dispatch({
+        type: CHANGE_ARRANGEMENT,
+        payload: {
+          id,
+          from,
+          to,
+        },
+      }),
+  };
+};
+
+export default connect(mapStateToProps, mapActionToProps)(NewNotebook);

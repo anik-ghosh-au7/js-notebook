@@ -7,12 +7,20 @@ import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import clsx from "clsx";
+import { sortableElement, sortableHandle } from "react-sortable-hoc";
 
 //styles
 import useStyles from "../component.style";
 
 const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
   const classes = useStyles();
+
+  //Drag handler
+  const DragHandle = sortableHandle(() => (
+    <span className={classes.component_icon}>
+      <BarChartIcon />
+    </span>
+  ));
 
   const [run, setRun] = useState(false);
 
@@ -57,7 +65,7 @@ const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
             className={classes.play_icon}
             onClick={() => playHandler(idx)}
           />
-          <BarChartIcon className={classes.component_icon} />
+          <DragHandle />
         </div>
       </div>
 
@@ -88,4 +96,7 @@ const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
   );
 };
 
-export default ChartComponent;
+//Draggable elements
+const SortableItem = sortableElement((props) => <ChartComponent {...props} />);
+
+export default SortableItem;
