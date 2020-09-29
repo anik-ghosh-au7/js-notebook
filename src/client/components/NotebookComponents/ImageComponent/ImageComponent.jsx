@@ -1,9 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
 import { sortableElement, sortableHandle } from "react-sortable-hoc";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import axios from "axios";
 
 //styles
@@ -31,6 +33,9 @@ const ImageComponent = ({
 
   // Dropzone state
   const [isOpen, setIsOpen] = React.useState(false);
+
+  // image maximize state
+  const [max, setMax] = React.useState(false);
 
   // edit handler
   const editHandler = () => {
@@ -88,15 +93,17 @@ const ImageComponent = ({
         {!isOpen ? (
           <div className={classes.note_component}>
             {!!component.value ? (
-              <img
-                src={component.value}
-                alt="image_component"
-                style={{
-                  maxHeight: "500px",
-                  maxWidth: "100%",
-                  padding: "20px 0 10px 0",
-                }}
-              />
+              <Fragment>
+                <img
+                  src={component.value}
+                  alt="image_component"
+                  style={{
+                    maxHeight: max ? "100%" : "250px",
+                    maxWidth: "100%",
+                    padding: "20px 0 10px 0",
+                  }}
+                />
+              </Fragment>
             ) : (
               <span className={classes.default_text}>
                 Double Click To Upload
@@ -115,6 +122,21 @@ const ImageComponent = ({
           className={classes.delete_icon}
           onClick={() => deleteHandler(idx)}
         />
+        {!!component.value && (
+          <>
+            {!max ? (
+              <ExpandMoreIcon
+                className={classes.expand_contract_icon}
+                onClick={() => setMax(true)}
+              />
+            ) : (
+              <ExpandLessIcon
+                className={classes.expand_contract_icon}
+                onClick={() => setMax(false)}
+              />
+            )}
+          </>
+        )}
         {!isOpen && (
           <EditOutlinedIcon
             className={classes.edit_icon}

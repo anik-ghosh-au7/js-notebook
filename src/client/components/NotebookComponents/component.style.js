@@ -77,6 +77,17 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
     },
   },
+  expand_contract_icon: {
+    position: "absolute",
+    bottom: "5px",
+    right: "15px",
+    fontSize: 20,
+    color: fade(theme.palette.common.black, 0.25),
+    "&:hover": {
+      color: fade(theme.palette.common.black, 0.75),
+      cursor: "pointer",
+    },
+  },
   play_icon: {
     position: "absolute",
     top: "5px",
