@@ -12,6 +12,7 @@ import response from "./utils/response";
 // routes
 import userRoute from "./routes/user.route";
 import protectedRoute from "./routes/protected.route";
+import publicRoute from "./routes/public.route";
 
 // connecting to database
 import "./database";
@@ -58,6 +59,7 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   protectedRoute
 );
+app.use("/api/public", publicRoute);
 
 // 404 error handling
 app.use("/api/*", (req, res, next) => {

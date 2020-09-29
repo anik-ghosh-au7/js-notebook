@@ -3,17 +3,21 @@ import { connect } from "react-redux";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
-import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import { sortableElement, sortableHandle } from "react-sortable-hoc";
+import axios from "axios";
 
 //styles
 import useStyles from "../component.style";
 
 // reducer actions
 import { UPDATE_COMPONENTS } from "../../../redux/actions/notebooks.action";
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 //components
 import DropZone from "../../DropZone/DropZone";
+
+// axios config
+import createConfig from "../../AppStructure/Profile/form_axios.config";
 
 const ImageComponent = ({
   component,
@@ -21,11 +25,9 @@ const ImageComponent = ({
   deleteHandler,
   notebookId,
   updateComponent,
+  setNotification,
 }) => {
   const classes = useStyles();
-
-  // image data state
-  const [data, setData] = React.useState("");
 
   // Dropzone state
   const [isOpen, setIsOpen] = React.useState(false);
@@ -35,18 +37,45 @@ const ImageComponent = ({
     setIsOpen(true);
   };
 
-  // save handler
-  const saveHandler = (idx) => {
-    setIsOpen(false);
-    updateComponent(notebookId, idx, data);
-  };
-
   //Drag handler
   const DragHandle = sortableHandle(() => (
     <span className={classes.component_icon} title="Move Vertically">
       <ImageOutlinedIcon />
     </span>
   ));
+
+  // axios request
+  const axiosRequest = async (formData) => {
+    try {
+      let response = await axios.post(
+        "http://localhost:5000/api/public/image",
+        formData,
+        createConfig()
+      );
+
+      if (!!response.data.url) {
+        updateComponent(notebookId, idx, response.data.url);
+      }
+
+      // if all good
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: "upload successful",
+      });
+
+      setIsOpen(false);
+    } catch (error) {
+      // if err
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: error.response.data.msg
+          ? error.response.data.msg
+          : "Internal server error",
+      });
+    }
+  };
 
   return (
     <div
@@ -57,23 +86,39 @@ const ImageComponent = ({
       <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
       <div className={classes.component}>
         {!isOpen ? (
-          <h1 style={{ textAlign: "center" }}>{component.name}</h1>
+          <div className={classes.note_component}>
+            {!!component.value ? (
+              <img
+                src={component.value}
+                alt="image_component"
+                style={{
+                  maxHeight: "500px",
+                  maxWidth: "100%",
+                  padding: "20px 0 10px 0",
+                }}
+              />
+            ) : (
+              <span className={classes.default_text}>
+                Double Click To Upload
+              </span>
+            )}
+          </div>
         ) : (
-          <DropZone isOpen={isOpen} setIsOpen={setIsOpen} />
+          <DropZone
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            axiosRequest={axiosRequest}
+            onsa
+          />
         )}
         <DeleteOutlineOutlinedIcon
           className={classes.delete_icon}
           onClick={() => deleteHandler(idx)}
         />
-        {!isOpen ? (
+        {!isOpen && (
           <EditOutlinedIcon
             className={classes.edit_icon}
             onClick={() => editHandler()}
-          />
-        ) : (
-          <SaveOutlinedIcon
-            className={classes.edit_icon}
-            onClick={() => saveHandler(idx)}
           />
         )}
         <DragHandle />
@@ -97,6 +142,12 @@ const mapActionToProps = (dispatch) => {
       dispatch({
         type: UPDATE_COMPONENTS,
         payload: { id, componentIdx, value },
+      });
+    },
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
       });
     },
   };

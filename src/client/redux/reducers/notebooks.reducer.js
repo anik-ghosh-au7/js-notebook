@@ -179,6 +179,7 @@ const reducer = (state = initNotebooks, action) => {
 
         let newState = state.slice();
         newState[idx] = newNotebook;
+        console.log("from reducer ===>>", newState);
         return newState;
       }
       return state;
