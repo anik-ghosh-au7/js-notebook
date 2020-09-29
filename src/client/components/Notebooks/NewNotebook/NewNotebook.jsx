@@ -193,7 +193,6 @@ const NewNotebook = (props) => {
                     index={idx}
                     idx={idx}
                     deleteHandler={deleteHandler}
-                    editHandler={editHandler}
                   />
                 );
               default:

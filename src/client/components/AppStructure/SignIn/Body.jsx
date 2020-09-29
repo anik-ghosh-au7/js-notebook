@@ -143,8 +143,6 @@ const SignIn = ({
         },
       });
 
-      console.log("github token --> ", response_data.data.access_token);
-
       let user_data = await axios("https://api.github.com/user", {
         method: "GET",
         headers: {
@@ -174,8 +172,6 @@ const SignIn = ({
       const { user, token } = res.data.data;
 
       setUser(user, token);
-
-      console.log("github user_data --> ", user_data.data);
 
       setNotification({
         open: true,

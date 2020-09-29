@@ -110,7 +110,11 @@ const LinkComponent = ({
         ) : (
           <div className={classes.link_component}>
             {!!component.value ? (
-              <a href={component.value.link} className={classes.link}>
+              <a
+                href={component.value.link}
+                className={classes.link}
+                target="blank"
+              >
                 <span style={{ fontSize: 30 }}>{component.value.linkName}</span>
               </a>
             ) : (

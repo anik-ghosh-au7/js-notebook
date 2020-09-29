@@ -5,6 +5,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import { connect } from "react-redux";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import IconButton from "@material-ui/core/IconButton";
+import axios from "axios";
 
 // components
 import List from "./List";
@@ -13,6 +14,12 @@ import DropZone from "../../DropZone/DropZone";
 // styles
 import useStyles from "./body.style";
 import { SET_USER } from "../../../redux/actions/user.action";
+
+// importing axios config to send form data
+import createConfig from "../../AppStructure/Profile/form_axios.config";
+
+// reducer actions
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 // edit button
 const Button = ({ className, onClick }) => (
@@ -27,7 +34,7 @@ const Button = ({ className, onClick }) => (
   </IconButton>
 );
 
-const Body = ({ userData, set_data }) => {
+const Body = ({ userData, set_data, setNotification }) => {
   const classes = useStyles();
 
   // state for button
@@ -79,6 +86,34 @@ const Body = ({ userData, set_data }) => {
     setIsOpen(true);
   };
 
+  const axiosRequest = async (form_data) => {
+    try {
+      let response = await axios.post(
+        "http://localhost:5000/api/protected/profile",
+        form_data,
+        createConfig()
+      );
+
+      setData({ ...data, Image: response.data.data.img });
+
+      // if all good
+      setNotification({
+        open: true,
+        severity: "success",
+        msg: response.data.msg,
+      });
+
+      setIsOpen(false);
+    } catch (err) {
+      // if err
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: err.response.data.msg,
+      });
+    }
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={5}>
@@ -111,8 +146,7 @@ const Body = ({ userData, set_data }) => {
       <DropZone
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        data={data}
-        setData={setData}
+        axiosRequest={axiosRequest}
       />
     </div>
   );
@@ -127,6 +161,12 @@ const mapStateToProps = (state) => {
 const mapActionToProps = (dispatch) => {
   return {
     set_data: (data) => dispatch({ type: SET_USER, payload: data }),
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
+      });
+    },
   };
 };
 

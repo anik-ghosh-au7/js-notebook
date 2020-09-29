@@ -1,47 +1,14 @@
 import React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
-import axios from "axios";
 
-// importing axios config to send form data
-import createConfig from "../AppStructure/Profile/form_axios.config";
-import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
-import { connect } from "react-redux";
-
-const DropZone = ({ isOpen, setIsOpen, data, setData, setNotification }) => {
+const DropZone = ({ isOpen, setIsOpen, axiosRequest }) => {
   const onSave = async (files) => {
-    try {
-      const file = files[0];
-      console.log(file);
-      // upload image to server and save url into data object from response
+    const file = files[0];
+    console.log(file);
 
-      let form_data = new FormData();
-      form_data.append("file", file);
-
-      let response = await axios.post(
-        "http://localhost:5000/api/protected/profile",
-        form_data,
-        createConfig()
-      );
-
-      console.log("response ===>>>> ", response);
-      setData({ ...data, Image: response.data.data.img });
-
-      // if all good
-      setNotification({
-        open: true,
-        severity: "success",
-        msg: response.data.msg,
-      });
-
-      setIsOpen(false);
-    } catch (err) {
-      // if err
-      setNotification({
-        open: true,
-        severity: "error",
-        msg: err.response.data.msg,
-      });
-    }
+    let form_data = new FormData();
+    form_data.append("file", file);
+    axiosRequest(form_data);
   };
   return (
     <DropzoneDialog
@@ -60,15 +27,4 @@ const DropZone = ({ isOpen, setIsOpen, data, setData, setNotification }) => {
   );
 };
 
-const mapActionToProps = (dispatch) => {
-  return {
-    setNotification: (data) => {
-      dispatch({
-        type: SET_NOTIFICATION,
-        payload: { ...data },
-      });
-    },
-  };
-};
-
-export default connect(null, mapActionToProps)(DropZone);
+export default DropZone;
