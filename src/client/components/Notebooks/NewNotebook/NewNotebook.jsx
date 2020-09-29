@@ -55,7 +55,6 @@ const NewNotebook = (props) => {
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log(oldIndex, newIndex);
     props.changeArrangement(props.notebookId, oldIndex, newIndex);
   };
 
@@ -152,7 +151,6 @@ const NewNotebook = (props) => {
                     idx={idx}
                     component={component}
                     deleteHandler={deleteHandler}
-                    editHandler={editHandler}
                   />
                 );
               case "Link":

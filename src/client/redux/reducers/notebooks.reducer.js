@@ -68,7 +68,14 @@ const reducer = (state = initNotebooks, action) => {
         newState.splice(idx, 1);
 
         // if state has no notebook
-        if (newState.length === 0) return initNotebooks;
+        if (newState.length === 0)
+          return [
+            {
+              ...demoData,
+              createdOn: moment().format("Do MMM, YYYY"),
+              time: moment().format("hh:mm a"),
+            },
+          ];
 
         return newState;
       }

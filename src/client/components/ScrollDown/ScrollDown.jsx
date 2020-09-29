@@ -7,6 +7,7 @@ const usePrevious = (value) => {
   });
   return ref.current;
 };
+
 const ScrollDown = ({ components }) => {
   const elementRef = useRef();
   const prevComponents = usePrevious(components);

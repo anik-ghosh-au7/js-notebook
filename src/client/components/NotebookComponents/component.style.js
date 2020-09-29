@@ -97,6 +97,18 @@ const useStyles = makeStyles((theme) => ({
     cursor: "grab",
     title: "Drag",
   },
+  text_field: {
+    width: "91%",
+    margin: theme.spacing(3, 6, 0, 5),
+    overFlow: "hidden",
+    backgroundColor: fade(theme.palette.common.black, 0.001),
+    border: "none",
+    resize: "none",
+    "&:focus": {
+      outline: "none",
+      backgroundColor: fade(theme.palette.common.black, 0.001),
+    },
+  },
 }));
 
 export default useStyles;
