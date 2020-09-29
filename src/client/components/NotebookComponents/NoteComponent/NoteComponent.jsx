@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { connect } from "react-redux";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -8,8 +9,9 @@ import { sortableElement, sortableHandle } from "react-sortable-hoc";
 
 //styles
 import useStyles from "../component.style";
+
+// reducer action
 import { UPDATE_COMPONENTS } from "../../../redux/actions/notebooks.action";
-import { connect } from "react-redux";
 
 const NoteComponent = ({
   component,
@@ -68,7 +70,13 @@ const NoteComponent = ({
             onChange={onChangeHandler}
           />
         ) : (
-          <p className={classes.note_component}>{component.value}</p>
+          <div className={classes.note_component}>
+            {!!component.value ? (
+              <p>{component.value}</p>
+            ) : (
+              <span className={classes.default_text}>Double Click To Edit</span>
+            )}
+          </div>
         )}
         <DeleteOutlineOutlinedIcon
           className={classes.delete_icon}

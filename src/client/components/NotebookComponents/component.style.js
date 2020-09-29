@@ -119,6 +119,29 @@ const useStyles = makeStyles((theme) => ({
     textAlignLast: "center",
     whiteSpace: "pre-wrap",
   },
+  link_field: {
+    padding: theme.spacing(3, 6, 0, 5),
+  },
+  link_component: {
+    width: "91%",
+    margin: theme.spacing(3, 5.5, 2, 3),
+    fontSize: "10",
+    fontWeight: "normal",
+    fontFamily: "calibri",
+    textAlign: "center",
+    wordWrap: "break-word",
+  },
+  default_text: {
+    fontSize: 30,
+    fontStyle: "normal",
+    color: fade(theme.palette.common.black, 0.25),
+  },
+  link: {
+    textDecoration: "none",
+    "&:visited": {
+      color: "red",
+    },
+  },
 }));
 
 export default useStyles;

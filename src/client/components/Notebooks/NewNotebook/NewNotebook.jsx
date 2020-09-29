@@ -161,7 +161,6 @@ const NewNotebook = (props) => {
                     idx={idx}
                     component={component}
                     deleteHandler={deleteHandler}
-                    editHandler={editHandler}
                   />
                 );
               case "Chart":
