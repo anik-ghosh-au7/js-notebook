@@ -25,7 +25,7 @@ const ImageComponent = ({ component, idx, deleteHandler, editHandler }) => {
     >
       <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
       <div className={classes.component}>
-        <h1 style={{ textAlign: "center" }}>{component}</h1>
+        <h1 style={{ textAlign: "center" }}>{component.name}</h1>
         <DeleteOutlineOutlinedIcon
           className={classes.delete_icon}
           onClick={() => deleteHandler(idx)}

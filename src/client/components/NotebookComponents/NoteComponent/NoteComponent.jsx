@@ -1,5 +1,4 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -9,12 +8,20 @@ import { sortableElement, sortableHandle } from "react-sortable-hoc";
 
 //styles
 import useStyles from "../component.style";
+import { UPDATE_COMPONENTS } from "../../../redux/actions/notebooks.action";
+import { connect } from "react-redux";
 
-const NoteComponent = ({ component, idx, deleteHandler }) => {
+const NoteComponent = ({
+  component,
+  idx,
+  deleteHandler,
+  notebookId,
+  updateComponent,
+}) => {
   const classes = useStyles();
 
   // edit state
-  const [isEdit, setIsEdit] = React.useState(true);
+  const [isEdit, setIsEdit] = React.useState(false);
 
   // note data state
   const [data, setData] = React.useState("");
@@ -31,25 +38,37 @@ const NoteComponent = ({ component, idx, deleteHandler }) => {
   };
 
   // edit handler
-  const editHandler = (idx) => {};
+  const editHandler = (idx) => {
+    setIsEdit(true);
+  };
+
+  // save handler
+  const saveHandler = (idx) => {
+    setIsEdit(false);
+    updateComponent(notebookId, idx, data);
+  };
 
   return (
     <div
       className={classes.component_wrapper}
       key={idx}
       onDoubleClick={() => editHandler(idx)}
+      onBlur={() => saveHandler(idx)}
     >
       <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
       <div className={classes.component}>
         {isEdit ? (
           <TextareaAutosize
-            rowsMin={3}
+            rowsMin={2}
             placeholder="Type here"
             className={classes.text_field}
-            fullWidth={true}
+            fullwidth="true"
+            autoFocus
+            defaultValue={component.value}
+            onChange={onChangeHandler}
           />
         ) : (
-          <h1 style={{ textAlign: "center" }}>{component}</h1>
+          <p className={classes.note_component}>{component.value}</p>
         )}
         <DeleteOutlineOutlinedIcon
           className={classes.delete_icon}
@@ -61,7 +80,10 @@ const NoteComponent = ({ component, idx, deleteHandler }) => {
             onClick={() => editHandler(idx)}
           />
         ) : (
-          <SaveOutlinedIcon className={classes.edit_icon} />
+          <SaveOutlinedIcon
+            className={classes.edit_icon}
+            onClick={() => saveHandler(idx)}
+          />
         )}
         <DragHandle />
       </div>
@@ -72,16 +94,21 @@ const NoteComponent = ({ component, idx, deleteHandler }) => {
 //Draggable elements
 const SortableItem = sortableElement((props) => <NoteComponent {...props} />);
 
-export default SortableItem;
+const mapStateToProps = (state) => {
+  return {
+    notebookId: state.activeTab,
+  };
+};
 
-// {/*<TextField
-//             id="standard-multiline-flexible"
-//             multiline
-//             rows={3}
-//             fullWidth={true}
-//             value={data}
-//             className={classes.text_field}
-//             onChange={onChangeHandler}
-//           />
-// eubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufh eubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufheubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufheubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufheubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufheubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufheubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufheubdfwufweurfrbfiwebrwfenfoiweo fwehnfoneworfnoiernoifnioernoif eroif eriofioer freiojfioerjijfioereifjei ewbfduiwebfuiew rfbwuoreofbewuofnweof ejr fbuoreuifrireo foreuifurenfutgnut tnoertgnioengiorneoirnfgioernf eriof ehrfef eiofoerjhfioherif eriofhioer fhierohf eriof herohferhf eruofhuerhfuerhferhofhreuiohfurehf eruhfuerhfuhhuerhufhuerhfuheruf reuhferfuerhfuerhuf erufhurehf erufhe rfuherf erufhe rfuherufh?
-// */}
+const mapActionToProps = (dispatch) => {
+  return {
+    updateComponent: (id, componentIdx, value) => {
+      dispatch({
+        type: UPDATE_COMPONENTS,
+        payload: { id, componentIdx, value },
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapActionToProps)(SortableItem);

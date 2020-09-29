@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
   component: {
     position: "relative",
-    minHeight: "50px",
+    minHeight: "100px",
     width: "100%",
     marginTop: 15,
     backgroundColor: fade(theme.palette.common.black, 0.01),
@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   },
   text_field: {
     width: "91%",
-    margin: theme.spacing(3, 6, 0, 5),
+    margin: theme.spacing(3, 6, 2, 5),
     overFlow: "hidden",
     backgroundColor: fade(theme.palette.common.black, 0.001),
     border: "none",
@@ -108,6 +108,16 @@ const useStyles = makeStyles((theme) => ({
       outline: "none",
       backgroundColor: fade(theme.palette.common.black, 0.001),
     },
+  },
+  note_component: {
+    width: "91%",
+    margin: theme.spacing(3, 6, 2, 5),
+    fontSize: "10",
+    fontWeight: "normal",
+    fontFamily: "calibri",
+    textAlign: "justify",
+    textAlignLast: "center",
+    whiteSpace: "pre-wrap",
   },
 }));
 

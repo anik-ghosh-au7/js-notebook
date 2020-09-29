@@ -6,6 +6,7 @@ import {
   CLEAR_ALL_COMPONENTS,
   DELETE_NOTEBOOK,
   UPDATE_NOTEBOOK,
+  UPDATE_COMPONENTS,
 } from "../actions/notebooks.action";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
@@ -101,7 +102,10 @@ const reducer = (state = initNotebooks, action) => {
         if (state[i].id === action.payload.id) {
           let newNotebook = {
             ...state[i],
-            components: [...state[i].components, action.payload.component],
+            components: [
+              ...state[i].components,
+              { name: action.payload.component },
+            ],
           };
 
           let newState = state.slice();
@@ -156,6 +160,26 @@ const reducer = (state = initNotebooks, action) => {
           newState[i] = newNotebook;
           return newState;
         }
+      }
+      return state;
+
+    case UPDATE_COMPONENTS:
+      idx = state.findIndex((notebook) => notebook.id === action.payload.id);
+      if (idx !== -1) {
+        let newComponents = state[idx].components.slice();
+        newComponents[action.payload.componentIdx] = {
+          ...newComponents[action.payload.componentIdx],
+          value: action.payload.value,
+        };
+
+        let newNotebook = {
+          ...state[idx],
+          components: newComponents,
+        };
+
+        let newState = state.slice();
+        newState[idx] = newNotebook;
+        return newState;
       }
       return state;
 

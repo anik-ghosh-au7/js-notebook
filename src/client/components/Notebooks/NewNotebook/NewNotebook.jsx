@@ -142,7 +142,7 @@ const NewNotebook = (props) => {
           useWindowAsScrollContainer
         >
           {map(props.components, (component, idx) => {
-            switch (component) {
+            switch (component.name) {
               case "Note":
                 return (
                   <NoteComponent

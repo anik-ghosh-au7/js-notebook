@@ -52,7 +52,7 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
             [classes.shrink_component]: run,
           })}
         >
-          <h1 style={{ textAlign: "center" }}>{component}</h1>
+          <h1 style={{ textAlign: "center" }}>{component.name}</h1>
           <DeleteOutlineOutlinedIcon
             className={classes.delete_icon}
             onClick={() => deleteHandler(idx)}
@@ -79,7 +79,9 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
         >
           <h3 className={classes.output}>{`Out [ ${idx + 1} ] : `}</h3>
           <div className={classes.shrink_component}>
-            <h1 style={{ textAlign: "center" }}>{`${component} Output`}</h1>
+            <h1
+              style={{ textAlign: "center" }}
+            >{`${component.name} Output`}</h1>
             <RefreshRoundedIcon
               className={classes.edit_icon}
               onClick={() => refreshHandler(idx)}

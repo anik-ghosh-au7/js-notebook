@@ -7,3 +7,4 @@ export const ADD_COMPONENT = "@@component/add";
 export const CHANGE_ARRANGEMENT = "@@component/arrangement";
 export const DELETE_COMPONENT = "@@component/delete";
 export const CLEAR_ALL_COMPONENTS = "@@component/clear-all";
+export const UPDATE_COMPONENTS = "@@component/update";
