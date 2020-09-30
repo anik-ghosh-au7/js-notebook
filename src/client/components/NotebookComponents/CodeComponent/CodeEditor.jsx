@@ -25,10 +25,9 @@ const CodeEditor = ({ theme, run, code, setCode }) => {
 
   return (
     <AceEditor
-      placeholder="Placeholder Text"
       mode="javascript"
       theme={theme}
-      name="blah2"
+      name="code_editor"
       onLoad={onLoad}
       onChange={onChange}
       width="100%"
