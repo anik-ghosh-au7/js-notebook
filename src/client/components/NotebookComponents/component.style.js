@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     minHeight: "100px",
     width: "100%",
+    height: "100px",
     marginTop: 15,
     backgroundColor: fade(theme.palette.common.black, 0.01),
     borderRadius: 2.5,
@@ -24,8 +25,9 @@ const useStyles = makeStyles((theme) => ({
   },
   shrink_component: {
     position: "relative",
-    minHeight: "200px",
+    minHeight: "300px",
     width: "100%",
+    height: "200px",
     marginTop: 15,
     backgroundColor: fade(theme.palette.common.black, 0.01),
     borderRadius: 2.5,
@@ -34,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       transform: "scale(1.015, 1.015)",
     },
+  },
+  code_theme: {
+    position: "absolute",
+    top: "5px",
+    left: "60px",
+    color: fade(theme.palette.common.black, 0.5),
+    paddingTop: "5px",
   },
   move_shrink_component: {
     marginLeft: "10%",

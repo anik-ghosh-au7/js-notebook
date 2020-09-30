@@ -8,12 +8,37 @@ import CodeRoundedIcon from "@material-ui/icons/CodeRounded";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import clsx from "clsx";
 import { sortableElement, sortableHandle } from "react-sortable-hoc";
+import { map } from "lodash";
+import { MenuItem, Select } from "@material-ui/core";
 
 //styles
 import useStyles from "../component.style";
 
+// components
+import CodeEditor from "./CodeEditor";
+
 const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
   const classes = useStyles();
+
+  // theme state
+  const [theme, setTheme] = useState("monokai");
+  const themeArray = [
+    "monokai",
+    "github",
+    "tomorrow",
+    "twilight",
+    "kuroir",
+    "xcode",
+    "textmate",
+    "terminal",
+    "solarized_dark",
+    "solarized_light",
+  ];
+
+  // Theme Change Handler
+  const handleThemeChange = (e) => {
+    setTheme(e.target.value);
+  };
 
   //Drag handler
   const DragHandle = sortableHandle(() => (
@@ -51,8 +76,27 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
             [classes.component]: !run,
             [classes.shrink_component]: run,
           })}
+          style={{ height: "200px" }}
         >
-          <h1 style={{ textAlign: "center" }}>{component.name}</h1>
+          <CodeEditor theme={theme} run={run} />
+
+          {/* ----------------------- */}
+
+          <Select
+            value={theme}
+            onChange={handleThemeChange}
+            className={classes.code_theme}
+            disableUnderline={true}
+          >
+            {map(themeArray, (name, idx) => (
+              <MenuItem value={name} key={idx}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+
+          {/* ----------------------- */}
+
           <DeleteOutlineOutlinedIcon
             className={classes.delete_icon}
             onClick={() => deleteHandler(idx)}
@@ -100,7 +144,6 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
 
 //Draggable elements
 const SortableItem = sortableElement((props) => {
-  console.log(props);
   return <CodeComponent {...props} />;
 });
 

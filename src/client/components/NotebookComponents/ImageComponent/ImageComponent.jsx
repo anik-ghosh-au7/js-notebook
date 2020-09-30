@@ -115,7 +115,6 @@ const ImageComponent = ({
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             axiosRequest={axiosRequest}
-            onsa
           />
         )}
         <DeleteOutlineOutlinedIcon
