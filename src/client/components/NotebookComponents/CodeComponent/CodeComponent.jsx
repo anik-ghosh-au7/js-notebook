@@ -95,6 +95,7 @@ const CodeComponent = ({
         console.log(e.message);
       }
     }
+    console.oldLog(resultArr);
     setResult(resultArr);
     console.log = console.oldLog;
   };
@@ -131,7 +132,7 @@ const CodeComponent = ({
         <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
         <div
           className={clsx({
-            [classes.component]: !run,
+            [classes.component_code]: !run,
             [classes.shrink_component]: run,
           })}
           style={{ height: "200px" }}
