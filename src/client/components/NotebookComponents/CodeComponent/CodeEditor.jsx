@@ -14,13 +14,13 @@ import "ace-builds/src-noconflict/theme-terminal";
 import "ace-builds/src-noconflict/theme-solarized_dark";
 import "ace-builds/src-noconflict/theme-solarized_light";
 
-const CodeEditor = ({ theme, run }) => {
+const CodeEditor = ({ theme, run, code, setCode }) => {
   const onLoad = () => {
     console.log("theme", theme);
   };
 
-  const onChange = () => {
-    console.log("on change");
+  const onChange = (data) => {
+    setCode(data);
   };
 
   return (
@@ -37,8 +37,7 @@ const CodeEditor = ({ theme, run }) => {
       showPrintMargin={true}
       showGutter={true}
       highlightActiveLine={true}
-      value={`// Type your code here
-`}
+      value={code}
       style={{ marginTop: "40px" }}
       setOptions={{
         showLineNumbers: true,

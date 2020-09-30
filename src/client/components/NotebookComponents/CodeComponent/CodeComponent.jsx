@@ -20,6 +20,9 @@ import CodeEditor from "./CodeEditor";
 const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
   const classes = useStyles();
 
+  // code state
+  const [code, setCode] = useState(`// Type your code here\n`);
+
   // theme state
   const [theme, setTheme] = useState("monokai");
   const themeArray = [
@@ -49,18 +52,51 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
 
   const [run, setRun] = useState(false);
 
+  // result state
+  const [result, setResult] = useState([]);
+
+  // code runner
+  const evaluate_code = () => {
+    // overriding console.log function
+    let resultArr = [];
+
+    console.log = function (value) {
+      resultArr.push(value);
+      return resultArr;
+    };
+
+    try {
+      // eslint-disable-next-line
+      let result_data = eval(code);
+      setResult(result_data);
+    } catch (error) {
+      console.log("error ==>>>>> ", error);
+    }
+  };
+
   const playHandler = (idx) => {
     console.log("component to be runned - ", idx);
     setRun(true);
+    evaluate_code();
   };
 
   const refreshHandler = (idx) => {
-    console.log("component output refreshed - ", idx);
+    evaluate_code();
   };
 
   const closeHandler = (idx) => {
     console.log("component output closed - ", idx);
     setRun(false);
+  };
+
+  const ResultComponent = () => {
+    return (
+      <div style={{ width: "100%", height: "100%", textAlign: "center" }}>
+        {map(result, (elem, idx) => (
+          <h5 key={idx}>{elem}</h5>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -78,7 +114,7 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
           })}
           style={{ height: "200px" }}
         >
-          <CodeEditor theme={theme} run={run} />
+          <CodeEditor theme={theme} run={run} code={code} setCode={setCode} />
 
           {/* ----------------------- */}
 
@@ -123,9 +159,7 @@ const CodeComponent = ({ component, idx, deleteHandler, editHandler }) => {
         >
           <h3 className={classes.output}>{`Out [ ${idx + 1} ] : `}</h3>
           <div className={classes.shrink_component}>
-            <h1
-              style={{ textAlign: "center" }}
-            >{`${component.name} Output`}</h1>
+            <ResultComponent />
             <RefreshRoundedIcon
               className={classes.edit_icon}
               onClick={() => refreshHandler(idx)}
