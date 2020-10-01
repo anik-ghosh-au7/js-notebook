@@ -106,7 +106,7 @@ const CodeComponent = ({
           resultArr.push(error.response.data.data.err.errorCause);
         if (!!error.response.data.data.err.errorType)
           resultArr.push(
-            `Error Type: ${error.response.data.data.err.errorType}`
+            `ErrorType: ${error.response.data.data.err.errorType}`
           );
       }
 
