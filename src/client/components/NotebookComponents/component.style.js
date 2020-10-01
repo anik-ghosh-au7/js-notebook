@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   component_code: {
     position: "relative",
-    minHeight: "100px",
+    minHeight: "210px",
     width: "100%",
-    height: "100px",
+    height: "210px",
     marginTop: 15,
     backgroundColor: fade(theme.palette.common.black, 0.01),
     borderRadius: 2.5,
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     minHeight: "300px",
     width: "100%",
-    height: "200px",
+    height: "300px",
     marginTop: 15,
     backgroundColor: fade(theme.palette.common.black, 0.01),
     borderRadius: 2.5,
@@ -59,6 +59,32 @@ const useStyles = makeStyles((theme) => ({
   },
   move_shrink_component: {
     marginLeft: "10%",
+  },
+  result_component: {
+    position: "absolute",
+    display: "flex",
+    flexDirection: "column",
+    width: "99%",
+    height: "85%",
+    top: "42px",
+    overflow: "auto",
+    paddingLeft: "20px",
+    // alignItems: "center",
+    // justifyContent: "center",
+    fontFamily: "Times New Roman, Times, serif",
+    backgroundColor: theme.palette.common.white,
+  },
+  result_component_black: {
+    backgroundColor: fade(theme.palette.common.black, 0.8),
+  },
+  result_component_white: {
+    backgroundColor: theme.palette.common.white,
+  },
+  result_content: {
+    margin: "15px 0 0 0",
+  },
+  result_content_black: {
+    color: "red",
   },
   output: {
     color: "red",

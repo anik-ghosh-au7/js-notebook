@@ -58,8 +58,8 @@ const ImageComponent = ({
         createConfig()
       );
 
-      if (!!response.data.url) {
-        updateComponent(notebookId, idx, response.data.url);
+      if (!!response.data.data.url) {
+        updateComponent(notebookId, idx, response.data.data.url);
       }
 
       // if all good

@@ -1,22 +1,29 @@
 // importing package
-import express, { response } from "express";
+import express from "express";
 
 // middleware
 import formidableMiddleware from "../middlewares/formidable/middleware";
 import cloudinaryMiddleware from "../middlewares/upload/cloudinary.middleware";
+import codeComplier from "../middlewares/codeCompiler/codeCompiler";
 
 // controller
-import userController from "../controllers/user.controller";
+import publicController from "../controllers/public.controller";
 
 // route
 let route = express.Router();
 
-route.post("/image", formidableMiddleware, cloudinaryMiddleware, (req, res) => {
-  if (!!req.imgUrl) {
-    res.status(200).send({ url: req.imgUrl });
-  } else {
-    res.status(400).send({ err: "Upload unsuccessful, try again!!" });
-  }
-});
+route.post(
+  "/image",
+  formidableMiddleware,
+  cloudinaryMiddleware,
+  publicController.imageController
+);
+
+route.post(
+  "/compile",
+  formidableMiddleware,
+  codeComplier,
+  publicController.codeController
+);
 
 export default route;
