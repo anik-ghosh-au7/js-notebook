@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
   },
   result_content: {
     margin: "15px 0 0 0",
+    fontSize: 15,
   },
   result_content_black: {
     color: "red",
