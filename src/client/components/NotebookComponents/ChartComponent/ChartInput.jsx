@@ -1,12 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
-import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
+import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import { map } from "lodash";
 
 //styles
 import useStyles from "../component.style";
+
+// components
+import ScrollDown from "../../../components/ScrollDown/ScrollDown";
 
 const ChartInput = ({ data, setData, setNotification }) => {
   const classes = useStyles();
@@ -80,8 +83,8 @@ const ChartInput = ({ data, setData, setNotification }) => {
   };
 
   return (
-    <div className={classes.chart_component}>
-      <form noValidate autoComplete="off">
+    <Fragment>
+      <div className={classes.chart_header}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -89,6 +92,7 @@ const ChartInput = ({ data, setData, setNotification }) => {
               name="title"
               variant="outlined"
               size="small"
+              fullWidth
               value={data.title}
               style={{ marginBottom: "20px" }}
               onChange={onChangeTitleHandler}
@@ -100,61 +104,71 @@ const ChartInput = ({ data, setData, setNotification }) => {
               name="description"
               variant="outlined"
               size="small"
+              fullWidth
               value={data.description}
               style={{ marginBottom: "20px" }}
               onChange={onChangeDescriptionHandler}
             />
           </Grid>
         </Grid>
-
+      </div>
+      <div className={classes.chart_component}>
         {map(data.labels, (ele, idx) => {
           return (
-            <Grid container spacing={2} key={idx}>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  name="label"
-                  variant="outlined"
-                  label="Label"
-                  size="small"
-                  value={ele}
-                  onChange={(e) => onChangeLabelHandler(e, idx)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={9}>
-                    <TextField
-                      variant="outlined"
-                      label="Value"
-                      name="data"
-                      size="small"
-                      value={data.values[idx]}
-                      onChange={(e) => onChangeValueHandler(e, idx)}
-                    />
+            <div className={classes.chart_feild_wrapper} key={idx}>
+              <Grid container spacing={4}>
+                <Grid item xs={12} sm={5}>
+                  <TextField
+                    name="label"
+                    variant="outlined"
+                    label="Label"
+                    size="small"
+                    value={ele}
+                    onChange={(e) => onChangeLabelHandler(e, idx)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={7}>
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={9}>
+                      <TextField
+                        variant="outlined"
+                        label="Value"
+                        name="data"
+                        size="small"
+                        value={data.values[idx]}
+                        onChange={(e) => onChangeValueHandler(e, idx)}
+                      />
+                    </Grid>
+                    <div className={classes.chart_feild_icon}>
+                      {idx === data.labels.length - 1 && (
+                        <Grid item xs={12} sm={3} key={`add-${idx}`}>
+                          <AddCircleOutlineOutlinedIcon
+                            onClick={addFieldHandler}
+                            className={classes.chart_icons}
+                          />
+                        </Grid>
+                      )}
+                      {idx < data.labels.length - 1 && (
+                        <Grid item xs={12} sm={3} key={`delete-${idx}`}>
+                          <CancelOutlinedIcon
+                            onClick={() => deleteFieldHandler(idx)}
+                            className={classes.chart_icons}
+                          />
+                        </Grid>
+                      )}
+                    </div>
+                    <div className={classes.chart_feild_index}>{`${
+                      idx + 1
+                    }.`}</div>
                   </Grid>
-                  {idx === data.labels.length - 1 && (
-                    <Grid item xs={12} sm={3}>
-                      <AddBoxOutlinedIcon
-                        onClick={addFieldHandler}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </Grid>
-                  )}
-                  {idx < data.labels.length - 1 && (
-                    <Grid item xs={12} sm={3}>
-                      <DeleteOutlineOutlinedIcon
-                        onClick={() => deleteFieldHandler(idx)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </Grid>
-                  )}
                 </Grid>
               </Grid>
-            </Grid>
+            </div>
           );
         })}
-      </form>
-    </div>
+        <ScrollDown components={data.labels} />
+      </div>
+    </Fragment>
   );
 };
 

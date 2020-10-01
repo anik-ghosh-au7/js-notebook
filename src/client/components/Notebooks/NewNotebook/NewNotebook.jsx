@@ -45,10 +45,6 @@ const NewNotebook = (props) => {
     props.deleteComponent(props.notebookId, idx);
   };
 
-  const editHandler = (idx) => {
-    console.log("component to be edited - ", idx);
-  };
-
   const editTitleHandler = () => {
     setFlag(true);
     console.log("edit");

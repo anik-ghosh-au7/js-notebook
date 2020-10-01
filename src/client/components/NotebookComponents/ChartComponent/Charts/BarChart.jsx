@@ -23,6 +23,9 @@ const BarChart = ({ labels, datasets, title }) => {
           legend: {
             display: true,
           },
+          // options: {
+          //   aspectRatio: 1,
+          // },
         }}
       />
     </div>

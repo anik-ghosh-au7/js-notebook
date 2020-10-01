@@ -203,10 +203,41 @@ const useStyles = makeStyles((theme) => ({
       color: "red",
     },
   },
+  chart_header: {
+    width: "91%",
+    margin: theme.spacing(4, 3, -1, 3),
+    padding: theme.spacing(1),
+    textAlign: "center",
+  },
   chart_component: {
     width: "91%",
-    margin: theme.spacing(3, 6, 2, 5),
+    margin: theme.spacing(-2, 0.7, 2, 7.3),
+    padding: theme.spacing(1, 4),
     textAlign: "center",
+    height: "65%",
+    overflowY: "scroll",
+  },
+  chart_feild_wrapper: {
+    position: "relative",
+  },
+  chart_feild_icon: {
+    position: "absolute",
+    top: "30%",
+    right: "5%",
+  },
+  chart_feild_index: {
+    position: "absolute",
+    top: "30%",
+    left: "-8%",
+    color: fade(theme.palette.common.black, 0.5),
+  },
+  chart_icons: {
+    cursor: "pointer",
+    color: fade(theme.palette.common.black, 0.25),
+    "&:hover": {
+      color: fade(theme.palette.common.black, 0.75),
+      cursor: "pointer",
+    },
   },
 }));
 

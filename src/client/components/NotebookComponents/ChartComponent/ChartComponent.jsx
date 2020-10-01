@@ -126,8 +126,22 @@ const ChartComponent = ({
     });
   };
 
+  // Custom Blur Handler for parent component to save data
+  // const blurHandler = (e) => {
+  //   const currentTarget = e.currentTarget;
+  //   setTimeout(() => {
+  //     if (!currentTarget.contains(document.activeElement)) {
+  //       saveHandler(idx);
+  //     }
+  //   }, 0);
+  // };
+
+  const blurHandler = (idx) => {
+    updateComponent(notebookId, idx, data);
+  };
+
   return (
-    <div className={classes.split_wrapper}>
+    <div className={classes.split_wrapper} onBlur={() => blurHandler(idx)}>
       <div className={classes.component_wrapper} key={idx}>
         <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
         <div
@@ -165,7 +179,10 @@ const ChartComponent = ({
           key={`split - ${idx}`}
         >
           <h3 className={classes.output}>{`Out [ ${idx + 1} ] : `}</h3>
-          <div className={classes.shrink_component}>
+          <div
+            className={classes.shrink_component}
+            style={{ paddingTop: "20px" }}
+          >
             {data.chart === "Polar" && (
               <PolarChart
                 labels={data.labels}
