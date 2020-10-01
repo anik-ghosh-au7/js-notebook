@@ -14,7 +14,6 @@ const middleware = (req, res, next) => {
       console.log(err);
       return next(err);
     }
-    console.log("fields --> ", fields, files);
     // adding fields and files in req object
     req.fields = fields;
     req.files = files;

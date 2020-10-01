@@ -203,6 +203,11 @@ const useStyles = makeStyles((theme) => ({
       color: "red",
     },
   },
+  chart_component: {
+    width: "91%",
+    margin: theme.spacing(3, 6, 2, 5),
+    textAlign: "center",
+  },
 }));
 
 export default useStyles;

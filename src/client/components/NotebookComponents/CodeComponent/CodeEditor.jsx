@@ -32,7 +32,7 @@ const CodeEditor = ({ theme, run, code, setCode }) => {
       onChange={onChange}
       width="100%"
       height={run ? "86%" : "80%"}
-      fontSize={11}
+      fontSize={12}
       showPrintMargin={true}
       showGutter={true}
       highlightActiveLine={true}

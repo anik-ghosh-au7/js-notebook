@@ -1,19 +1,87 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import PlayCircleFilledWhiteOutlinedIcon from "@material-ui/icons/PlayCircleFilledWhiteOutlined";
+import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import RefreshRoundedIcon from "@material-ui/icons/RefreshRounded";
-import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import clsx from "clsx";
 import { sortableElement, sortableHandle } from "react-sortable-hoc";
+import { map } from "lodash";
+import { MenuItem, Select } from "@material-ui/core";
 
 //styles
 import useStyles from "../component.style";
 
-const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
+// reducer action
+import { UPDATE_COMPONENTS } from "../../../redux/actions/notebooks.action";
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
+
+// component
+import {
+  PolarChart,
+  BarChart,
+  RadarChart,
+  LineChart,
+  DoughnutChart,
+  PieChart,
+} from "./Charts";
+import ChartInput from "./ChartInput";
+
+const ChartComponent = ({
+  component,
+  idx,
+  deleteHandler,
+  updateComponent,
+  notebookId,
+  setNotification,
+}) => {
   const classes = useStyles();
+
+  // chart array
+  let chartArr = ["Polar", "Bar", "Radar", "Line", "Doughnut", "Pie"];
+
+  // handle chart change
+  const handleChartChange = (e) => {
+    setData({
+      ...data,
+      chart: e.target.value,
+    });
+  };
+
+  // data state
+  const [data, setData] = useState({
+    title:
+      !!component.value && !!component.value.title ? component.value.title : "",
+    labels:
+      !!component.value && !!component.value.labels
+        ? component.value.labels
+        : [""],
+    values:
+      !!component.value && !!component.value.values
+        ? component.value.values
+        : [0],
+    chart:
+      !!component.value && !!component.value.chart
+        ? component.value.chart
+        : "Polar",
+    description:
+      !!component.value && !!component.value.description
+        ? component.value.description
+        : "",
+  });
+
+  // for setting state as redux state
+  useEffect(() => {
+    if (!!component.value)
+      setData({
+        title: component.value.title,
+        labels: component.value.labels,
+        values: component.value.values,
+        chart: component.value.chart,
+        description: component.value.description,
+      });
+  }, [component.value]);
 
   //Drag handler
   const DragHandle = sortableHandle(() => (
@@ -22,29 +90,45 @@ const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
     </span>
   ));
 
-  const [run, setRun] = useState(false);
+  const run = true;
 
-  const playHandler = (idx) => {
-    console.log("component to be runned - ", idx);
-    setRun(true);
+  const refreshHandler = () => {
+    setData({
+      title:
+        !!component.value && !!component.value.title
+          ? component.value.title
+          : "",
+      labels:
+        !!component.value && !!component.value.labels
+          ? component.value.labels
+          : [""],
+      values:
+        !!component.value && !!component.value.values
+          ? component.value.values
+          : [0],
+      chart:
+        !!component.value && !!component.value.chart
+          ? component.value.chart
+          : "Polar",
+      description:
+        !!component.value && !!component.value.description
+          ? component.value.description
+          : "",
+    });
   };
 
-  const refreshHandler = (idx) => {
-    console.log("component output refreshed - ", idx);
-  };
-
-  const closeHandler = (idx) => {
-    console.log("component output closed - ", idx);
-    setRun(false);
+  const saveHandler = (idx) => {
+    updateComponent(notebookId, idx, data);
+    setNotification({
+      open: true,
+      severity: "success",
+      msg: "data saved successfully",
+    });
   };
 
   return (
     <div className={classes.split_wrapper}>
-      <div
-        className={classes.component_wrapper}
-        key={idx}
-        onDoubleClick={() => editHandler(idx)}
-      >
+      <div className={classes.component_wrapper} key={idx}>
         <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
         <div
           className={clsx({
@@ -52,18 +136,22 @@ const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
             [classes.shrink_component]: run,
           })}
         >
-          <h1 style={{ textAlign: "center" }}>{component.name}</h1>
+          <ChartInput
+            data={data}
+            setData={setData}
+            setNotification={setNotification}
+          />
           <DeleteOutlineOutlinedIcon
             className={classes.delete_icon}
             onClick={() => deleteHandler(idx)}
           />
-          <EditOutlinedIcon
+          <SaveOutlinedIcon
             className={classes.edit_icon}
-            onClick={() => editHandler(idx)}
+            onClick={() => saveHandler(idx)}
           />
-          <PlayCircleFilledWhiteOutlinedIcon
+          <RefreshRoundedIcon
             className={classes.play_icon}
-            onClick={() => playHandler(idx)}
+            onClick={refreshHandler}
           />
           <DragHandle />
         </div>
@@ -75,21 +163,64 @@ const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
             [classes.move_shrink_component]: run,
           })}
           key={`split - ${idx}`}
-          onDoubleClick={() => editHandler(idx)}
         >
           <h3 className={classes.output}>{`Out [ ${idx + 1} ] : `}</h3>
           <div className={classes.shrink_component}>
-            <h1
-              style={{ textAlign: "center" }}
-            >{`${component.name} Output`}</h1>
-            <RefreshRoundedIcon
-              className={classes.edit_icon}
-              onClick={() => refreshHandler(idx)}
-            />
-            <CloseRoundedIcon
-              className={classes.delete_icon}
-              onClick={() => closeHandler(idx)}
-            />
+            {data.chart === "Polar" && (
+              <PolarChart
+                labels={data.labels}
+                datasets={[{ label: data.description, data: data.values }]}
+                title={data.title}
+              />
+            )}
+            {data.chart === "Bar" && (
+              <BarChart
+                labels={data.labels}
+                datasets={[{ label: data.description, data: data.values }]}
+                title={data.title}
+              />
+            )}
+            {data.chart === "Radar" && (
+              <RadarChart
+                labels={data.labels}
+                datasets={[{ label: data.description, data: data.values }]}
+                title={data.title}
+              />
+            )}
+            {data.chart === "Line" && (
+              <LineChart
+                labels={data.labels}
+                datasets={[{ label: data.description, data: data.values }]}
+                title={data.title}
+              />
+            )}
+            {data.chart === "Doughnut" && (
+              <DoughnutChart
+                labels={data.labels}
+                datasets={[{ label: data.description, data: data.values }]}
+                title={data.title}
+              />
+            )}
+            {data.chart === "Pie" && (
+              <PieChart
+                labels={data.labels}
+                datasets={[{ label: data.description, data: data.values }]}
+                title={data.title}
+              />
+            )}
+
+            <Select
+              value={data.chart}
+              onChange={handleChartChange}
+              className={classes.code_theme}
+              disableUnderline={true}
+            >
+              {map(chartArr, (name, idx) => (
+                <MenuItem value={name} key={idx}>
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
             <CompareArrowsIcon className={classes.component_icon} />
           </div>
         </div>
@@ -101,4 +232,27 @@ const ChartComponent = ({ component, idx, deleteHandler, editHandler }) => {
 //Draggable elements
 const SortableItem = sortableElement((props) => <ChartComponent {...props} />);
 
-export default SortableItem;
+const mapStateToProps = (state) => {
+  return {
+    notebookId: state.activeTab,
+  };
+};
+
+const mapActionToProps = (dispatch) => {
+  return {
+    updateComponent: (id, componentIdx, value) => {
+      dispatch({
+        type: UPDATE_COMPONENTS,
+        payload: { id, componentIdx, value },
+      });
+    },
+    setNotification: (data) => {
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload: { ...data },
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapActionToProps)(SortableItem);

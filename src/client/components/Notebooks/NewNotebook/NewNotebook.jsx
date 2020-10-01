@@ -171,7 +171,6 @@ const NewNotebook = (props) => {
                     idx={idx}
                     component={component}
                     deleteHandler={deleteHandler}
-                    editHandler={editHandler}
                   />
                 );
               case "Code":
@@ -182,7 +181,6 @@ const NewNotebook = (props) => {
                     index={idx}
                     idx={idx}
                     deleteHandler={deleteHandler}
-                    editHandler={editHandler}
                   />
                 );
               case "Image":

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
@@ -57,6 +57,10 @@ const CodeComponent = ({
     "solarized_dark",
     "solarized_light",
   ];
+
+  useEffect(() => {
+    setCode(component.value);
+  }, [component.value]);
 
   // Theme Change Handler
   const handleThemeChange = (e) => {
@@ -146,7 +150,7 @@ const CodeComponent = ({
   };
 
   return (
-    <div className={classes.split_wrapper}>
+    <div className={classes.split_wrapper} onBlur={() => saveHandler(idx)}>
       <div
         className={classes.component_wrapper}
         key={idx}
