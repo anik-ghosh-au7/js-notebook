@@ -71,7 +71,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "20px",
     // alignItems: "center",
     // justifyContent: "center",
-    fontFamily: "Times New Roman, Times, serif",
+    fontFamily:
+      "Courier New, Courier, monospace, Times New Roman, Times, serif",
     backgroundColor: theme.palette.common.white,
   },
   result_component_black: {
