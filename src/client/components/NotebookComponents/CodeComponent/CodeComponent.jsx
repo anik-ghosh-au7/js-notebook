@@ -46,8 +46,24 @@ const CodeComponent = ({
 
   // code state
   const [code, setCode] = useState(
-    !!component.value ? component.value : `// Type your code here\n`
+    !!component.value && !!component.value.code
+      ? component.value.code
+      : `// Type your code here\n`
   );
+
+  // result state
+  const [result, setResult] = useState(
+    !!component.value && !!component.value.result ? component.value.result : []
+  );
+
+  // setting state from redux state
+  useEffect(() => {
+    console.log("I am running...");
+    if (!!component.value) {
+      setCode(component.value.code);
+      setResult(component.value.result);
+    }
+  }, [component.value]);
 
   // theme state
   const [theme, setTheme] = useState("monokai");
@@ -64,10 +80,6 @@ const CodeComponent = ({
     "solarized_light",
   ];
 
-  useEffect(() => {
-    setCode(component.value);
-  }, [component.value]);
-
   // Theme Change Handler
   const handleThemeChange = (e) => {
     setTheme(e.target.value);
@@ -82,9 +94,6 @@ const CodeComponent = ({
 
   // for running code
   const [run, setRun] = useState(false);
-
-  // result state
-  const [result, setResult] = useState([]);
 
   // code runner
 
@@ -101,7 +110,7 @@ const CodeComponent = ({
 
       resultArr = response.data.data.result.split("\n");
 
-      // compilattion successful
+      // compilation successful
       setNotification({
         open: true,
         severity: "success",
@@ -123,7 +132,7 @@ const CodeComponent = ({
 
       setResult(resultArr);
 
-      // compilattion failed
+      // compilation failed
       setNotification({
         open: true,
         severity: "error",
@@ -132,7 +141,8 @@ const CodeComponent = ({
           : "internal error, try again!!",
       });
     }
-  }, [code, setNotification]);
+    updateComponent(notebookId, idx, { code, result: resultArr });
+  }, [code, setNotification, updateComponent, idx, notebookId]);
 
   const playHandler = () => {
     setRun(true);
@@ -148,7 +158,7 @@ const CodeComponent = ({
   };
 
   const saveHandler = (idx) => {
-    updateComponent(notebookId, idx, code);
+    updateComponent(notebookId, idx, { code, result });
     setNotification({
       open: true,
       severity: "success",
@@ -158,7 +168,7 @@ const CodeComponent = ({
 
   // ---------------------------------------
 
-  // use effect to run code snippets on run all and then desable it
+  // use effect to run code snippets on run all and then disable it
   useEffect(() => {
     if (runAll) {
       setRun(true);
