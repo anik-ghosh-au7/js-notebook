@@ -62,7 +62,6 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
       Icon: () => <BuildRoundedIcon />,
       label: "Tools",
       onClick: (e) => {
-        console.log(e.currentTarget);
         handleClick(e);
       },
     },

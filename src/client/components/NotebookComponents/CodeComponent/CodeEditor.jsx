@@ -16,7 +16,7 @@ import "ace-builds/src-noconflict/theme-solarized_light";
 
 const CodeEditor = ({ theme, run, code, setCode }) => {
   const onLoad = () => {
-    console.log("theme", theme);
+    console.log("Code Editor Loaded --> ", theme);
   };
 
   const onChange = (data) => {

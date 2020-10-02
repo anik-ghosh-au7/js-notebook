@@ -50,11 +50,8 @@ const NewNotebook = (props) => {
     setActiveTab(id);
   }, [setActiveTab, id]);
 
-  console.log("userName===>", userName);
-
   // updating author
   useEffect(() => {
-    console.log("userName===>", userName);
     updateNotebook(id, "author", userName);
   }, [id, userName, updateNotebook]);
 

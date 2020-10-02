@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
@@ -21,7 +21,10 @@ import CodeEditor from "./CodeEditor";
 import ResultComponent from "./Result";
 
 // reducer action
-import { UPDATE_COMPONENTS } from "../../../redux/actions/notebooks.action";
+import {
+  UPDATE_COMPONENTS,
+  UPDATE_NOTEBOOK,
+} from "../../../redux/actions/notebooks.action";
 import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 // axios config
@@ -37,18 +40,9 @@ const CodeComponent = ({
   notebookId,
   setNotification,
   runAll,
+  clearRunAll,
 }) => {
   const classes = useStyles();
-
-  // // ref for running code
-  // const runCode = useRef();
-
-  // // function to run the code
-  // const letsRun = () => runCode.current.click();
-
-  // // running
-  // if (true) letsRun();
-  console.log("runAll====>", runAll);
 
   // code state
   const [code, setCode] = useState(
@@ -93,7 +87,8 @@ const CodeComponent = ({
   const [result, setResult] = useState([]);
 
   // code runner
-  const evaluate_code = async () => {
+
+  const evaluate_code = useCallback(async () => {
     let formData = new FormData();
     formData.append("code", code);
     let resultArr = [];
@@ -137,7 +132,7 @@ const CodeComponent = ({
           : "internal error, try again!!",
       });
     }
-  };
+  }, [code, setNotification]);
 
   const playHandler = () => {
     setRun(true);
@@ -160,6 +155,19 @@ const CodeComponent = ({
       msg: "Code Saved Successfully",
     });
   };
+
+  // ---------------------------------------
+
+  // use effect to run code snippets on run all and then desable it
+  useEffect(() => {
+    if (runAll) {
+      setRun(true);
+      evaluate_code();
+      clearRunAll(notebookId);
+    }
+  }, [evaluate_code, runAll, clearRunAll, notebookId]);
+
+  // ---------------------------------------
 
   // return -------------------------------------------------------------------------------
   return (
@@ -262,6 +270,12 @@ const mapActionToProps = (dispatch) => {
       dispatch({
         type: SET_NOTIFICATION,
         payload: { ...data },
+      });
+    },
+    clearRunAll: (id) => {
+      dispatch({
+        type: UPDATE_NOTEBOOK,
+        payload: { id, name: "runAll", value: false },
       });
     },
   };
