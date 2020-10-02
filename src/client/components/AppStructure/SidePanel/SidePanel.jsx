@@ -15,8 +15,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
-import html2canvas from "html2canvas";
-import jspdf from "jspdf";
+import html2pdf from "html2pdf.js";
+// import html2canvas from "html2canvas";
+// import jspdf from "jspdf";
 
 // styles
 import useStyles from "./sidePanel.style";
@@ -52,16 +53,45 @@ const SidePanel = ({
   // For pdf------------------------------------------------------------------------
   const createPdf = async () => {
     try {
-      let canvas = await html2canvas(pdfRef.current);
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jspdf({
-        format: "a4",
-      });
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("download.pdf");
+      // --------------------------------------------------------------
+      // let canvas = await html2canvas(pdfRef.current);
+      // const imgData = canvas.toDataURL("image/png");
+      // const pdf = new jspdf({
+      //   format: "a4",
+      // });
+      // const imgProps = pdf.getImageProperties(imgData);
+      // const pdfWidth = pdf.internal.pageSize.getWidth();
+      // const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      // pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      // pdf.save("download.pdf");
+      // --------------------------------------------------------------
+
+      let element = pdfRef.current;
+      let divWidth = element.clientWidth;
+      let divHeight = element.clientHeight;
+      console.log("width ===>", divWidth);
+      console.log("width ===>", divHeight);
+      let opt = {
+        margin: [0, 0.2],
+        filename: "myNotebook.pdf",
+        enableLinks: true,
+        image: { type: "jpeg", quality: 0.98 },
+        pagebreak: { mode: ["css", "whiteline"], avoid: ".component_wrapper" },
+        html2canvas: {
+          scale: 2,
+          width: divWidth,
+          height: divHeight,
+          scrollX: 0,
+          scrollY: 0,
+        },
+        jsPDF: {
+          unit: "in",
+          format: "a4",
+          orientation: "portrait",
+        },
+      };
+
+      html2pdf().set(opt).from(element).save();
     } catch (err) {
       console.log(err);
     }
