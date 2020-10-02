@@ -62,6 +62,9 @@ const CodeComponent = ({
     if (!!component.value) {
       setCode(component.value.code);
       setResult(component.value.result);
+    } else {
+      setCode("");
+      setResult([]);
     }
   }, [component.value]);
 

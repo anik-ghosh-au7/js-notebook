@@ -82,6 +82,15 @@ const ChartComponent = ({
         chart: component.value.chart,
         description: component.value.description,
       });
+    else {
+      setData({
+        title: "",
+        labels: [""],
+        values: [0],
+        chart: "Polar",
+        description: "",
+      });
+    }
   }, [component.value]);
 
   //Drag handler
