@@ -7,6 +7,7 @@ import userReducer from "./user.reducer";
 import notebooksReducer from "./notebooks.reducer";
 import tabReducer from "./tabbar.reducer";
 import activeTabReducer from "./activetab.reducer";
+import setTabValueReducer from "./setTabValue.reducer";
 
 export default combineReducers({
   signData: signReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   notebooks: notebooksReducer,
   tab: tabReducer,
   activeTab: activeTabReducer,
+  tabValue: setTabValueReducer,
 });

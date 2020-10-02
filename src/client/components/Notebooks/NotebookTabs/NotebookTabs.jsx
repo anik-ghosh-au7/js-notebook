@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
@@ -17,7 +17,7 @@ import useStyles from "./notebook.styles";
 import NewNotebook from "../NewNotebook/NewNotebook";
 
 // reducer action
-import { SET_TAB } from "../../../redux/actions/activetab.action";
+import { SET_VALUE } from "../../../redux/actions/setTabValue.action";
 
 const closeHandler = (id, idx) => {
   console.log(id, idx);
@@ -58,23 +58,26 @@ const a11yProps = (index) => {
   };
 };
 
-const NotebookTabs = ({ notebooks, isDrawerOpen, setActiveTab }) => {
-  const [value, setValue] = React.useState(0);
+const NotebookTabs = ({ notebooks, isDrawerOpen, tabValue, setTabValue }) => {
+  // const [value, setValue] = React.useState(0);
   const classes = useStyles();
 
-  const firstTabId = notebooks[0].id;
+  // const firstTabId = notebooks[0].id;
 
-  // component did mount
-  React.useEffect(() => {
-    setActiveTab(firstTabId);
-  }, [firstTabId, setActiveTab]);
+  // // component did mount
+  // useEffect(() => {
+  //   setActiveTab(firstTabId);
+  // }, [firstTabId, setActiveTab]);
+
+  const noOfNotebooks = notebooks.length;
+
+  // for activation of last tab
+  useEffect(() => {
+    setTabValue(noOfNotebooks - 1);
+  }, [noOfNotebooks, setTabValue]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const tabHandler = (id) => {
-    setActiveTab(id);
+    setTabValue(newValue);
   };
 
   return (
@@ -83,7 +86,7 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, setActiveTab }) => {
       {map(notebooks, (notebook, idx) => {
         return (
           <TabPanel
-            value={value}
+            value={tabValue}
             index={idx}
             key={notebook.id}
             isDrawerOpen={isDrawerOpen}
@@ -101,7 +104,7 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, setActiveTab }) => {
         })}
       >
         <Tabs
-          value={value}
+          value={tabValue}
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="on"
@@ -112,7 +115,6 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, setActiveTab }) => {
           {map(notebooks, (notebook, idx) => {
             return (
               <Tab
-                onClick={() => tabHandler(notebook.id)}
                 label={
                   <div className={classes.tab_label}>
                     {notebook.title}
@@ -136,15 +138,16 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, setActiveTab }) => {
 const mapStateToProps = (state) => {
   return {
     isDrawerOpen: state.tab,
+    tabValue: state.tabValue,
   };
 };
 
 const mapActionToProps = (dispatch) => {
   return {
-    setActiveTab: (id) => {
+    setTabValue: (idx) => {
       dispatch({
-        type: SET_TAB,
-        payload: id,
+        type: SET_VALUE,
+        payload: idx,
       });
     },
   };

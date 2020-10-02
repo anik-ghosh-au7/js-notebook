@@ -1,5 +1,5 @@
 import { Typography, TextField } from "@material-ui/core";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { map } from "lodash";
 import { connect } from "react-redux";
 import { sortableContainer } from "react-sortable-hoc";
@@ -23,12 +23,14 @@ import {
   DELETE_COMPONENT,
   UPDATE_NOTEBOOK,
 } from "../../../redux/actions/notebooks.action";
+import { SET_TAB } from "../../../redux/actions/activetab.action";
 
 // sortable container
 const SortableContainer = sortableContainer(({ children }) => {
   return <div>{children}</div>;
 });
 
+//  notebook component
 const NewNotebook = (props) => {
   const classes = useStyles();
 
@@ -40,6 +42,13 @@ const NewNotebook = (props) => {
 
   // error state
   const [isError, setIsError] = React.useState(false);
+
+  const { setActiveTab, id } = props;
+
+  // component did mount
+  useEffect(() => {
+    setActiveTab(id);
+  }, [setActiveTab, id]);
 
   const deleteHandler = (idx) => {
     props.deleteComponent(props.notebookId, idx);
@@ -227,6 +236,12 @@ const mapActionToProps = (dispatch) => {
       dispatch({
         type: UPDATE_NOTEBOOK,
         payload: { id, name, value },
+      });
+    },
+    setActiveTab: (id) => {
+      dispatch({
+        type: SET_TAB,
+        payload: id,
       });
     },
   };
