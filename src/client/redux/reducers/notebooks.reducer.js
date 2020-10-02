@@ -19,6 +19,7 @@ const demoData = {
   time: moment().format("hh:mm a"),
   modifiedOn: "just now",
   components: [],
+  runAll: false,
 };
 
 const initNotebooks = [demoData];

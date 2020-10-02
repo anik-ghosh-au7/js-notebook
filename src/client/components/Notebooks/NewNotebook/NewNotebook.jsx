@@ -43,12 +43,20 @@ const NewNotebook = (props) => {
   // error state
   const [isError, setIsError] = React.useState(false);
 
-  const { setActiveTab, id } = props;
+  const { setActiveTab, id, userName, updateNotebook } = props;
 
   // component did mount
   useEffect(() => {
     setActiveTab(id);
   }, [setActiveTab, id]);
+
+  console.log("userName===>", userName);
+
+  // updating author
+  useEffect(() => {
+    console.log("userName===>", userName);
+    updateNotebook(id, "author", userName);
+  }, [id, userName, updateNotebook]);
 
   const deleteHandler = (idx) => {
     props.deleteComponent(props.notebookId, idx);
@@ -98,10 +106,10 @@ const NewNotebook = (props) => {
         title="Double click to edit"
       >
         <div className={classes.wrapper}>
-          <h2 className={classes.label}>
+          <h3 className={classes.label}>
             <b>Author : </b>
             <em>{props.author}</em>
-          </h2>
+          </h3>
           <h3 className={classes.label}>
             <b>Modified : </b>
             {props.modifiedOn}
@@ -186,6 +194,7 @@ const NewNotebook = (props) => {
                     index={idx}
                     idx={idx}
                     deleteHandler={deleteHandler}
+                    runAll={props.runAll}
                   />
                 );
               case "Image":
@@ -212,6 +221,11 @@ const NewNotebook = (props) => {
 const mapStateToProps = (state) => {
   return {
     notebookId: state.activeTab,
+    userName: !!state.userData.firstName
+      ? `${state.userData.firstName} ${
+          !!state.userData.lastName ? state.userData.lastName : ""
+        }`
+      : "Guest",
   };
 };
 

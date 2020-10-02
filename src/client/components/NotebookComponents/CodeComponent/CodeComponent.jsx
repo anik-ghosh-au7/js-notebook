@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
@@ -27,6 +27,7 @@ import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 // axios config
 import createConfig from "../../AppStructure/Profile/form_axios.config";
 
+// component ----------------------------------------------------------------------------------------
 const CodeComponent = ({
   component,
   idx,
@@ -35,8 +36,19 @@ const CodeComponent = ({
   updateComponent,
   notebookId,
   setNotification,
+  runAll,
 }) => {
   const classes = useStyles();
+
+  // // ref for running code
+  // const runCode = useRef();
+
+  // // function to run the code
+  // const letsRun = () => runCode.current.click();
+
+  // // running
+  // if (true) letsRun();
+  console.log("runAll====>", runAll);
 
   // code state
   const [code, setCode] = useState(
@@ -149,6 +161,7 @@ const CodeComponent = ({
     });
   };
 
+  // return -------------------------------------------------------------------------------
   return (
     <div className={classes.split_wrapper} onBlur={() => saveHandler(idx)}>
       <div
