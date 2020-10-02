@@ -52,20 +52,16 @@ const SidePanel = ({
   // For pdf------------------------------------------------------------------------
   const createPdf = async () => {
     try {
-      console.log("ref ====> ", pdfRef.current);
-      let canvas = await html2canvas(pdfRef.current, {
-        width: 5000,
-      });
-      console.log("canvas ===> ", canvas);
+      let canvas = await html2canvas(pdfRef.current);
       const imgData = canvas.toDataURL("image/png");
-      console.log("imgData ===> ", imgData);
       const pdf = new jspdf({
-        unit: "in",
-        format: [12, 9],
+        format: "a4",
       });
-      await pdf.addImage(imgData, "PNG", 0, 0);
-      console.log("pdf ===> ", pdf);
-      await pdf.save("download.pdf");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("download.pdf");
     } catch (err) {
       console.log(err);
     }
