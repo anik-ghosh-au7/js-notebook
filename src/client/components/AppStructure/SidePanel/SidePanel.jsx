@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { withRouter } from "react-router";
 import clsx from "clsx";
 import { useTheme } from "@material-ui/core/styles";
@@ -15,6 +15,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
+import html2canvas from "html2canvas";
+import jspdf from "jspdf";
 
 // styles
 import useStyles from "./sidePanel.style";
@@ -43,6 +45,33 @@ const SidePanel = ({
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  // ref for download as pdf
+  const pdfRef = useRef();
+
+  // For pdf------------------------------------------------------------------------
+  const createPdf = async () => {
+    try {
+      console.log("ref ====> ", pdfRef.current);
+      let canvas = await html2canvas(pdfRef.current, {
+        width: 5000,
+      });
+      console.log("canvas ===> ", canvas);
+      const imgData = canvas.toDataURL("image/png");
+      console.log("imgData ===> ", imgData);
+      const pdf = new jspdf({
+        unit: "in",
+        format: [12, 9],
+      });
+      await pdf.addImage(imgData, "PNG", 0, 0);
+      console.log("pdf ===> ", pdf);
+      await pdf.save("download.pdf");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // --------------------------------------------------------------------------------
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -127,7 +156,7 @@ const SidePanel = ({
                 <ListItem
                   button
                   key={index}
-                  onClick={onClick}
+                  onClick={name === "Download" ? createPdf : onClick}
                   className={classes.notebookButton}
                 >
                   <ListItemIcon title={label}>
@@ -141,7 +170,7 @@ const SidePanel = ({
         </List>
         <Tools anchorEl={anchorEl} handleClose={handleClose} />
       </Drawer>
-      <main className={classes.content}>
+      <main className={classes.content} ref={pdfRef}>
         {/* <div className={classes.toolbar} /> */}
         {children}
       </main>
