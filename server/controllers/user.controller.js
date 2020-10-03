@@ -3,11 +3,13 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { isEmpty } from "lodash";
+import nodemailer from "nodemailer";
 
 // models
 import model from "../models/user.model";
 // utils
 import response from "../utils/response";
+import generateOTP from "../utils/otpGenerator";
 // catching errors
 import catchError from "../utils/catchError";
 // secret key for jwt
@@ -15,6 +17,7 @@ import { secret } from "../configs/secretKey";
 import userModel from "../models/user.model";
 
 const controller = {};
+let dict = {};
 
 //  user signin control -------------------------------------------
 controller.signup = catchError(async (req, res, next) => {
@@ -24,6 +27,7 @@ controller.signup = catchError(async (req, res, next) => {
   let userData = { ...req.body, password: hashed_password };
   const user = new model(userData);
   const data = await user.save();
+
   response(res, data, "register successful", false, 200);
 });
 
@@ -47,6 +51,13 @@ controller.login = (req, res, next) => {
   })(req, res);
 };
 
+// function to clear OTP after 30 mins
+const clearOTP = (dict, key) => {
+  return setTimeout(() => {
+    delete dict[key];
+  }, 1000 * 60 * 30);
+};
+
 // checking email for password reset ------------------------------------------------
 controller.verify = catchError(async (req, res, next) => {
   console.log(req.headers);
@@ -56,14 +67,48 @@ controller.verify = catchError(async (req, res, next) => {
   // if user not found
   if (!user) return response(res, null, "email not registered", true, 404);
 
+  // -------------------------------------------
+
+  const otp = generateOTP();
+
+  // to set OTP and clear timer
+  if (dict[email]) {
+    clearInterval(dict[email][1]);
+    delete dict[email];
+  }
+  dict[email] = [otp, clearOTP(dict, email)];
+
+  await nodemailer.createTestAccount();
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    auth: {
+      user: process.env.EMAIL,
+      port: 465,
+      secure: true,
+      pass: process.env.PASSWORD,
+    },
+  });
+  await transporter.sendMail({
+    from: "JS-NoteBook ",
+    to: email,
+    subject: "OTP from JS-Notebook",
+    // plain text body
+    text: `For sign up in JS-Notebook", please use this OTP ${otp}. This OTP will be valid for 30 mins`,
+    // html body
+    html: `<b><H2>For sign in JS-Notebook, please use this OTP ${otp}</H2><br> OTP will be valid for 30 mins</b>`,
+  });
+
+  // -------------------------------------------
+
   // else create otp
   response(res, null, "OTP sent to email", false, 200);
 });
 
 // check otp -----------------------------------------------------------------------
 controller.otp = catchError(async (req, res, next) => {
-  let { otp } = req.body;
-  if (otp === "1234")
+  let { otp, email } = req.body;
+  if (dict[email] && dict[email][0] === otp)
     return response(res, null, "OTP verified successfully", false, 200);
 
   response(res, null, "OTP didn`t match", true, 401);

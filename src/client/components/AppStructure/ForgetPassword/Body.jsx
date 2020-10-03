@@ -102,7 +102,7 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
       const parameters = {
         targetName: e.target.name,
         url: "http://localhost:5000/api/users/otp",
-        data: { otp: formik.values.otp },
+        data: { otp: formik.values.otp, email: formik.values.email },
       };
       setStates({ ...parameters });
     }
