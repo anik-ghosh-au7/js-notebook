@@ -90,8 +90,9 @@ const Body = ({ toggleShare, notebookId }) => {
                 helperText={formik.errors["email"] || error}
                 autoFocus
               />
-
-              <DividerWithText>Select</DividerWithText>
+              <div className={classes.divider}>
+                <DividerWithText>Select</DividerWithText>
+              </div>
               <Grid container>
                 <Grid item xs>
                   <Button

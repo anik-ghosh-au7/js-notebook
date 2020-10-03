@@ -23,9 +23,10 @@ import { Grid } from "@material-ui/core";
 
 // Components
 import DividerWithText from "../../Divider/DividerWithText";
+import { withRouter } from "react-router";
 
 // Forget Password component -----------------------------------------
-const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
+const Body = ({ toggleSignOut, clearUserData, setNotification, history }) => {
   const classes = useStyles();
 
   const onClickHandler = (e) => {
@@ -37,6 +38,7 @@ const Body = ({ toggleSignOut, clearUserData, setNotification }) => {
         severity: "success",
         msg: "Sign out successful",
       });
+      if (history.location.pathname !== "/create") history.push("/");
     } else if (innerText === "NO") {
       setNotification({
         open: true,
@@ -114,4 +116,4 @@ const mapActionToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapActionToProps)(Body);
+export default connect(null, mapActionToProps)(withRouter(Body));

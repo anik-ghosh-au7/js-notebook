@@ -52,7 +52,7 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
       label: "Shared Notebooks",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
-        console.log(e.currentTarget);
+        if (history.location.pathname !== "/shared") history.push("/shared");
       },
     },
   ];
