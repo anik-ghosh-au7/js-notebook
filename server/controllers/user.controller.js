@@ -117,8 +117,11 @@ controller.otp = catchError(async (req, res, next) => {
 // set new password ----------------------------------------------------------------
 controller.setPassword = catchError(async (req, res, next) => {
   let { email, password } = req.body;
-  let user = await model.findOneAndUpdate({ email }, { $set: { password } });
-
+  let hashed_password = await bcrypt.hash(password, 5);
+  let user = await model.findOneAndUpdate(
+    { email },
+    { $set: { password: hashed_password } }
+  );
   // if user not found
   if (!user) return response(res, null, "email not registered", true, 404);
 

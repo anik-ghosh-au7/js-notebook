@@ -23,6 +23,7 @@ import {
   runAllCode,
   saveNotebook,
   allNotebooks,
+  shareNotebook,
 } from "../../../Handlers";
 
 export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
@@ -98,7 +99,7 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
       label: "Share",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
-        console.log(e.currentTarget);
+        else shareNotebook();
       },
     },
     {

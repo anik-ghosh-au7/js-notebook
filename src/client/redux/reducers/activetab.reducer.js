@@ -1,6 +1,6 @@
 import { SET_TAB } from "../actions/activetab.action";
 
-let id = "";
+let id = -1;
 
 const reducer = (state = id, action) => {
   if (action.type === SET_TAB) {

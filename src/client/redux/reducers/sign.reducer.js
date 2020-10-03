@@ -4,6 +4,7 @@ import {
   forget,
   signout,
   profile,
+  share,
 } from "../actions/sign.action";
 
 let initialState = {
@@ -12,6 +13,7 @@ let initialState = {
   forget: false,
   signout: false,
   profile: false,
+  share: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -33,6 +35,10 @@ const reducer = (state = initialState, action) => {
 
   if (action.type === profile) {
     return { ...state, profile: !state.profile };
+  }
+
+  if (action.type === share) {
+    return { ...state, share: !state.share };
   }
 
   return state;

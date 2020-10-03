@@ -16,6 +16,7 @@ import {
   NoteComponent,
   ImageComponent,
 } from "../../NotebookComponents/";
+import Share from "../../AppStructure/Share/Share";
 
 // reducer action
 import {
@@ -211,6 +212,7 @@ const NewNotebook = (props) => {
         </SortableContainer>
       </div>
       <ScrollDown components={props.components} />
+      <Share />
     </Fragment>
   );
 };
