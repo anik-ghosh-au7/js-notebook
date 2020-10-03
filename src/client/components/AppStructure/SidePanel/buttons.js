@@ -21,6 +21,8 @@ import {
   clearAllComponents,
   deleteNotebook,
   runAllCode,
+  saveNotebook,
+  allNotebooks,
 } from "../../../Handlers";
 
 export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
@@ -40,7 +42,7 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
       label: "All Notebooks",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
-        console.log(e.currentTarget);
+        else allNotebooks();
       },
     },
     {
@@ -79,7 +81,7 @@ export const notebookButtons = (isSignIn, toggleSignIn, handleClick) => {
       label: "Save",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
-        console.log(e.currentTarget);
+        else saveNotebook();
       },
     },
     {

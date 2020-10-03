@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 import { secretPassword } from "../configs/secretKey";
 
 // making schema
-const userSchema = mongoose.Schema;
+const userSchema = Schema;
 
 // defining schema
 const user = new userSchema(
@@ -30,6 +30,12 @@ const user = new userSchema(
     github: {
       type: String,
     },
+    notebooks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "notebook",
+      },
+    ],
   },
   {
     versionKey: false,
