@@ -23,4 +23,10 @@ route.post("/add", notebookController.create);
 
 route.get("/all", notebookController.all);
 
+route.post("/share", notebookController.share);
+
+route.get("/shared", notebookController.shared);
+
+route.get("/received", notebookController.received);
+
 export default route;

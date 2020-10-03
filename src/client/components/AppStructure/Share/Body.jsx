@@ -47,7 +47,7 @@ const Body = ({ toggleShare, notebookId }) => {
       let response = await httpRequest({
         method: "POST",
         url: "http://localhost:5000/api/protected/share", // to be changed
-        data: formik.values.email,
+        data: { email: formik.values.email, notebookId },
       });
       console.log("response ===>>> ", response.data);
     } catch (error) {

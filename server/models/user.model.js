@@ -36,6 +36,18 @@ const user = new userSchema(
         ref: "notebook",
       },
     ],
+    shared: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "notebook",
+      },
+    ],
+    received: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "notebook",
+      },
+    ],
   },
   {
     versionKey: false,
