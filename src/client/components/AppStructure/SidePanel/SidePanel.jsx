@@ -72,6 +72,7 @@ const SidePanel = ({
           scrollX: 0,
           scrollY: 0,
           ignoreElements: true,
+          useCORS: true,
         },
         jsPDF: {
           unit: "in",
