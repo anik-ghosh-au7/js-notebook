@@ -1,6 +1,7 @@
 // importing packages
 import passport from "passport";
 import local from "passport-local";
+import bcrypt from "bcrypt";
 
 // user model
 import userModel from "./models/user.model";
@@ -10,12 +11,19 @@ const LocalStrategy = local.Strategy;
 
 const logic = async (email, password, cb) => {
   try {
-    const user = await userModel.findOne({ email, password });
+    const user = await userModel.findOne({ email });
 
     // if user not found
     if (!user)
       return cb(null, false, {
-        msg: "Incorrect email or password.",
+        msg: "Incorrect email id.",
+        isError: true,
+        data: null,
+      });
+
+    if (!(await bcrypt.compare(password, user.password)))
+      return cb(null, false, {
+        msg: "Incorrect password.",
         isError: true,
         data: null,
       });

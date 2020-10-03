@@ -17,6 +17,7 @@
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "bcrypt": "^5.0.0",
     "chart.js": "^2.9.3",
     "cloudinary": "^1.23.0",
     "compile-run": "^2.3.4",

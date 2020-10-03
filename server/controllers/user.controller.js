@@ -1,5 +1,6 @@
 // importing packages
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { isEmpty } from "lodash";
 
@@ -19,7 +20,9 @@ const controller = {};
 controller.signup = catchError(async (req, res, next) => {
   if (!!req.validationErr)
     return response(res, null, req.validationErr, true, 400);
-  const user = new model(req.body);
+  let hashed_password = await bcrypt.hash(req.body.password, 5);
+  let userData = { ...req.body, password: hashed_password };
+  const user = new model(userData);
   const data = await user.save();
   response(res, data, "register successful", false, 200);
 });
