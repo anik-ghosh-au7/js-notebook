@@ -99,6 +99,7 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, tabValue, setTabValue }) => {
       <AppBar
         position="sticky"
         color="default"
+        data-html2canvas-ignore="true"
         className={clsx(classes.stickToBottom, {
           [classes.tabBarShift]: isDrawerOpen,
         })}

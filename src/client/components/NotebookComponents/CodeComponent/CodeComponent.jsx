@@ -35,7 +35,7 @@ const CodeComponent = ({
   component,
   idx,
   deleteHandler,
-  editHandler,
+  // editHandler,
   updateComponent,
   notebookId,
   setNotification,
@@ -188,7 +188,7 @@ const CodeComponent = ({
       <div
         className={classes.component_wrapper}
         key={idx}
-        onDoubleClick={() => editHandler(idx)}
+        // onDoubleClick={() => editHandler(idx)}
       >
         <h3 className={classes.input}>{`In [ ${idx + 1} ] : `}</h3>
         <div
@@ -239,7 +239,7 @@ const CodeComponent = ({
             [classes.move_shrink_component]: run,
           })}
           key={`split - ${idx}`}
-          onDoubleClick={() => editHandler(idx)}
+          // onDoubleClick={() => editHandler(idx)}
         >
           <h3 className={classes.output}>{`Out [ ${idx + 1} ] : `}</h3>
           <div className={classes.shrink_component}>

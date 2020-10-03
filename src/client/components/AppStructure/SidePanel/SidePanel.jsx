@@ -68,8 +68,10 @@ const SidePanel = ({
           scale: 2,
           width: divWidth,
           height: divHeight,
+          windowWidth: divWidth + 150,
           scrollX: 0,
           scrollY: 0,
+          ignoreElements: true,
         },
         jsPDF: {
           unit: "in",
