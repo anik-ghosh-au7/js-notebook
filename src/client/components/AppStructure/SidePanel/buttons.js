@@ -22,7 +22,6 @@ import {
   deleteNotebook,
   runAllCode,
   saveNotebook,
-  allNotebooks,
   shareNotebook,
 } from "../../../Handlers";
 
@@ -43,7 +42,7 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
       label: "All Notebooks",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
-        else allNotebooks();
+        else if (history.location.pathname !== "/all") history.push("/all");
       },
     },
     {
@@ -52,7 +51,8 @@ export const mainButtons = (isSignIn, toggleSignIn, history, addNotebook) => {
       label: "Shared Notebooks",
       onClick: (e) => {
         if (!isSignIn) toggleSignIn();
-        if (history.location.pathname !== "/shared") history.push("/shared");
+        else if (history.location.pathname !== "/shared")
+          history.push("/shared");
       },
     },
   ];
