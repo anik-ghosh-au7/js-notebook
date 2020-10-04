@@ -52,6 +52,13 @@ const reducer = (state = initNotebooks, action) => {
 
   switch (action.type) {
     case ADD_NOTEBOOK:
+      if (!!action.payload)
+        return [
+          ...state,
+          {
+            ...action.payload,
+          },
+        ];
       return [
         ...state,
         {

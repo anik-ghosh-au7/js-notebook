@@ -62,7 +62,6 @@ const NewNotebook = (props) => {
 
   const editTitleHandler = () => {
     setFlag(true);
-    console.log("edit");
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {

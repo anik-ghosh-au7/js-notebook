@@ -1,17 +1,34 @@
 import React from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Card, CardContent, Typography } from "@material-ui/core";
+
+// reducer action
+import { ADD_NOTEBOOK } from "../../../redux/actions/notebooks.action";
 
 // styles
 import useStyles from "./notebooklist.style";
 
 const NotebookList = (props) => {
   const classes = useStyles();
-  const { loading = true, inputData } = props;
+  const { loading = true, inputData, addNotebook, history } = props;
 
   let data = [1, 2, 3];
+
+  const onClickHandler = (e) => {
+    let { id } = e.currentTarget;
+    let notebook = {
+      ...inputData[id],
+      components: JSON.parse(inputData[id].components),
+    };
+    addNotebook(notebook);
+
+    // changing route
+    history.push("/create");
+  };
 
   return (
     <Grid container className={classes.notebook}>
@@ -35,9 +52,11 @@ const NotebookList = (props) => {
             <Box
               key={index}
               width={250}
+              id={index}
               marginRight={2}
               my={5}
               className={classes.list_container}
+              onClick={onClickHandler}
             >
               <Card className={classes.root} variant="outlined">
                 <CardContent>
@@ -60,4 +79,15 @@ const NotebookList = (props) => {
   );
 };
 
-export default NotebookList;
+const mapActionToProps = (dispatch) => {
+  return {
+    addNotebook: (data) => {
+      dispatch({
+        type: ADD_NOTEBOOK,
+        payload: data,
+      });
+    },
+  };
+};
+
+export default connect(null, mapActionToProps)(withRouter(NotebookList));

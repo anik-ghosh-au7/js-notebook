@@ -8,7 +8,7 @@ import useStyles from "./allNotebooks.style";
 import Copyright from "../../components/Copyright/Copyright";
 import NotebookList from "../../components/Notebooks/NotebookList/NotebookList";
 
-const Folders = () => {
+const AllNotebooks = () => {
   const classes = useStyles();
 
   // state variables
@@ -47,4 +47,4 @@ const Folders = () => {
   );
 };
 
-export default Folders;
+export default AllNotebooks;
