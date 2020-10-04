@@ -44,7 +44,15 @@ const NewNotebook = (props) => {
   // error state
   const [isError, setIsError] = React.useState(false);
 
-  const { setActiveTab, id, userName, updateNotebook, author, canEdit } = props;
+  const {
+    setActiveTab,
+    id,
+    userName,
+    updateNotebook,
+    author,
+    canEdit,
+    isSearched,
+  } = props;
 
   // component did mount
   useEffect(() => {
@@ -53,22 +61,23 @@ const NewNotebook = (props) => {
 
   // updating author
   useEffect(() => {
-    if (canEdit) {
+    if (canEdit && !isSearched) {
       if (userName !== "Guest" && author === "Guest")
         updateNotebook(id, "author", userName);
     }
-  }, [id, userName, updateNotebook, author, canEdit]);
+  }, [id, userName, updateNotebook, author, canEdit, isSearched]);
 
   const deleteHandler = (idx) => {
-    props.deleteComponent(props.notebookId, idx);
+    if (!isSearched) props.deleteComponent(props.notebookId, idx);
   };
 
   const editTitleHandler = () => {
-    if (props.canEdit) setFlag(true);
+    if (canEdit && !isSearched) setFlag(true);
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    props.changeArrangement(props.notebookId, oldIndex, newIndex);
+    if (!isSearched)
+      props.changeArrangement(props.notebookId, oldIndex, newIndex);
   };
 
   // custom title validation
@@ -164,7 +173,7 @@ const NewNotebook = (props) => {
                     idx={idx}
                     component={component}
                     deleteHandler={deleteHandler}
-                    canEdit={!props.isSearched}
+                    canEdit={!isSearched}
                   />
                 );
               case "Link":
@@ -175,7 +184,7 @@ const NewNotebook = (props) => {
                     idx={idx}
                     component={component}
                     deleteHandler={deleteHandler}
-                    canEdit={!props.isSearched}
+                    canEdit={!isSearched}
                   />
                 );
               case "Chart":
@@ -186,7 +195,7 @@ const NewNotebook = (props) => {
                     idx={idx}
                     component={component}
                     deleteHandler={deleteHandler}
-                    canEdit={!props.isSearched}
+                    canEdit={!isSearched}
                   />
                 );
               case "Code":
@@ -198,7 +207,7 @@ const NewNotebook = (props) => {
                     idx={idx}
                     deleteHandler={deleteHandler}
                     runAll={props.runAll}
-                    canEdit={!props.isSearched}
+                    canEdit={!isSearched}
                   />
                 );
               case "Image":
@@ -209,7 +218,7 @@ const NewNotebook = (props) => {
                     index={idx}
                     idx={idx}
                     deleteHandler={deleteHandler}
-                    canEdit={!props.isSearched}
+                    canEdit={!isSearched}
                   />
                 );
               default:
