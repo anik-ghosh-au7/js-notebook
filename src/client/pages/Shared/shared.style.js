@@ -23,19 +23,29 @@ const useStyles = makeStyles((theme) => ({
   },
   component_icon: {
     fontSize: 150,
+    color: fade(theme.palette.common.black, 0.5),
+  },
+  heading: {
+    position: "absolute",
+    top: "5%",
+    paddingTop: "20px",
     color: fade(theme.palette.common.black, 0.7),
   },
   list: {
     position: "absolute",
-    top: "20%",
-    paddingTop: "20px",
+    top: "10%",
+    paddingTop: "40px",
   },
   icon: {
     position: "absolute",
     right: "4%",
-    top: "10%",
-    paddingTop: "20px",
+    top: "5%",
+    paddingTop: "40px",
     cursor: "pointer",
+    "&:hover": {
+      transform: "scale(1.3, 1.3)",
+      paddingTop: "35px",
+    },
   },
 }));
 

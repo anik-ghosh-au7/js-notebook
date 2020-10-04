@@ -17,10 +17,13 @@ const Folders = () => {
   const classes = useStyles();
   const theme = useTheme();
 
+  // state variables
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [clicked, setClicked] = useState(false);
+  const [type, setType] = useState("");
 
+  // handlers
   const fetchSharedNotebooks = async () => {
     setClicked(true);
     try {
@@ -29,6 +32,7 @@ const Folders = () => {
         url: "http://localhost:5000/api/protected/shared",
       });
       console.log("response ====>>>", res.data);
+      setType("Shared Notebooks");
       setData(res.data.data);
     } catch (err) {
       console.log("err in shared ==>", err.response);
@@ -37,11 +41,14 @@ const Folders = () => {
   };
 
   const fetchReceivedNotebooks = async () => {
+    setClicked(true);
     try {
       let res = await httpRequest({
         method: "GET",
         url: "http://localhost:5000/api/protected/received",
       });
+      setType("Received Notebooks");
+      setData(res.data.data);
       console.log("response in shared ==>", res.data);
     } catch (err) {
       console.log("err in shared ==>", err.response);
@@ -63,8 +70,8 @@ const Folders = () => {
           <Grid item xs={12} sm={6} md={3} className={classes.details}>
             <div className={classes.card} onClick={fetchSharedNotebooks}>
               <FolderSharedOutlinedIcon className={classes.component_icon} />
-              <Typography variant="h6" gutterBottom>
-                {`Notebooks shared`}
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                {`Shared`}
               </Typography>
             </div>
           </Grid>
@@ -72,8 +79,8 @@ const Folders = () => {
           <Grid item xs={12} sm={6} md={3} className={classes.details}>
             <div className={classes.card} onClick={fetchReceivedNotebooks}>
               <FolderSpecialOutlinedIcon className={classes.component_icon} />
-              <Typography variant="h6" gutterBottom>
-                {`Notebooks received`}
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                {`Received`}
               </Typography>
             </div>
           </Grid>
@@ -83,6 +90,7 @@ const Folders = () => {
       )}
       {clicked && (
         <Fragment>
+          <h1 className={classes.heading}>{type}</h1>
           <div className={classes.icon}>
             <ArrowBackIcon
               style={{
@@ -93,7 +101,7 @@ const Folders = () => {
             />
           </div>
           <div className={classes.list}>
-            <NotebookList loading={loading} inputData={data} />
+            <NotebookList loading={loading} inputData={data} type={type} />
           </div>
         </Fragment>
       )}
