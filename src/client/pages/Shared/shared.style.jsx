@@ -25,6 +25,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 150,
     color: fade(theme.palette.common.black, 0.7),
   },
+  list: {
+    position: "absolute",
+    top: "20%",
+    paddingTop: "20px",
+  },
+  icon: {
+    position: "absolute",
+    right: "4%",
+    top: "10%",
+    paddingTop: "20px",
+    cursor: "pointer",
+  },
 }));
 
 export default useStyles;
