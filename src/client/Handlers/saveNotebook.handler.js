@@ -1,6 +1,9 @@
 import httpRequest from "../config/axios.config";
 import store from "../redux/store";
 
+// reducer action
+import { SET_NOTIFICATION } from "../redux/actions/notification.action";
+
 export default async () => {
   try {
     let notebookId = store.getState().activeTab;
@@ -15,8 +18,22 @@ export default async () => {
       data: newNotebook,
     });
 
-    console.log("response ===> ", res.data);
+    store.dispatch({
+      type: SET_NOTIFICATION,
+      payload: {
+        open: true,
+        severity: "success",
+        msg: res.data.msg,
+      },
+    });
   } catch (err) {
-    console.log("error===>", err.response);
+    store.dispatch({
+      type: SET_NOTIFICATION,
+      payload: {
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Sorry! server is down.",
+      },
+    });
   }
 };
