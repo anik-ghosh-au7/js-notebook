@@ -14,7 +14,7 @@ import useStyles from "./notebooklist.style";
 
 const NotebookList = (props) => {
   const classes = useStyles();
-  const { loading = true, inputData, addNotebook, history } = props;
+  const { loading = true, inputData, addNotebook, history, type } = props;
 
   let data = [1, 2, 3];
 
@@ -23,6 +23,8 @@ const NotebookList = (props) => {
     let notebook = {
       ...inputData[id],
       components: JSON.parse(inputData[id].components),
+      canEdit: type !== "Received Notebooks",
+      isSearched: type === "Received Notebooks",
     };
     addNotebook(notebook);
 

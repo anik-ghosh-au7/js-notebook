@@ -36,6 +36,7 @@ const ChartComponent = ({
   updateComponent,
   notebookId,
   setNotification,
+  canEdit,
 }) => {
   const classes = useStyles();
 
@@ -168,6 +169,7 @@ const ChartComponent = ({
             data={data}
             setData={setData}
             setNotification={setNotification}
+            canEdit={canEdit}
           />
           <DeleteOutlineOutlinedIcon
             className={classes.delete_icon}

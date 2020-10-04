@@ -49,10 +49,10 @@ const Folders = () => {
       });
       setType("Received Notebooks");
       setData(res.data.data);
-      console.log("response in shared ==>", res.data);
     } catch (err) {
       console.log("err in shared ==>", err.response);
     }
+    setLoading(false);
   };
 
   return (
@@ -97,11 +97,19 @@ const Folders = () => {
                 fontSize: 40,
                 color: fade(theme.palette.common.black, 0.5),
               }}
-              onClick={() => setClicked(false)}
+              onClick={() => {
+                setLoading(true);
+                setClicked(false);
+              }}
             />
           </div>
           <div className={classes.list}>
-            <NotebookList loading={loading} inputData={data} type={type} />
+            <NotebookList
+              loading={loading}
+              inputData={data}
+              type={type}
+              setLoading={setLoading}
+            />
           </div>
         </Fragment>
       )}

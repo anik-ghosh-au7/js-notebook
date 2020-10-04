@@ -35,12 +35,12 @@ const CodeComponent = ({
   component,
   idx,
   deleteHandler,
-  // editHandler,
   updateComponent,
   notebookId,
   setNotification,
   runAll,
   clearRunAll,
+  canEdit,
 }) => {
   const classes = useStyles();
 
@@ -198,7 +198,13 @@ const CodeComponent = ({
           })}
           style={{ height: "200px" }}
         >
-          <CodeEditor theme={theme} run={run} code={code} setCode={setCode} />
+          <CodeEditor
+            theme={theme}
+            run={run}
+            code={code}
+            setCode={setCode}
+            canEdit={canEdit}
+          />
 
           {/* ----------------------- */}
 

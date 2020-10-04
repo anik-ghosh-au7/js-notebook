@@ -14,13 +14,13 @@ import "ace-builds/src-noconflict/theme-terminal";
 import "ace-builds/src-noconflict/theme-solarized_dark";
 import "ace-builds/src-noconflict/theme-solarized_light";
 
-const CodeEditor = ({ theme, run, code, setCode }) => {
+const CodeEditor = ({ theme, run, code, setCode, canEdit }) => {
   const onLoad = () => {
     console.log("Code Editor Loaded --> ", theme);
   };
 
   const onChange = (data) => {
-    setCode(data);
+    if (canEdit) setCode(data);
   };
 
   return (

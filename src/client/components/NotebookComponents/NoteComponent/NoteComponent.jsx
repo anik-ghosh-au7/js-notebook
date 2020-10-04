@@ -19,6 +19,7 @@ const NoteComponent = ({
   deleteHandler,
   notebookId,
   updateComponent,
+  canEdit,
 }) => {
   const classes = useStyles();
 
@@ -41,7 +42,7 @@ const NoteComponent = ({
 
   // edit handler
   const editHandler = (idx) => {
-    setIsEdit(true);
+    if (canEdit) setIsEdit(true);
   };
 
   // save handler

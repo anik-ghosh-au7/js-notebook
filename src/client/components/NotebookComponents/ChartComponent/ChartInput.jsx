@@ -11,75 +11,87 @@ import useStyles from "../component.style";
 // components
 import ScrollDown from "../../../components/ScrollDown/ScrollDown";
 
-const ChartInput = ({ data, setData, setNotification }) => {
+const ChartInput = ({ data, setData, setNotification, canEdit }) => {
   const classes = useStyles();
 
   // adding field
   const addFieldHandler = () => {
-    if (data.labels.length < 10) {
-      setData({
-        ...data,
-        labels: [...data.labels, ""],
-        values: [...data.values, 0],
-      });
-    } else {
-      setNotification({
-        open: true,
-        severity: "warning",
-        msg: "You can only add 10 fields",
-      });
+    if (canEdit) {
+      if (data.labels.length < 10) {
+        setData({
+          ...data,
+          labels: [...data.labels, ""],
+          values: [...data.values, 0],
+        });
+      } else {
+        setNotification({
+          open: true,
+          severity: "warning",
+          msg: "You can only add 10 fields",
+        });
+      }
     }
   };
 
   // delete field
   const deleteFieldHandler = (idx) => {
-    let newLabels = data.labels.slice();
-    let newValues = data.values.slice();
+    if (canEdit) {
+      let newLabels = data.labels.slice();
+      let newValues = data.values.slice();
 
-    newLabels.splice(idx, 1);
-    newValues.splice(idx, 1);
+      newLabels.splice(idx, 1);
+      newValues.splice(idx, 1);
 
-    setData({
-      ...data,
-      labels: [...newLabels],
-      values: [...newValues],
-    });
+      setData({
+        ...data,
+        labels: [...newLabels],
+        values: [...newValues],
+      });
+    }
   };
 
   // title handler
   const onChangeTitleHandler = (e) => {
-    setData({
-      ...data,
-      title: e.currentTarget.value,
-    });
+    if (canEdit) {
+      setData({
+        ...data,
+        title: e.currentTarget.value,
+      });
+    }
   };
 
   // labels handler
   const onChangeLabelHandler = (e, idx) => {
-    let newLabels = data.labels.slice();
-    newLabels[idx] = e.currentTarget.value;
-    setData({
-      ...data,
-      labels: newLabels,
-    });
+    if (canEdit) {
+      let newLabels = data.labels.slice();
+      newLabels[idx] = e.currentTarget.value;
+      setData({
+        ...data,
+        labels: newLabels,
+      });
+    }
   };
 
   // value handler
   const onChangeValueHandler = (e, idx) => {
-    let newValues = data.values.slice();
-    newValues[idx] = e.currentTarget.value;
-    setData({
-      ...data,
-      values: newValues,
-    });
+    if (canEdit) {
+      let newValues = data.values.slice();
+      newValues[idx] = e.currentTarget.value;
+      setData({
+        ...data,
+        values: newValues,
+      });
+    }
   };
 
   // description handler
   const onChangeDescriptionHandler = (e) => {
-    setData({
-      ...data,
-      description: e.currentTarget.value,
-    });
+    if (canEdit) {
+      setData({
+        ...data,
+        description: e.currentTarget.value,
+      });
+    }
   };
 
   return (

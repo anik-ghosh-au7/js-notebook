@@ -28,6 +28,7 @@ const ImageComponent = ({
   notebookId,
   updateComponent,
   setNotification,
+  canEdit,
 }) => {
   const classes = useStyles();
 
@@ -39,7 +40,7 @@ const ImageComponent = ({
 
   // edit handler
   const editHandler = () => {
-    setIsOpen(true);
+    if (canEdit) setIsOpen(true);
   };
 
   //Drag handler

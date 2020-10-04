@@ -20,6 +20,8 @@ const demoData = {
   modifiedOn: "just now",
   components: [],
   runAll: false,
+  canEdit: true,
+  isSearched: false,
 };
 
 const initNotebooks = [demoData];

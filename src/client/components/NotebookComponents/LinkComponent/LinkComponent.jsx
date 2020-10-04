@@ -19,6 +19,7 @@ const LinkComponent = ({
   deleteHandler,
   updateComponent,
   notebookId,
+  canEdit,
 }) => {
   const classes = useStyles();
 
@@ -43,7 +44,7 @@ const LinkComponent = ({
 
   // edit handler
   const editHandler = () => {
-    setIsEdit(true);
+    if (canEdit) setIsEdit(true);
   };
 
   const onChangeHandler = (e) => {

@@ -42,6 +42,11 @@ controller.all = catchError(async (req, res, next) => {
 
 // sharing notebook ------------------------------------------------------------------------------
 controller.share = catchError(async (req, res, next) => {
+  // if user try to share with himself
+  if (req.user.email === req.body.email)
+    return response(res, null, `You can't share with yourself`, true, 400);
+
+  // if not, find user
   let shareWith = await userModel.findOne({ email: req.body.email });
 
   // if user (with whom to share) not found
