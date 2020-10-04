@@ -18,10 +18,7 @@ import NewNotebook from "../NewNotebook/NewNotebook";
 
 // reducer action
 import { SET_VALUE } from "../../../redux/actions/setTabValue.action";
-
-const closeHandler = (id, idx) => {
-  console.log(id, idx);
-};
+import { DELETE_NOTEBOOK } from "../../../redux/actions/notebooks.action";
 
 const TabPanel = (props) => {
   const { children, value, index, isDrawerOpen, ...other } = props;
@@ -58,16 +55,14 @@ const a11yProps = (index) => {
   };
 };
 
-const NotebookTabs = ({ notebooks, isDrawerOpen, tabValue, setTabValue }) => {
-  // const [value, setValue] = React.useState(0);
+const NotebookTabs = ({
+  notebooks,
+  isDrawerOpen,
+  tabValue,
+  setTabValue,
+  removeNotebook,
+}) => {
   const classes = useStyles();
-
-  // const firstTabId = notebooks[0].id;
-
-  // // component did mount
-  // useEffect(() => {
-  //   setActiveTab(firstTabId);
-  // }, [firstTabId, setActiveTab]);
 
   const noOfNotebooks = notebooks.length;
 
@@ -76,8 +71,19 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, tabValue, setTabValue }) => {
     setTabValue(noOfNotebooks - 1);
   }, [noOfNotebooks, setTabValue]);
 
+  // causing problem------------------------------------------------
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
+  };
+  // ------------------------------------------------------------------------
+
+  const closeHandler = (id, idx) => {
+    if (idx <= notebooks.length - 1) {
+      let newIdx = notebooks.length - 2;
+      if (newIdx < 0) newIdx = 0;
+      setTabValue(newIdx);
+    }
+    removeNotebook(id);
   };
 
   return (
@@ -121,7 +127,10 @@ const NotebookTabs = ({ notebooks, isDrawerOpen, tabValue, setTabValue }) => {
                     {notebook.title}
                     <CloseIcon
                       className={classes.icon}
-                      onClick={() => closeHandler(notebook.id, idx)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        closeHandler(notebook.id, idx);
+                      }}
                     />
                   </div>
                 }
@@ -149,6 +158,12 @@ const mapActionToProps = (dispatch) => {
       dispatch({
         type: SET_VALUE,
         payload: idx,
+      });
+    },
+    removeNotebook: (id) => {
+      dispatch({
+        type: DELETE_NOTEBOOK,
+        payload: { id },
       });
     },
   };

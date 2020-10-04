@@ -120,4 +120,15 @@ controller.received = catchError(async (req, res, next) => {
     });
 });
 
+// delete notebook ------------------------------------------------------------------------
+controller.delete = catchError(async (req, res, next) => {
+  let notebook = await notebookModel.findOneAndDelete({ id: req.body.id });
+  console.log("Notebook===>", notebook);
+  // if not found
+  if (!notebook)
+    return response(res, null, `Can't find the notebook`, true, 404);
+
+  response(res, null, "Notebook deleted successfully", false, 200);
+});
+
 export default controller;

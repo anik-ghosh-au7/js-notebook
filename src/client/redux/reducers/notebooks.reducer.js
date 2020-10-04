@@ -54,13 +54,31 @@ const reducer = (state = initNotebooks, action) => {
 
   switch (action.type) {
     case ADD_NOTEBOOK:
-      if (!!action.payload)
+      if (!!action.payload) {
+        // find the notebook in reducer index
+        let notebookIdx = state.findIndex(
+          (notebook) => notebook.id === action.payload.id
+        );
+
+        // if notebook found
+        if (notebookIdx !== -1) {
+          let newState = state.slice();
+          let newNotebook = { ...newState[notebookIdx], ...action.payload };
+          newState.splice(notebookIdx, 1);
+          newState.push(newNotebook);
+          return newState;
+        }
+
+        // if not found
         return [
           ...state,
           {
             ...action.payload,
           },
         ];
+      }
+
+      // if action.payload not exist
       return [
         ...state,
         {

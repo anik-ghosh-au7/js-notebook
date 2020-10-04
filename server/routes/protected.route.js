@@ -29,4 +29,6 @@ route.get("/shared", notebookController.shared);
 
 route.get("/received", notebookController.received);
 
+route.post("/delete", notebookController.delete);
+
 export default route;
