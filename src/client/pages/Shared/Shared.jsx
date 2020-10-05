@@ -5,15 +5,19 @@ import FolderSpecialOutlinedIcon from "@material-ui/icons/FolderSpecialOutlined"
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { fade, Grid, useTheme } from "@material-ui/core";
 import httpRequest from "../../config/axios.config";
+import { connect } from "react-redux";
 
 // styles
 import useStyles from "./shared.style";
+
+// reducer actions
+import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
 // components
 import Copyright from "../../components/Copyright/Copyright";
 import NotebookList from "../../components/Notebooks/NotebookList/NotebookList";
 
-const Folders = () => {
+const SharedNotebooks = ({ setNotification }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -35,7 +39,11 @@ const Folders = () => {
       setType("Shared Notebooks");
       setData(res.data.data);
     } catch (err) {
-      console.log("err in shared ==>", err.response);
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Internal Server Error",
+      });
     }
     setLoading(false);
   };
@@ -50,7 +58,11 @@ const Folders = () => {
       setType("Received Notebooks");
       setData(res.data.data);
     } catch (err) {
-      console.log("err in shared ==>", err.response);
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Internal Server Error",
+      });
     }
     setLoading(false);
   };
@@ -120,4 +132,14 @@ const Folders = () => {
   );
 };
 
-export default Folders;
+const mapActionToProps = (dispatch) => {
+  return {
+    setNotification: (payload) =>
+      dispatch({
+        type: SET_NOTIFICATION,
+        payload,
+      }),
+  };
+};
+
+export default connect(null, mapActionToProps)(SharedNotebooks);

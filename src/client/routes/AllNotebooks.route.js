@@ -5,7 +5,7 @@ const AllNotebooksRoute = [
   {
     path: all,
     exact: true,
-    isProtected: false,
+    isProtected: true,
     component: AllNotebooks,
   },
 ];

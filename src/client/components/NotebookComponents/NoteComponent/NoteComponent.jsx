@@ -27,7 +27,9 @@ const NoteComponent = ({
   const [isEdit, setIsEdit] = React.useState(false);
 
   // note data state
-  const [data, setData] = React.useState("");
+  const [data, setData] = React.useState(
+    !!component.value ? component.value : ""
+  );
 
   //Drag handler
   const DragHandle = sortableHandle(() => (

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -34,10 +35,14 @@ const NavBar = (props) => {
     isLogin,
     userName,
     onDrawerClick,
+    history,
   } = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  // state for search
+  const [search, setSearch] = useState("");
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -140,6 +145,23 @@ const NavBar = (props) => {
           ]}
     </Menu>
   );
+
+  // on change handler for search
+  const onChangeHandler = (e) => {
+    setSearch(e.currentTarget.value);
+  };
+
+  // on enter handler for search
+  const onEnterHandler = (e) => {
+    if (e.key === "Enter") {
+      if (search.trim().length > 0)
+        history.push({
+          pathname: "/search",
+          search: `${search.trim()}`,
+        });
+    }
+  };
+
   // return component ----------------------------------------------------------------
   return (
     <div className={classes.grow}>
@@ -175,10 +197,13 @@ const NavBar = (props) => {
             <InputBase
               style={{ color: "white" }}
               placeholder="Search…"
+              value={search}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+              onChange={onChangeHandler}
+              onKeyPress={onEnterHandler}
             />
           </div>
 
@@ -252,4 +277,4 @@ const mapActionToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapActionToProps)(NavBar);
+export default connect(mapStateToProps, mapActionToProps)(withRouter(NavBar));

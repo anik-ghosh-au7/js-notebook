@@ -35,7 +35,6 @@ controller.all = catchError(async (req, res, next) => {
     .populate("notebooks")
     .exec()
     .then((docs) => {
-      console.log("docs ==> ", docs);
       response(res, docs.notebooks, "all notebooks fetched", false, 200);
     });
 });
