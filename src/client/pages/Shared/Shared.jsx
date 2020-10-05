@@ -33,7 +33,7 @@ const SharedNotebooks = ({ setNotification }) => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: "http://localhost:5000/api/protected/shared",
+        url: "http://localhost:5000/api/protected/shared?limit=8&page=1",
       });
       console.log("response ====>>>", res.data);
       setType("Shared Notebooks");
@@ -53,7 +53,7 @@ const SharedNotebooks = ({ setNotification }) => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: "http://localhost:5000/api/protected/received",
+        url: "http://localhost:5000/api/protected/received?limit=8&page=1",
       });
       setType("Received Notebooks");
       setData(res.data.data);

@@ -30,13 +30,26 @@ controller.create = catchError(async (req, res, next) => {
 
 // all notebooks --------------------------------------------------------------------------------
 controller.all = catchError(async (req, res, next) => {
-  await userModel
+  let prevPage = false,
+    nextPage = false;
+  let { limit, page } = req.query;
+  limit = parseInt(limit);
+  page = parseInt(page);
+  let { notebooks } = await userModel
     .findById(req.user._id)
     .populate("notebooks")
-    .exec()
-    .then((docs) => {
-      response(res, docs.notebooks, "all notebooks fetched", false, 200);
-    });
+    .exec();
+
+  if (notebooks.length > limit) {
+    nextPage = true;
+    notebooks = notebooks.slice((page - 1) * limit, limit);
+  }
+
+  if (page > 1) prevPage = true;
+
+  let data = { notebooks, prevPage, nextPage };
+
+  response(res, data, "all notebooks fetched", false, 200);
 });
 
 // sharing notebook ------------------------------------------------------------------------------
@@ -91,32 +104,50 @@ controller.share = catchError(async (req, res, next) => {
 
 // shared notebooks ----------------------------------------------------------------------
 controller.shared = catchError(async (req, res, next) => {
-  await userModel
+  let prevPage = false,
+    nextPage = false;
+  let { limit, page } = req.query;
+  limit = parseInt(limit);
+  page = parseInt(page);
+  let { notebooks } = await userModel
     .findById(req.user._id)
     .populate("shared")
-    .exec()
-    .then((docs) => {
-      console.log("docs ==> ", docs);
-      response(res, docs.shared, "all shared notebooks fetched", false, 200);
-    });
+    .exec();
+
+  if (notebooks.length > limit) {
+    nextPage = true;
+    notebooks = notebooks.slice((page - 1) * limit, limit);
+  }
+
+  if (page > 1) prevPage = true;
+
+  let data = { notebooks, prevPage, nextPage };
+
+  response(res, data, "all shared notebooks fetched", false, 200);
 });
 
 // received notebooks ----------------------------------------------------------------------
 controller.received = catchError(async (req, res, next) => {
-  await userModel
+  let prevPage = false,
+    nextPage = false;
+  let { limit, page } = req.query;
+  limit = parseInt(limit);
+  page = parseInt(page);
+  let { notebooks } = await userModel
     .findById(req.user._id)
     .populate("received")
-    .exec()
-    .then((docs) => {
-      console.log("docs ==> ", docs);
-      response(
-        res,
-        docs.received,
-        "all received notebooks fetched",
-        false,
-        200
-      );
-    });
+    .exec();
+
+  if (notebooks.length > limit) {
+    nextPage = true;
+    notebooks = notebooks.slice((page - 1) * limit, limit);
+  }
+
+  if (page > 1) prevPage = true;
+
+  let data = { notebooks, prevPage, nextPage };
+
+  response(res, data, "all received notebooks fetched", false, 200);
 });
 
 // delete notebook ------------------------------------------------------------------------

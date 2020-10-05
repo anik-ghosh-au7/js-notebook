@@ -24,9 +24,9 @@ const AllNotebooks = ({ setNotification }) => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: "http://localhost:5000/api/protected/all",
+        url: "http://localhost:5000/api/protected/all?page=1&limit=8",
       });
-      setData(res.data.data);
+      setData(res.data.data.notebooks);
     } catch (err) {
       console.log("err in shared ==>", err.response);
       setNotification({

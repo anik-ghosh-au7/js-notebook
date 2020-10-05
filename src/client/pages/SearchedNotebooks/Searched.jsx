@@ -28,9 +28,15 @@ const SearchedNotebooks = ({ setNotification, history }) => {
         method: "GET",
         url: `http://localhost:5000/api/public/search?query=${history.location.search.slice(
           1
-        )}`,
+        )}&page=1&limit=8`,
       });
-      setData(res.data.data);
+      console.log(
+        "nextPage==>",
+        res.data.data.nextPage,
+        "prevPage==>",
+        res.data.data.prevPage
+      );
+      setData(res.data.data.notebooks);
     } catch (err) {
       setNotification({
         open: true,
@@ -47,7 +53,9 @@ const SearchedNotebooks = ({ setNotification, history }) => {
 
   return (
     <div className={classes.wrapper}>
-      <h1 className={classes.heading}>All Notebooks</h1>
+      <h1 className={classes.heading}>
+        Search results for {history.location.search.slice(1)}
+      </h1>
       <div className={classes.list}>
         <NotebookList loading={loading} inputData={data} />
       </div>

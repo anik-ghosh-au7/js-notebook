@@ -1,5 +1,9 @@
+// model
+import notebookModel from "../models/notebook.model";
+
 // utils
 import response from "../utils/response";
+import catchError from "../utils/catchError";
 
 export default {
   imageController: (req, res) => {
@@ -30,4 +34,42 @@ export default {
       );
     }
   },
+
+  // search notebooks by title ----------------------------------------------------------------
+  searchController: catchError(async (req, res, next) => {
+    let nextPage = false,
+      prevPage = false;
+    let query = req.query.query.trim();
+    let { limit, page } = req.query;
+    limit = parseInt(limit);
+    page = parseInt(page);
+
+    let notebooks = [];
+
+    if (!!query) {
+      notebooks = await notebookModel
+        .find({
+          $or: [{ title: query }, { title: { $regex: query, $options: "i" } }],
+        })
+        .skip((page - 1) * limit)
+        .limit(limit + 1)
+        .sort({ title: "asc" })
+        .exec();
+    }
+
+    if (notebooks.length > limit) {
+      nextPage = true;
+      notebooks = notebooks.slice(0, notebooks.length - 1);
+    }
+
+    if (page > 1) prevPage = true;
+
+    let data = {
+      notebooks,
+      prevPage,
+      nextPage,
+    };
+
+    response(res, data, "Search result", false, 200);
+  }),
 };

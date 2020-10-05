@@ -26,4 +26,6 @@ route.post(
   publicController.codeController
 );
 
+route.get("/search", publicController.searchController);
+
 export default route;
