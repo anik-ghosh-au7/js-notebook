@@ -24,6 +24,8 @@ const SearchedNotebooks = ({ setNotification, history }) => {
     prevPage: false,
   });
 
+  let pageNumber = page.pageNumber;
+
   // handlers
   const fetchSearchedNotebooks = useCallback(async () => {
     try {
@@ -31,13 +33,11 @@ const SearchedNotebooks = ({ setNotification, history }) => {
         method: "GET",
         url: `http://localhost:5000/api/public/search?query=${history.location.search.slice(
           1
-        )}&page=${page.pageNumber}&limit=${limit}`,
+        )}&page=${pageNumber}&limit=${limit}`,
       });
-      setData(res.data.data.notebooks);
-      if (page.nextPage !== res.data.data.nextPage)
-        setPage({ ...page, nextPage: res.data.data.nextPage });
-      if (page.prevPage !== res.data.data.prevPage)
-        setPage({ ...page, prevPage: res.data.data.prevPage });
+      const { notebooks, prevPage, nextPage } = res.data.data;
+      setData(notebooks);
+      setPage({ pageNumber, prevPage, nextPage });
     } catch (err) {
       setNotification({
         open: true,
@@ -46,7 +46,7 @@ const SearchedNotebooks = ({ setNotification, history }) => {
       });
     }
     setLoading(false);
-  }, [setNotification, history.location.search, page]);
+  }, [setNotification, history.location.search, pageNumber]);
 
   useEffect(() => {
     fetchSearchedNotebooks();

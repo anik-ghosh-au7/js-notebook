@@ -12,10 +12,8 @@ const ExtractJWT = passportJWT.ExtractJwt;
 
 // logic
 const logic = async (jwtPayload, cb) => {
-  console.log(jwtPayload, "line 15");
   try {
     let user = await userModel.findOne({ email: jwtPayload.email });
-    console.log(user, "line 18");
     // if user not found
     if (!user) return cb(new Error("user not found"), null);
 

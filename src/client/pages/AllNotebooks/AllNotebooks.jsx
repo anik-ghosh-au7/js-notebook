@@ -24,18 +24,19 @@ const AllNotebooks = ({ setNotification }) => {
     prevPage: false,
   });
 
+  const pageNumber = page.pageNumber;
+
   // handlers
   const fetchAllNotebooks = useCallback(async () => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: `http://localhost:5000/api/protected/all?page=${page.pageNumber}&limit=${limit}`,
+        url: `http://localhost:5000/api/protected/all?page=${pageNumber}&limit=${limit}`,
       });
-      setData(res.data.data.notebooks);
-      if (page.nextPage !== res.data.data.nextPage)
-        setPage({ ...page, nextPage: res.data.data.nextPage });
-      if (page.prevPage !== res.data.data.prevPage)
-        setPage({ ...page, prevPage: res.data.data.prevPage });
+
+      const { notebooks, prevPage, nextPage } = res.data.data;
+      setData(notebooks);
+      setPage({ pageNumber, prevPage, nextPage });
     } catch (err) {
       setNotification({
         open: true,
@@ -44,7 +45,7 @@ const AllNotebooks = ({ setNotification }) => {
       });
     }
     setLoading(false);
-  }, [setNotification, page]);
+  }, [setNotification, pageNumber]);
 
   useEffect(() => {
     fetchAllNotebooks();

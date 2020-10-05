@@ -33,18 +33,19 @@ const SharedNotebooks = ({ setNotification }) => {
     prevPage: false,
   });
 
+  const { pageNumber } = page;
+
   // handlers
   const fetchSharedNotebooks = useCallback(async () => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: `http://localhost:5000/api/protected/shared?page=${page.pageNumber}&limit=${limit}`,
+        url: `http://localhost:5000/api/protected/shared?page=${pageNumber}&limit=${limit}`,
       });
-      setData(res.data.data.notebooks);
-      if (page.nextPage !== res.data.data.nextPage)
-        setPage({ ...page, nextPage: res.data.data.nextPage });
-      if (page.prevPage !== res.data.data.prevPage)
-        setPage({ ...page, prevPage: res.data.data.prevPage });
+
+      const { notebooks, nextPage, prevPage } = res.data.data;
+      setData(notebooks);
+      setPage({ pageNumber, prevPage, nextPage });
     } catch (err) {
       setNotification({
         open: true,
@@ -53,19 +54,18 @@ const SharedNotebooks = ({ setNotification }) => {
       });
     }
     setLoading(false);
-  }, [setNotification, page]);
+  }, [setNotification, pageNumber]);
 
   const fetchReceivedNotebooks = useCallback(async () => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: `http://localhost:5000/api/protected/received?page=${page.pageNumber}&limit=${limit}`,
+        url: `http://localhost:5000/api/protected/received?page=${pageNumber}&limit=${limit}`,
       });
-      setData(res.data.data.notebooks);
-      if (page.nextPage !== res.data.data.nextPage)
-        setPage({ ...page, nextPage: res.data.data.nextPage });
-      if (page.prevPage !== res.data.data.prevPage)
-        setPage({ ...page, prevPage: res.data.data.prevPage });
+
+      const { notebooks, nextPage, prevPage } = res.data.data;
+      setData(notebooks);
+      setPage({ pageNumber, prevPage, nextPage });
     } catch (err) {
       setNotification({
         open: true,
@@ -74,7 +74,7 @@ const SharedNotebooks = ({ setNotification }) => {
       });
     }
     setLoading(false);
-  }, [page, setNotification]);
+  }, [pageNumber, setNotification]);
 
   useEffect(() => {
     if (type === "Shared Notebooks") fetchSharedNotebooks();
