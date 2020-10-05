@@ -17,7 +17,7 @@ const demoData = {
   author: "Guest",
   createdOn: moment().format("Do MMM, YYYY"),
   time: moment().format("hh:mm a"),
-  modifiedOn: "just now",
+  modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
   components: [],
   runAll: false,
   canEdit: true,
@@ -87,6 +87,7 @@ const reducer = (state = initNotebooks, action) => {
           id: uuidv4(),
           createdOn: moment().format("Do MMMM, YYYY"),
           time: moment().format("hh:mm a"),
+          modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
         },
       ];
 
@@ -115,6 +116,7 @@ const reducer = (state = initNotebooks, action) => {
       if (idx !== -1) {
         let newNotebook = {
           ...state[idx],
+          modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
           [action.payload.name]: action.payload.value,
         };
 
@@ -130,6 +132,7 @@ const reducer = (state = initNotebooks, action) => {
         if (state[i].id === action.payload.id) {
           let newNotebook = {
             ...state[i],
+            modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
             components: [
               ...state[i].components,
               { name: action.payload.component },
@@ -148,6 +151,7 @@ const reducer = (state = initNotebooks, action) => {
         if (state[i].id === action.payload.id) {
           let newNotebook = {
             ...state[i],
+            modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
             components: arrayMove(
               state[i].components,
               action.payload.from,
@@ -166,6 +170,7 @@ const reducer = (state = initNotebooks, action) => {
         if (state[i].id === action.payload.id) {
           let newNotebook = {
             ...state[i],
+            modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
             components: newCompo(state[i].components, action.payload.index),
           };
 
@@ -181,6 +186,7 @@ const reducer = (state = initNotebooks, action) => {
         if (state[i].id === action.payload.id) {
           let newNotebook = {
             ...state[i],
+            modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
             components: [],
           };
 
@@ -202,6 +208,7 @@ const reducer = (state = initNotebooks, action) => {
 
         let newNotebook = {
           ...state[idx],
+          modifiedOn: moment().format("DD-MM-YY, hh:mm a"),
           components: newComponents,
         };
 

@@ -121,7 +121,7 @@ const NewNotebook = (props) => {
           </h3>
           <h3 className={classes.label}>
             <b>Modified : </b>
-            {props.modifiedOn}
+            <span style={{ fontSize: 14 }}>{props.modifiedOn}</span>
           </h3>
         </div>
         <div className={classes.wrapper}>

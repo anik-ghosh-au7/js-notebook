@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import FolderSharedOutlinedIcon from "@material-ui/icons/FolderSharedOutlined";
 import FolderSpecialOutlinedIcon from "@material-ui/icons/FolderSpecialOutlined";
@@ -20,24 +20,31 @@ import NotebookList from "../../components/Notebooks/NotebookList/NotebookList";
 const SharedNotebooks = ({ setNotification }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const limit = 8;
 
   // state variables
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [clicked, setClicked] = useState(false);
   const [type, setType] = useState("");
+  const [page, setPage] = useState({
+    pageNumber: 1,
+    nextPage: false,
+    prevPage: false,
+  });
 
   // handlers
-  const fetchSharedNotebooks = async () => {
-    setClicked(true);
+  const fetchSharedNotebooks = useCallback(async () => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: "http://localhost:5000/api/protected/shared?limit=8&page=1",
+        url: `http://localhost:5000/api/protected/shared?page=${page.pageNumber}&limit=${limit}`,
       });
-      console.log("response ====>>>", res.data);
-      setType("Shared Notebooks");
-      setData(res.data.data);
+      setData(res.data.data.notebooks);
+      if (page.nextPage !== res.data.data.nextPage)
+        setPage({ ...page, nextPage: res.data.data.nextPage });
+      if (page.prevPage !== res.data.data.prevPage)
+        setPage({ ...page, prevPage: res.data.data.prevPage });
     } catch (err) {
       setNotification({
         open: true,
@@ -46,17 +53,19 @@ const SharedNotebooks = ({ setNotification }) => {
       });
     }
     setLoading(false);
-  };
+  }, [setNotification, page]);
 
-  const fetchReceivedNotebooks = async () => {
-    setClicked(true);
+  const fetchReceivedNotebooks = useCallback(async () => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: "http://localhost:5000/api/protected/received?limit=8&page=1",
+        url: `http://localhost:5000/api/protected/received?page=${page.pageNumber}&limit=${limit}`,
       });
-      setType("Received Notebooks");
-      setData(res.data.data);
+      setData(res.data.data.notebooks);
+      if (page.nextPage !== res.data.data.nextPage)
+        setPage({ ...page, nextPage: res.data.data.nextPage });
+      if (page.prevPage !== res.data.data.prevPage)
+        setPage({ ...page, prevPage: res.data.data.prevPage });
     } catch (err) {
       setNotification({
         open: true,
@@ -65,70 +74,90 @@ const SharedNotebooks = ({ setNotification }) => {
       });
     }
     setLoading(false);
-  };
+  }, [page, setNotification]);
+
+  useEffect(() => {
+    if (type === "Shared Notebooks") fetchSharedNotebooks();
+    if (type === "Received Notebooks") fetchReceivedNotebooks();
+  }, [type, fetchReceivedNotebooks, fetchSharedNotebooks]);
 
   return (
-    <div className={classes.wrapper}>
-      {!clicked && (
-        <Grid
-          item
-          xs={12}
-          container
-          spacing={5}
-          direction="row"
-          justify="space-evenly"
-          alignItems="flex-start"
-        >
-          <Grid item xs={12} sm={6} md={3} className={classes.details}>
-            <div className={classes.card} onClick={fetchSharedNotebooks}>
-              <FolderSharedOutlinedIcon className={classes.component_icon} />
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                {`Shared`}
-              </Typography>
-            </div>
-          </Grid>
+    <Fragment>
+      <div className={classes.wrapper}>
+        {!clicked && (
+          <Grid
+            item
+            xs={12}
+            container
+            spacing={5}
+            direction="row"
+            justify="space-evenly"
+            alignItems="flex-start"
+          >
+            <Grid item xs={6} sm={6} md={3} className={classes.details}>
+              <div
+                className={classes.card}
+                onClick={() => {
+                  setClicked(true);
+                  setType("Shared Notebooks");
+                }}
+              >
+                <FolderSharedOutlinedIcon className={classes.component_icon} />
+                <Typography variant="h6" color="textSecondary" gutterBottom>
+                  {`Shared`}
+                </Typography>
+              </div>
+            </Grid>
 
-          <Grid item xs={12} sm={6} md={3} className={classes.details}>
-            <div className={classes.card} onClick={fetchReceivedNotebooks}>
-              <FolderSpecialOutlinedIcon className={classes.component_icon} />
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                {`Received`}
-              </Typography>
-            </div>
+            <Grid item xs={6} sm={6} md={3} className={classes.details}>
+              <div
+                className={classes.card}
+                onClick={() => {
+                  setClicked(true);
+                  setType("Received Notebooks");
+                }}
+              >
+                <FolderSpecialOutlinedIcon className={classes.component_icon} />
+                <Typography variant="h6" color="textSecondary" gutterBottom>
+                  {`Received`}
+                </Typography>
+              </div>
+            </Grid>
+            <Grid item xs={6} sm={6} md={3}></Grid>
+            <Grid item xs={6} sm={6} md={3}></Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}></Grid>
-          <Grid item xs={12} sm={6} md={3}></Grid>
-        </Grid>
-      )}
-      {clicked && (
-        <Fragment>
-          <h1 className={classes.heading}>{type}</h1>
-          <div className={classes.icon}>
-            <ArrowBackIcon
-              style={{
-                fontSize: 40,
-                color: fade(theme.palette.common.black, 0.5),
-              }}
-              onClick={() => {
-                setLoading(true);
-                setClicked(false);
-              }}
-            />
-          </div>
-          <div className={classes.list}>
-            <NotebookList
-              loading={loading}
-              inputData={data}
-              type={type}
-              setLoading={setLoading}
-            />
-          </div>
-        </Fragment>
-      )}
-      <div className={classes.stickToBottom}>
-        <Copyright />
+        )}
+        {clicked && (
+          <Fragment>
+            <h1 className={classes.heading}>{type}</h1>
+            <div className={classes.icon}>
+              <ArrowBackIcon
+                style={{
+                  fontSize: 40,
+                  color: fade(theme.palette.common.black, 0.5),
+                }}
+                onClick={() => {
+                  setLoading(true);
+                  setClicked(false);
+                  setPage({ pageNumber: 1, nextPage: false, prevPage: false });
+                }}
+              />
+            </div>
+            <div className={classes.list}>
+              <NotebookList
+                loading={loading}
+                inputData={data}
+                type={type}
+                setLoading={setLoading}
+                page={page}
+                setPage={setPage}
+              />
+            </div>
+          </Fragment>
+        )}
       </div>
-    </div>
+      <Copyright />
+    </Fragment>
   );
 };
 

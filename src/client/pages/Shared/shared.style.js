@@ -5,25 +5,10 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     margin: theme.spacing(0),
   },
-  details: {
-    margin: theme.spacing(10, 0),
-    textAlign: "center",
-    cursor: "pointer",
-  },
-  card: {
-    "&:hover": {
-      transform: "scale(1.2, 1.2)",
-      //   boxShadow: "0px 0px 4px 1px rgba(0,0,0,0.4)",
-    },
-  },
-  stickToBottom: {
-    position: "fixed",
-    top: "95%",
-    left: "45%",
-  },
-  component_icon: {
-    fontSize: 150,
-    color: fade(theme.palette.common.black, 0.5),
+  list: {
+    position: "absolute",
+    top: "10%",
+    paddingTop: "40px",
   },
   heading: {
     position: "absolute",
@@ -31,10 +16,20 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "20px",
     color: fade(theme.palette.common.black, 0.7),
   },
-  list: {
-    position: "absolute",
-    top: "10%",
-    paddingTop: "40px",
+  details: {
+    margin: theme.spacing(10, 0),
+    textAlign: "center",
+    cursor: "pointer",
+    height: "71.3vh",
+  },
+  card: {
+    "&:hover": {
+      transform: "scale(1.2, 1.2)",
+    },
+  },
+  component_icon: {
+    fontSize: 150,
+    color: fade(theme.palette.common.black, 0.5),
   },
   icon: {
     position: "absolute",
@@ -46,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
       transform: "scale(1.3, 1.3)",
       paddingTop: "35px",
     },
+    zIndex: 1,
   },
 }));
 

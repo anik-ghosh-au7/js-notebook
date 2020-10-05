@@ -5,11 +5,6 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     margin: theme.spacing(0),
   },
-  stickToBottom: {
-    position: "fixed",
-    top: "95%",
-    left: "45%",
-  },
   list: {
     position: "absolute",
     top: "10%",

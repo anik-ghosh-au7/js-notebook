@@ -9,26 +9,34 @@ import useStyles from "./allNotebooks.style";
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
 // components
-import Copyright from "../../components/Copyright/Copyright";
 import NotebookList from "../../components/Notebooks/NotebookList/NotebookList";
 
 const AllNotebooks = ({ setNotification }) => {
   const classes = useStyles();
+  const limit = 8;
 
   // state variables
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState({
+    pageNumber: 1,
+    nextPage: false,
+    prevPage: false,
+  });
 
   // handlers
   const fetchAllNotebooks = useCallback(async () => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: "http://localhost:5000/api/protected/all?page=1&limit=8",
+        url: `http://localhost:5000/api/protected/all?page=${page.pageNumber}&limit=${limit}`,
       });
       setData(res.data.data.notebooks);
+      if (page.nextPage !== res.data.data.nextPage)
+        setPage({ ...page, nextPage: res.data.data.nextPage });
+      if (page.prevPage !== res.data.data.prevPage)
+        setPage({ ...page, prevPage: res.data.data.prevPage });
     } catch (err) {
-      console.log("err in shared ==>", err.response);
       setNotification({
         open: true,
         severity: "error",
@@ -36,7 +44,7 @@ const AllNotebooks = ({ setNotification }) => {
       });
     }
     setLoading(false);
-  }, [setNotification]);
+  }, [setNotification, page]);
 
   useEffect(() => {
     fetchAllNotebooks();
@@ -46,10 +54,12 @@ const AllNotebooks = ({ setNotification }) => {
     <div className={classes.wrapper}>
       <h1 className={classes.heading}>All Notebooks</h1>
       <div className={classes.list}>
-        <NotebookList loading={loading} inputData={data} />
-      </div>
-      <div className={classes.stickToBottom}>
-        <Copyright />
+        <NotebookList
+          loading={loading}
+          inputData={data}
+          page={page}
+          setPage={setPage}
+        />
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ controller.all = catchError(async (req, res, next) => {
 
   if (notebooks.length > limit) {
     nextPage = true;
-    notebooks = notebooks.slice((page - 1) * limit, limit);
+    notebooks = notebooks.slice((page - 1) * limit, limit * page);
   }
 
   if (page > 1) prevPage = true;
@@ -109,19 +109,19 @@ controller.shared = catchError(async (req, res, next) => {
   let { limit, page } = req.query;
   limit = parseInt(limit);
   page = parseInt(page);
-  let { notebooks } = await userModel
+  let { shared } = await userModel
     .findById(req.user._id)
     .populate("shared")
     .exec();
 
-  if (notebooks.length > limit) {
+  if (shared.length > limit) {
     nextPage = true;
-    notebooks = notebooks.slice((page - 1) * limit, limit);
+    shared = shared.slice((page - 1) * limit, limit * page);
   }
 
   if (page > 1) prevPage = true;
 
-  let data = { notebooks, prevPage, nextPage };
+  let data = { notebooks: shared, prevPage, nextPage };
 
   response(res, data, "all shared notebooks fetched", false, 200);
 });
@@ -133,19 +133,19 @@ controller.received = catchError(async (req, res, next) => {
   let { limit, page } = req.query;
   limit = parseInt(limit);
   page = parseInt(page);
-  let { notebooks } = await userModel
+  let { received } = await userModel
     .findById(req.user._id)
     .populate("received")
     .exec();
 
-  if (notebooks.length > limit) {
+  if (received.length > limit) {
     nextPage = true;
-    notebooks = notebooks.slice((page - 1) * limit, limit);
+    received = received.slice((page - 1) * limit, limit * page);
   }
 
   if (page > 1) prevPage = true;
 
-  let data = { notebooks, prevPage, nextPage };
+  let data = { notebooks: received, prevPage, nextPage };
 
   response(res, data, "all received notebooks fetched", false, 200);
 });
