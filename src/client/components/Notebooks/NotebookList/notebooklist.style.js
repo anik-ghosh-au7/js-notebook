@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
   notebook: {
     padding: "20px 0",
     margin: "40px 0 0 0",
+    height: "76.8vh",
+    width: "91.6vw",
   },
   buttons: {
     position: "absolute",

@@ -103,6 +103,7 @@ const SharedNotebooks = ({ setNotification }) => {
                 onClick={() => {
                   setClicked(true);
                   setType("Shared Notebooks");
+                  setPage({ pageNumber: 1, nextPage: false, prevPage: false });
                 }}
               >
                 <FolderSharedOutlinedIcon className={classes.component_icon} />
@@ -118,6 +119,7 @@ const SharedNotebooks = ({ setNotification }) => {
                 onClick={() => {
                   setClicked(true);
                   setType("Received Notebooks");
+                  setPage({ pageNumber: 1, nextPage: false, prevPage: false });
                 }}
               >
                 <FolderSpecialOutlinedIcon className={classes.component_icon} />
@@ -142,7 +144,7 @@ const SharedNotebooks = ({ setNotification }) => {
                 onClick={() => {
                   setLoading(true);
                   setClicked(false);
-                  setPage({ pageNumber: 1, nextPage: false, prevPage: false });
+                  setPage({ pageNumber: 0, nextPage: false, prevPage: false });
                 }}
               />
             </div>
