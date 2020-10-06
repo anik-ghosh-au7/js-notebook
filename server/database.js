@@ -1,10 +1,10 @@
 // importing package
 import mongoose from "mongoose";
-// import { MONGODB_URL } from "../config/mongoURL.js";
+import MONGODB_URL from "./configs/mongoURL";
 
 // connecting to db
 mongoose
-  .connect("mongodb://localhost/js-notebook", {
+  .connect(MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
