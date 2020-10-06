@@ -29,16 +29,6 @@ const app = express();
 // setting port
 const port = process.env.PORT || 5000;
 
-// let users = [
-//   {
-//     firstname: "Admin",
-//     lastname: "Admin",
-//     email: "admin@gmail.com",
-//     password: "aA@1",
-//     otp: "1234",
-//   },
-// ];
-
 // middleware
 app.use(morgan("dev"));
 app.use(
