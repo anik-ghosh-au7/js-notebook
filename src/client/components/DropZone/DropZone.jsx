@@ -4,7 +4,6 @@ import { DropzoneDialog } from "material-ui-dropzone";
 const DropZone = ({ isOpen, setIsOpen, axiosRequest }) => {
   const onSave = async (files) => {
     const file = files[0];
-    console.log(file);
 
     let form_data = new FormData();
     form_data.append("file", file);

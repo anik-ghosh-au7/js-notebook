@@ -4,6 +4,9 @@ import store from "../redux/store";
 // reducer action
 import { SET_NOTIFICATION } from "../redux/actions/notification.action";
 
+// config
+import homeUrl from "../config/url";
+
 export default async () => {
   try {
     let notebookId = store.getState().activeTab;
@@ -14,7 +17,7 @@ export default async () => {
     let newNotebook = { ...notebook, components };
     let res = await httpRequest({
       method: "POST",
-      url: "http://localhost:5000/api/protected/add",
+      url: `${homeUrl}api/protected/add`,
       data: newNotebook,
     });
 

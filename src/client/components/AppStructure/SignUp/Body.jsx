@@ -34,6 +34,9 @@ import { setUserData } from "../../../utils/storageData";
 // github credentials
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "../../../config/github";
 
+// config
+import homeUrl from "../../../config/url";
+
 // components
 import DividerWithText from "../../Divider/DividerWithText";
 import GoogleButton from "../Buttons/Google.button";
@@ -93,8 +96,6 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
           msg: "Login Unsuccessful",
         });
       }
-      console.log("google token --> ", response.accessToken);
-      console.log("google user_data --> ", response.profileObj);
       let userData = {
         firstName: response.profileObj.givenName,
         lastName: response.profileObj.familyName,
@@ -105,7 +106,7 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       // sending data to server
       let res = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/users/custom",
+        url: `${homeUrl}api/users/custom`,
         data: userData,
       });
 
@@ -120,14 +121,11 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       });
       toggleSignUp();
     } catch (err) {
-      console.log(err);
-
-      if (!!err.response)
-        setNotification({
-          open: true,
-          severity: "error",
-          msg: err.response.data.msg,
-        });
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Sorry! server is down.",
+      });
     }
   };
 
@@ -145,8 +143,6 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
           client_secret: GITHUB_CLIENT_SECRET,
         },
       });
-
-      console.log("github token --> ", response_data.data.access_token);
 
       let user_data = await axios("https://api.github.com/user", {
         method: "GET",
@@ -170,15 +166,13 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       // sending data to server
       let res = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/users/custom",
+        url: `${homeUrl}api/users/custom`,
         data: userData,
       });
 
       const { user, token } = res.data.data;
 
       setUser(user, token);
-
-      console.log("github user_data --> ", user_data.data);
 
       setNotification({
         open: true,
@@ -188,14 +182,11 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
 
       toggleSignUp();
     } catch (err) {
-      console.log(err);
-
-      if (!!err.response)
-        setNotification({
-          open: true,
-          severity: "error",
-          msg: err.response.data.msg,
-        });
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Sorry! server is down.",
+      });
     }
   };
 
@@ -211,7 +202,7 @@ const Body = ({ toggleSignUp, toggleSignIn, setNotification, setUser }) => {
       };
       let response = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/users/signup",
+        url: `${homeUrl}api/users/signup`,
         data,
       });
 

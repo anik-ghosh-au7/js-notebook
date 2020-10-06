@@ -30,6 +30,9 @@ import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 // axios config
 import createConfig from "../../AppStructure/Profile/form_axios.config";
 
+// config
+import homeUrl from "../../../config/url";
+
 // component ----------------------------------------------------------------------------------------
 const CodeComponent = ({
   component,
@@ -58,7 +61,6 @@ const CodeComponent = ({
 
   // setting state from redux state
   useEffect(() => {
-    console.log("I am running...");
     if (!!component.value) {
       setCode(component.value.code);
       setResult(component.value.result);
@@ -106,7 +108,7 @@ const CodeComponent = ({
     let resultArr = [];
     try {
       let response = await axios.post(
-        "http://localhost:5000/api/public/compile",
+        `${homeUrl}api/public/compile`,
         formData,
         createConfig()
       );

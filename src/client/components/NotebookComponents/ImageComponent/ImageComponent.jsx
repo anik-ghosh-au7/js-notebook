@@ -21,6 +21,9 @@ import DropZone from "../../DropZone/DropZone";
 // axios config
 import createConfig from "../../AppStructure/Profile/form_axios.config";
 
+// config
+import homeUrl from "../../../config/url";
+
 const ImageComponent = ({
   component,
   idx,
@@ -54,7 +57,7 @@ const ImageComponent = ({
   const axiosRequest = async (formData) => {
     try {
       let response = await axios.post(
-        "http://localhost:5000/api/public/image",
+        `${homeUrl}api/public/image`,
         formData,
         createConfig()
       );

@@ -8,6 +8,9 @@ import useStyles from "./searched.style";
 // reducer actions
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
+// config
+import homeUrl from "../../config/url";
+
 // components
 import NotebookList from "../../components/Notebooks/NotebookList/NotebookList";
 
@@ -31,7 +34,7 @@ const SearchedNotebooks = ({ setNotification, history }) => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: `http://localhost:5000/api/public/search?query=${history.location.search.slice(
+        url: `${homeUrl}api/public/search?query=${history.location.search.slice(
           1
         )}&page=${pageNumber}&limit=${limit}`,
       });

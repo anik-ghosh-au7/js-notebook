@@ -27,6 +27,9 @@ import useStyles from "./body.style";
 // redux action
 import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
+// config
+import homeUrl from "../../../config/url";
+
 const Body = ({ toggleShare, notebookId, setNotification }) => {
   const [error, setError] = useState("");
   const classes = useStyles();
@@ -49,7 +52,7 @@ const Body = ({ toggleShare, notebookId, setNotification }) => {
     try {
       let response = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/protected/share", // to be changed
+        url: `${homeUrl}api/protected/share`,
         data: { email: formik.values.email, notebookId },
       });
 

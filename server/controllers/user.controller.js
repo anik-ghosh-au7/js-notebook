@@ -34,8 +34,6 @@ controller.signup = catchError(async (req, res, next) => {
 // user login control --------------------------------------------
 controller.login = (req, res, next) => {
   passport.authenticate("local", { session: false }, (err, user, info) => {
-    console.log("Error===>", err);
-    console.log(user);
     if (err || !user)
       return response(res, null, "Credentials incorrect", true, 404);
 
@@ -60,7 +58,6 @@ const clearOTP = (dict, key) => {
 
 // checking email for password reset ------------------------------------------------
 controller.verify = catchError(async (req, res, next) => {
-  console.log(req.headers);
   let { email } = req.body;
   let user = await model.findOne({ email });
 

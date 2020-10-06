@@ -13,6 +13,9 @@ import useStyles from "./shared.style";
 // reducer actions
 import { SET_NOTIFICATION } from "../../redux/actions/notification.action";
 
+// config
+import homeUrl from "../../config/url";
+
 // components
 import Copyright from "../../components/Copyright/Copyright";
 import NotebookList from "../../components/Notebooks/NotebookList/NotebookList";
@@ -40,7 +43,7 @@ const SharedNotebooks = ({ setNotification }) => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: `http://localhost:5000/api/protected/shared?page=${pageNumber}&limit=${limit}`,
+        url: `${homeUrl}api/protected/shared?page=${pageNumber}&limit=${limit}`,
       });
 
       const { notebooks, nextPage, prevPage } = res.data.data;
@@ -60,7 +63,7 @@ const SharedNotebooks = ({ setNotification }) => {
     try {
       let res = await httpRequest({
         method: "GET",
-        url: `http://localhost:5000/api/protected/received?page=${pageNumber}&limit=${limit}`,
+        url: `${homeUrl}api/protected/received?page=${pageNumber}&limit=${limit}`,
       });
 
       const { notebooks, nextPage, prevPage } = res.data.data;

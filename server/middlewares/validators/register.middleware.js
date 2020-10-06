@@ -43,11 +43,9 @@ export const registerError = (req, res, next) => {
   try {
     validationResult(req).throw();
   } catch (err) {
-    console.log("Validation error==>", err);
     const singleKeyError = simplyfyErr(err.array());
     const errors = singleKeyError.map((e) => e.msg);
     const message = errors.join(",");
-    console.log("err message==>", message);
     req.validationErr = message;
   }
   next();

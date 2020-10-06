@@ -24,7 +24,6 @@ const middleware = async (req, res, next) => {
       req.files.file.path,
       (err, imageResponse) => {
         if (err) {
-          console.log(err);
           return next(err);
         } else {
           image_url = imageResponse.secure_url;
@@ -34,7 +33,6 @@ const middleware = async (req, res, next) => {
 
           fs.unlink(req.files.file.path, (err) => {
             if (err) {
-              console.log(err);
               return next(err);
             }
           });

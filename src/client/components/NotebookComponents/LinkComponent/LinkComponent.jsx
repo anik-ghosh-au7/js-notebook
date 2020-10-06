@@ -68,7 +68,6 @@ const LinkComponent = ({
   // save handler
   const saveHandler = (idx) => {
     let err = checkLink(data);
-    console.log(err);
     if (!err) {
       setIsEdit(false);
       updateComponent(notebookId, idx, {

@@ -33,6 +33,7 @@ import { mainButtons, notebookButtons } from "./buttons";
 import { signin } from "../../../redux/actions/sign.action";
 import { ADD_NOTEBOOK } from "../../../redux/actions/notebooks.action";
 import { SHIFT, UNSHIFT } from "../../../redux/actions/tabbar.action";
+import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 const SidePanel = ({
   isSignIn,
@@ -42,6 +43,7 @@ const SidePanel = ({
   addNotebook,
   shift,
   unshift,
+  setNotification,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -56,8 +58,6 @@ const SidePanel = ({
       let element = pdfRef.current;
       let divWidth = element.clientWidth;
       let divHeight = element.clientHeight;
-      console.log("width ===>", divWidth);
-      console.log("width ===>", divHeight);
       let opt = {
         margin: [0, 0.2],
         filename: "myNotebook.pdf",
@@ -83,7 +83,11 @@ const SidePanel = ({
 
       html2pdf().set(opt).from(element).save();
     } catch (err) {
-      console.log(err);
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: "Sorry! We are facing some issue in making pdf.",
+      });
     }
   };
 
@@ -219,6 +223,9 @@ const mapActionToProps = (dispatch) => {
       dispatch({
         type: UNSHIFT,
       }),
+    setNotification: (payload) => {
+      dispatch({ type: SET_NOTIFICATION, payload });
+    },
   };
 };
 

@@ -41,6 +41,9 @@ import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 // user data reducer
 import { setUserData } from "../../../utils/storageData";
 
+// config
+import homeUrl from "../../../config/url";
+
 //  signin component -----------------------------------------------
 const SignIn = ({
   toggleSignUp,
@@ -90,8 +93,7 @@ const SignIn = ({
           msg: "Login Unsuccessful",
         });
       }
-      console.log("google token --> ", response.accessToken);
-      console.log("google user_data --> ", response.profileObj);
+
       let userData = {
         firstName: response.profileObj.givenName,
         lastName: response.profileObj.familyName,
@@ -102,7 +104,7 @@ const SignIn = ({
       // sending data to server
       let res = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/users/custom",
+        url: `${homeUrl}api/users/custom`,
         data: userData,
       });
 
@@ -117,14 +119,11 @@ const SignIn = ({
       });
       toggleSignIn();
     } catch (err) {
-      console.log(err);
-
-      if (!!err.response)
-        setNotification({
-          open: true,
-          severity: "error",
-          msg: err.response.data.msg,
-        });
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Sorry! server is down.",
+      });
     }
   };
 
@@ -165,7 +164,7 @@ const SignIn = ({
       // sending data to server
       let res = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/users/custom",
+        url: `${homeUrl}api/users/custom`,
         data: userData,
       });
 
@@ -181,14 +180,11 @@ const SignIn = ({
 
       toggleSignIn();
     } catch (err) {
-      console.log(err);
-
-      if (!!err.response)
-        setNotification({
-          open: true,
-          severity: "error",
-          msg: err.response.data.msg,
-        });
+      setNotification({
+        open: true,
+        severity: "error",
+        msg: !!err.response ? err.response.data.msg : "Sorry! server is down.",
+      });
     }
   };
 
@@ -206,7 +202,7 @@ const SignIn = ({
       };
       let response = await httpRequest({
         method: "POST",
-        url: "http://localhost:5000/api/users/login",
+        url: `${homeUrl}api/users/login`,
         data,
       });
 
@@ -216,14 +212,12 @@ const SignIn = ({
         severity: "success",
         msg: response.data.msg,
       });
-      console.log(response.data.data.token, response.data.data.user);
 
       // setting data to local storage
       setUser(response.data.data.user, response.data.data.token);
 
       // switching to user home
       toggleSignIn();
-      console.log("Authorized", response.data);
     } catch (err) {
       if (!!err.response) {
         setNotification({

@@ -5,6 +5,9 @@ import { DELETE_NOTEBOOK } from "../redux/actions/notebooks.action";
 import { SET_VALUE } from "../redux/actions/setTabValue.action";
 import { SET_NOTIFICATION } from "../redux/actions/notification.action";
 
+// config
+import homeUrl from "../config/url";
+
 const setValue = (idx) => {
   if (idx < 0) idx = 0;
   return store.dispatch({
@@ -17,7 +20,7 @@ const deleteFromServer = async (id) => {
   try {
     let res = await httpRequest({
       method: "POST",
-      url: "http://localhost:5000/api/protected/delete",
+      url: `${homeUrl}api/protected/delete`,
       data: { id },
     });
     store.dispatch({

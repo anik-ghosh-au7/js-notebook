@@ -14,6 +14,9 @@ import { connect } from "react-redux";
 // axios
 import httpRequest from "../../../config/axios.config";
 
+// config
+import homeUrl from "../../../config/url";
+
 // styles
 import useStyles from "./body.style";
 
@@ -73,13 +76,12 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     } catch (err) {
       if (!!err.response) {
         setError(err.response.data.msg);
-        setNotification({
-          msg: err.response.data.msg,
-          open: true,
-          severity: "error",
-        });
       }
-      console.log(err.response);
+      setNotification({
+        msg: !!err.response ? err.response.data.msg : "Sorry! Server is down.",
+        open: true,
+        severity: "error",
+      });
     }
   };
 
@@ -91,7 +93,7 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     if (e.target.name === "email") {
       const parameters = {
         targetName: e.target.name,
-        url: "http://localhost:5000/api/users/verify",
+        url: `${homeUrl}api/users/verify`,
         data: { email: formik.values.email },
       };
       setStates({ ...parameters });
@@ -101,7 +103,7 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     else if (e.target.name === "otp") {
       const parameters = {
         targetName: e.target.name,
-        url: "http://localhost:5000/api/users/otp",
+        url: `${homeUrl}api/users/otp`,
         data: { otp: formik.values.otp, email: formik.values.email },
       };
       setStates({ ...parameters });
@@ -111,7 +113,7 @@ const ForgetPassword = ({ toggleForget, setNotification }) => {
     else if (e.target.name === "reset") {
       const parameters = {
         targetName: e.target.name,
-        url: "http://localhost:5000/api/users/password",
+        url: `${homeUrl}api/users/password`,
         data: { email: formik.values.email, password: formik.values.reset },
       };
       setStates({ ...parameters });

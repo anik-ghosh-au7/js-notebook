@@ -1,2 +1,5 @@
-export const GITHUB_CLIENT_ID = "8c3c65de40005978cbe4";
-export const GITHUB_CLIENT_SECRET = "d8e7c99558166a7262057b2cd1f6cd8f9482db1b";
+import dotenv from "dotenv";
+dotenv.config();
+
+export const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
+export const GITHUB_CLIENT_SECRET = process.env.REACT_APP_GITHUB_CLIENT_SECRET;

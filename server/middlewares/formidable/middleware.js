@@ -11,7 +11,6 @@ const middleware = (req, res, next) => {
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
-      console.log(err);
       return next(err);
     }
     // adding fields and files in req object

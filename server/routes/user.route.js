@@ -26,7 +26,6 @@ route.post("/password", userController.setPassword);
 route.post(
   "/custom",
   (req, res, next) => {
-    console.log(req.body);
     next();
   },
   registerChecker,

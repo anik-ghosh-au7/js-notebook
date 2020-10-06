@@ -21,6 +21,9 @@ import createConfig from "../../AppStructure/Profile/form_axios.config";
 // reducer actions
 import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
+// config
+import homeUrl from "../../../config/url";
+
 // edit button
 const Button = ({ className, onClick }) => (
   <IconButton
@@ -82,14 +85,13 @@ const Body = ({ userData, set_data, setNotification }) => {
   };
 
   const onButtonClick = () => {
-    console.log("onclick");
     setIsOpen(true);
   };
 
   const axiosRequest = async (form_data) => {
     try {
       let response = await axios.post(
-        "http://localhost:5000/api/protected/profile",
+        `${homeUrl}api/protected/profile`,
         form_data,
         createConfig()
       );

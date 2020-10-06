@@ -26,6 +26,9 @@ import createConfig from "./form_axios.config";
 // styles
 import useStyles from "./list.style";
 
+// config
+import homeUrl from "../../../config/url";
+
 import { SET_NOTIFICATION } from "../../../redux/actions/notification.action";
 
 const getFieldIcon = (name) => {
@@ -62,7 +65,7 @@ const DataList = ({
       });
 
       let response = await axios.post(
-        "http://localhost:5000/api/protected/profile",
+        `${homeUrl}api/protected/profile`,
         form_data,
         createConfig()
       );

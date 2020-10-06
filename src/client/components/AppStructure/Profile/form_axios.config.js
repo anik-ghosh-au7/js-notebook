@@ -1,6 +1,5 @@
 const createConfig = () => {
   const authToken = localStorage.getItem("token");
-  console.log("token ==> ", authToken);
 
   if (!!authToken) {
     return {
