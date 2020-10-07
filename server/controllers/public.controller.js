@@ -49,7 +49,12 @@ export default {
     if (!!query) {
       notebooks = await notebookModel
         .find({
-          $or: [{ title: query }, { title: { $regex: query, $options: "i" } }],
+          $or: [
+            { title: query },
+            { title: { $regex: query, $options: "i" } },
+            { author: query },
+            { author: { $regex: query, $options: "i" } },
+          ],
         })
         .skip((page - 1) * limit)
         .limit(limit + 1)
