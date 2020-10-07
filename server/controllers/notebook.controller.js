@@ -86,9 +86,35 @@ controller.share = catchError(async (req, res, next) => {
       404
     );
 
-  // if all good
-  req.user.shared.push(notebookToShare._id);
-  await req.user.save();
+  // check if notebook already present in users shared fields
+  let idxOfShared = req.user.shared.findIndex(
+    (id) => String(id) === String(notebookToShare._id)
+  );
+
+  console.log("index of shared ==>", idxOfShared);
+
+  if (idxOfShared === -1) {
+    // if all good
+    req.user.shared.push(notebookToShare._id);
+    await req.user.save();
+  }
+
+  // check if notebook already present in receivers received field
+  let idxOfReceived = shareWith.received.findIndex(
+    (id) => String(id) === String(notebookToShare._id)
+  );
+
+  console.log("received index ==>", idxOfReceived);
+
+  // if notebook is already shared
+  if (idxOfReceived !== -1)
+    return response(
+      res,
+      null,
+      `Notebook is already shared with ${shareWith.firstName}`,
+      false,
+      200
+    );
 
   shareWith.received.push(notebookToShare._id);
   await shareWith.save();
