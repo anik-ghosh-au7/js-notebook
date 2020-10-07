@@ -85,6 +85,9 @@ controller.verify = catchError(async (req, res, next) => {
       secure: true,
       pass: process.env.PASSWORD,
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
   await transporter.sendMail({
     from: "JS-NoteBook ",
