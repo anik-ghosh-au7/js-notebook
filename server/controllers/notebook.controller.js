@@ -137,7 +137,7 @@ controller.shared = catchError(async (req, res, next) => {
     .populate("shared")
     .exec();
 
-  if (notebooks.length > limit * page) nextPage = true;
+  if (shared.length > limit * page) nextPage = true;
 
   if (shared.length > limit) {
     shared = shared.slice((page - 1) * limit, limit * page);
@@ -162,7 +162,7 @@ controller.received = catchError(async (req, res, next) => {
     .populate("received")
     .exec();
 
-  if (notebooks.length > limit * page) nextPage = true;
+  if (received.length > limit * page) nextPage = true;
 
   if (received.length > limit) {
     received = received.slice((page - 1) * limit, limit * page);
