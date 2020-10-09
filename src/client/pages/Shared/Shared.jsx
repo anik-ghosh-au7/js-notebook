@@ -82,6 +82,10 @@ const SharedNotebooks = ({ setNotification }) => {
   useEffect(() => {
     if (type === "Shared Notebooks") fetchSharedNotebooks();
     if (type === "Received Notebooks") fetchReceivedNotebooks();
+    return () => {
+      setData([]);
+      setLoading(true);
+    };
   }, [type, fetchReceivedNotebooks, fetchSharedNotebooks]);
 
   return (
@@ -142,7 +146,7 @@ const SharedNotebooks = ({ setNotification }) => {
                   color: fade(theme.palette.common.black, 0.5),
                 }}
                 onClick={() => {
-                  setLoading(true);
+                  // setLoading(true);
                   setClicked(false);
                   setPage({ pageNumber: 0, nextPage: false, prevPage: false });
                 }}
