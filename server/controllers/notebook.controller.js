@@ -40,8 +40,9 @@ controller.all = catchError(async (req, res, next) => {
     .populate("notebooks")
     .exec();
 
+  if (notebooks.length > limit * page) nextPage = true;
+
   if (notebooks.length > limit) {
-    nextPage = true;
     notebooks = notebooks.slice((page - 1) * limit, limit * page);
   }
 
@@ -91,8 +92,6 @@ controller.share = catchError(async (req, res, next) => {
     (id) => String(id) === String(notebookToShare._id)
   );
 
-  console.log("index of shared ==>", idxOfShared);
-
   if (idxOfShared === -1) {
     // if all good
     req.user.shared.push(notebookToShare._id);
@@ -103,8 +102,6 @@ controller.share = catchError(async (req, res, next) => {
   let idxOfReceived = shareWith.received.findIndex(
     (id) => String(id) === String(notebookToShare._id)
   );
-
-  console.log("received index ==>", idxOfReceived);
 
   // if notebook is already shared
   if (idxOfReceived !== -1)
@@ -140,8 +137,9 @@ controller.shared = catchError(async (req, res, next) => {
     .populate("shared")
     .exec();
 
+  if (notebooks.length > limit * page) nextPage = true;
+
   if (shared.length > limit) {
-    nextPage = true;
     shared = shared.slice((page - 1) * limit, limit * page);
   }
 
@@ -164,8 +162,9 @@ controller.received = catchError(async (req, res, next) => {
     .populate("received")
     .exec();
 
+  if (notebooks.length > limit * page) nextPage = true;
+
   if (received.length > limit) {
-    nextPage = true;
     received = received.slice((page - 1) * limit, limit * page);
   }
 
